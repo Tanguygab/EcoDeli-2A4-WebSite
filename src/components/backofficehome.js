@@ -16,18 +16,6 @@ function BackofficeHome() {
     <div>
       <BackNavbar />
       <div className="container">
-      <Routes>
-          <Route path="gestion-commercants" element={<GestionCommercants />} />
-          <Route path="gestion-contrats" element={<GestionContrats />} />
-          <Route path="gestion-livreurs" element={<GestionLivreurs />} />
-          <Route path="gestion-prestataires" element={<GestionPrestataires />} />
-          <Route path="gestion-livraisons" element={<GestionLivraisons />} />
-          <Route path="gestion-prestations" element={<GestionPrestations />} />
-          <Route path="suivi-prestations" element={<SuiviPrestations />} />
-          <Route path="gestion-paiements" element={<GestionPaiements />} />
-          <Route path="gestion-factures" element={<GestionFactures />} />
-          <Route path="gestion-financiere" element={<GestionFinanciere />} />
-        </Routes>
       </div>
     </div>
   );
