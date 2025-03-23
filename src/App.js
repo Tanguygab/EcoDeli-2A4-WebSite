@@ -1,12 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
-import Navbar from './components/navbar';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/navbar";
+import { Link } from "react-router-dom";
+import BackOfficeHome from "./components/backofficehome";
 
 function App() {
   return (
-    <div className="App">
-      <Navbar></Navbar>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Navbar />} />
+
+        <Route path="/backoffice" element={<BackOfficeHome />} />
+      </Routes>
+    </Router>
   );
 }
 

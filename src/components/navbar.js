@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import logow from "../asset/logow.png"; // Import correct
 
 const Navbar = () => {
   const [isActive, setIsActive] = useState(false);
@@ -6,7 +8,7 @@ const Navbar = () => {
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
-        <a className="navbar-item">Ecodeli G1</a>
+        <Link to="/backoffice"><a className="navbar-item"><img src={logow} alt="Logo"/></a></Link>
 
         {/* Bouton burger */}
         <a
