@@ -1,0 +1,88 @@
+{
+    "auth": {
+        "login": "Login",
+        "register": "Register"
+    },
+
+    "form": {
+        "email": {
+            "label": "Email",
+            "placeholder": "my@email.com",
+            "valid": "",
+            "invalid": "This email is invalid"
+        },
+        "username": {
+            "label": "Username",
+            "placeholder": "My Cool Name",
+            "valid": "This username is available",
+            "invalid": "This username is invalid"
+        },
+        "password": {
+            "label": "Password",
+            "placeholder": "MySuperSecretPassword123!",
+            "valid": "",
+            "invalid": "Your password should be between 6 and 20 characters!"
+        }
+    },
+
+    "search": {
+        "bills": "Search Bills..."
+    },
+
+    "pagination": {
+        "previous": "Previous",
+        "next": "Next",
+        "page": "Page {{page}}"
+    },
+
+
+    "table": {
+        "actions": {
+            "label": "Actions",
+            "see": "See",
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+        "global": {
+            "id": "ID"
+        },
+        "bills": {
+            "date": "Date",
+            "price": "Price"
+        },
+        "contracts": {
+            "start_date": "Start Date",
+            "end_date": "End Price"
+        },
+        "deliveries": {
+            "latitude": "Latitude",
+            "longitude": "Longitude",
+            "products": "Products"
+        },
+        "deliverymen": {},
+        "finances": {
+            "type": "Type",
+            "amount": "Amount",
+            "date": "Date"
+        },
+        "payments": {
+            "date": "Date",
+            "amount": "Amount",
+            "status": "Status"
+        },
+        "prestataires": {
+            "name": "Name",
+            "email": "Email",
+            "phone": "Phone"
+        },
+        "prestations": {
+            "service": "Service",
+            "client": "Client",
+            "status": "Status"
+        },
+        "traders": {
+            "name": "Name",
+            "email": "Email"
+        }
+    }
+}
