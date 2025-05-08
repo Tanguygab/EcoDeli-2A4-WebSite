@@ -1,7 +1,24 @@
 {
     "auth": {
         "login": "Login",
-        "register": "Register"
+        "register": "Register",
+        "logout": "Logout"
+    },
+
+    "home": {
+        "all-products": "All Products",
+        "delivery-info": "Delivery Information",
+        "news": "News",
+        "quality-information": "Quality Information",
+        "quick-deliveries": "Quick Deliveries",
+        "assurance-&-refunds": "Assurance and Refunds",
+        "guaranteed-satisfaction": "Guaranteed Satisfaction"
+    },
+
+    "user": {
+        "profile": "Profile",
+        "notifications": "Notifications",
+        "settings": "Settings"
     },
 
     "form": {
@@ -26,6 +43,7 @@
     },
 
     "search": {
+        "products": "Search products/offers...",
         "bills": "Search Bills..."
     },
 

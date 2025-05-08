@@ -31,7 +31,8 @@ const input = ref()
                 :type="type" :placeholder="tr('placeholder')">
 
             <Icon :icon="icon" class="is-small is-left" />
-            <Icon :icon="valid ? 'fa-check' : 'fa-exclamation-triangle'" class="is-small is-right" />
+            <Icon v-if="valid" icon="fa-check" class="is-small is-right" />
+            <Icon v-else-if="valid !== undefined" icon="fa-exclamation-triangle" class="is-small is-right" />
         </div>
         <p v-if="valid !== undefined" :class="'help ' + (valid ? 'is-success' : 'is-danger')">
             {{ tr(valid ? "valid" : "invalid") }}

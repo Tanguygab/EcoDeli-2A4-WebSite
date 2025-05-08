@@ -61,7 +61,7 @@ const label = t("auth." + (props.isLogin ? "login" : "register"))
             @input="checkUsername" />
         <CustomInput v-model="validEmail" keypath="form" name="email" type="email" icon="fa-envelope"
             @input="checkEmail" />
-        <CustomInput v-model="validPassword" keypath="form" name="password" type="password" icon="fa-password"
+        <CustomInput v-model="validPassword" keypath="form" name="password" type="password" icon="fa-lock"
             @input="checkPassword" />
         <input class="button is-link" type="submit" :value="label">
 

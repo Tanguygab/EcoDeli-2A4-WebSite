@@ -8,14 +8,14 @@ import BackOffice from './components/nav/BackOffice.vue';
 <template>
   <header class="header">
     <BackOffice v-if="router.currentRoute.value?.path.startsWith('/backoffice')" />
-    <FrontOffice v-else/>
+    <FrontOffice v-else />
   </header>
   <main>
-    <div class="container is-flex is-flex-direction-column is-align-items-center">
+    <div class="container is-flex is-flex-direction-column is-align-items-center mt-5">
       <RouterView />
     </div>
   </main>
-  <footer class="footer">
+  <footer class="footer mt-auto">
     footer
   </footer>
 </template>

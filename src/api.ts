@@ -1,6 +1,5 @@
-import axios, { type AxiosRequestConfig, type AxiosResponse } from "axios";
+import axios from "axios";
 import router from "./router";
-import { startSession } from "./stores/session";
 import type { User } from "./types/user";
 import type { Product } from "./types/product";
 import type { Subscription } from "./types/subscription";
@@ -13,7 +12,12 @@ import type { Contract } from "./types/contract";
 import type { Warehouse } from "./types/warehouse";
 import type { Delivery } from "./types/delivery";
 
-const session = startSession()
+
+let session: any
+
+function api(newSession: any) {
+    session = newSession
+}
 
 async function request<type>(method: string, url: string, body?: object) {
     return (await axios.request<type>({
@@ -52,8 +56,8 @@ async function register(username: string, email: string, password: string) {
     router.push("/login")
 }
 
-async function logout() {
-    await post("auth/logout")
+function logout() {
+    post("auth/logout")
     session.saveToken("", "")
     router.push("/")
 }
@@ -161,6 +165,7 @@ async function getWarehouses() {
 
 
 export {
+    api,
     // Auth
     login, register, logout, isSessionValid,
 
