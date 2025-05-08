@@ -22,17 +22,23 @@
     },
 
     "form": {
+        "firstname": {
+            "label": "First Name",
+            "placeholder": "Tanguy",
+            "valid": "",
+            "invalid": "This name is invalid"
+        },
+        "name": {
+            "label": "Family Name",
+            "placeholder": "Gabril",
+            "valid": "",
+            "invalid": "This name is invalid"
+        },
         "email": {
             "label": "Email",
-            "placeholder": "my@email.com",
+            "placeholder": "tanguy@gabril.com",
             "valid": "",
             "invalid": "This email is invalid"
-        },
-        "username": {
-            "label": "Username",
-            "placeholder": "My Cool Name",
-            "valid": "This username is available",
-            "invalid": "This username is invalid"
         },
         "password": {
             "label": "Password",

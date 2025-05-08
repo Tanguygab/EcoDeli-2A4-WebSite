@@ -3,12 +3,12 @@ import { ref } from "vue";
 import { startSession } from "@/stores/session";
 import router from "@/router";
 import CustomInput from "./CustomInput.vue";
-import { isSessionValid, login, register } from "@/api"
+import { api, isSessionValid, login, register } from "@/api"
 import { t } from "i18next";
 
-const props = defineProps<{ isLogin: boolean }>();
+const props = defineProps<{ isLogin?: boolean }>();
 
-const session = startSession();
+api(startSession())
 isSessionValid().then(valid => { if (valid) router.push("/") });
 
 const error = ref<string>("");
@@ -34,13 +34,17 @@ const validEmail = ref<boolean | undefined>()
 function checkEmail(value: String) {
 
 }
-const validUsername = ref<boolean | undefined>()
-function checkUsername(value: string) {
+const validFirstName = ref<boolean | undefined>()
+function checkFirstName(value: string) {
     typing = value
     setTimeout(() => {
         if (typing !== value) return
-        validUsername.value = value === "Tanguygab"
+        validFirstName.value = value === "Tanguy"
     }, 1000);
+}
+
+const validName = ref<boolean | undefined>()
+function checkName(value: string) {
 }
 
 const validPassword = ref<boolean | undefined>()
@@ -57,15 +61,18 @@ const label = t("auth." + (props.isLogin ? "login" : "register"))
     <form @submit.prevent="submit" class="container">
         <p>{{ error }}</p>
 
-        <CustomInput v-if="isLogin" v-model="validUsername" keypath="form" name="username" type="text" icon="fa-user"
-            @input="checkUsername" />
+        <CustomInput v-if="!isLogin" v-model="validFirstName" keypath="form" name="firstname" type="text" icon="fa-user"
+            @input="checkFirstName" />
+        <CustomInput v-if="!isLogin" v-model="validName" keypath="form" name="name" type="text" icon="fa-user"
+            @input="checkName" />
         <CustomInput v-model="validEmail" keypath="form" name="email" type="email" icon="fa-envelope"
             @input="checkEmail" />
         <CustomInput v-model="validPassword" keypath="form" name="password" type="password" icon="fa-lock"
             @input="checkPassword" />
         <input class="button is-link" type="submit" :value="label">
 
-        <p v-if="isLogin">No account? <RouterLink to="register">{{ label }}</RouterLink> instead.</p>
+        <p v-if="isLogin">No account? <RouterLink to="register">{{ $t("auth." + props.isLogin ? "register" : "login") }}
+            </RouterLink> instead.</p>
         <p v-else>Already have an account? <RouterLink to="login">{{ label }}</RouterLink> instead.</p>
     </form>
 </template>
