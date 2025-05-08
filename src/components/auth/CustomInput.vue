@@ -5,14 +5,14 @@ import Icon from '../Icon.vue';
 
 const valid = defineModel()
 const props = defineProps<{
-    keypath: string,
+    keypath?: string,
     name: string,
     type: string,
     icon: string
 }>()
 defineEmits(["input"])
 
-const path = props.keypath + "." + props.name + "."
+const path = (props.keypath ? props.keypath : "form") + "." + props.name + "."
 function tr(key: string) {
     return t(path + key)
 }

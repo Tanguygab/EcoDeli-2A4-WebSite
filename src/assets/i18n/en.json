@@ -45,6 +45,18 @@
             "placeholder": "MySuperSecretPassword123!",
             "valid": "",
             "invalid": "Your password should be between 6 and 20 characters!"
+        },
+        "confirm": {
+            "label": "Confirm Password",
+            "placeholder": "MySuperSecretPassword123!",
+            "valid": "",
+            "invalid": "Your passwords don't match!"
+        },
+        "birthday": {
+            "label": "Birthday",
+            "placeholder": "",
+            "valid": "",
+            "invalid": ""
         }
     },
 

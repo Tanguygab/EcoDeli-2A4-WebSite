@@ -51,8 +51,8 @@ async function login(email: string, password: string) {
             
 }
 
-async function register(username: string, email: string, password: string) {
-    await post("auth/register", { email: email, username: username, password: password })
+async function register(firstname: string, name:  string, email: string, password: string, birthday: string) {
+    await post("auth/register", { firstname: firstname, name: name, email: email, password: password, birthday: birthday })
     router.push("/login")
 }
 
