@@ -18,7 +18,8 @@
     "user": {
         "profile": "Profile",
         "notifications": "Notifications",
-        "settings": "Settings"
+        "settings": "Settings",
+        "backoffice": "BackOffice"
     },
 
     "form": {

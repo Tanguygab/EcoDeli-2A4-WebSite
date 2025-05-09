@@ -14,14 +14,17 @@ api(session)
             <Logo link="/" />
         </div>
         <div class="navbar-menu navbar-end navbar-item buttons">
-            <div v-if="session.session.token || true">
+            <div v-if="session.user">
                 <div class="navbar-item has-dropdown is-hoverable">
                     <img src="@/assets/pedro.png">
                     <div class="navbar-dropdown is-boxed is-right">
-                        <RouterLink class="navbar-item" to="profile">{{ $t("user.profile") }}</RouterLink>
-                        <RouterLink class="navbar-item" to="notifications">{{ $t("user.notifications") }}</RouterLink>
-                        <RouterLink class="navbar-item" to="settings">{{ $t("user.settings") }}</RouterLink>
+                        <RouterLink class="navbar-item" to="/profile">{{ $t("user.profile") }}</RouterLink>
+                        <RouterLink class="navbar-item" to="/notifications">{{ $t("user.notifications") }}</RouterLink>
+                        <RouterLink class="navbar-item" to="/settings">{{ $t("user.settings") }}</RouterLink>
                         <hr class="navbar-divider">
+                        <RouterLink v-if="session.user.role.access_level >= 100" class="navbar-item has-text-danger-50"
+                            to="/backoffice">{{
+                                $t("user.backoffice") }}</RouterLink>
                         <a @click="logout()" class="navbar-item">{{ $t("auth.logout") }}</a>
                     </div>
                 </div>

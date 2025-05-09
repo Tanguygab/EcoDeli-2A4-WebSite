@@ -1,6 +1,6 @@
 import axios from "axios";
 import router from "./router";
-import type { User } from "./types/user";
+import { DummyUser, type User } from "./types/user";
 import type { Product } from "./types/product";
 import type { Subscription } from "./types/subscription";
 import { paginate, type Pagination } from "./types/pagination";
@@ -11,11 +11,13 @@ import type { UserProof } from "./types/user_proof";
 import type { Contract } from "./types/contract";
 import type { Warehouse } from "./types/warehouse";
 import type { Delivery } from "./types/delivery";
+import type { Notification } from "./types/notification";
+import type { Session } from "./stores/session";
 
 
-let session: any
+let session: Session
 
-function api(newSession: any) {
+function api(newSession: Session) {
     session = newSession
 }
 
@@ -25,7 +27,7 @@ async function request<type>(method: string, url: string, body?: object) {
         baseURL: "http://localhost:3000/",
         url: url,
         data: body,
-        headers: session.getHeader()
+        headers: session.getHeader
     })).data
 }
 
@@ -45,7 +47,8 @@ async function del<type>(endpoint: string) {
 // Auth
 
 async function login(email: string, password: string) {
-    const res = await post<any>("auth/login", { email: email, password: password })
+    const res = {token: "abc", user: DummyUser}
+    // const res = await post<any>("auth/login", { email: email, password: password })
     session.saveToken(res.token, res.user)
     router.push("/")
             
@@ -58,17 +61,17 @@ async function register(firstname: string, name:  string, email: string, passwor
 
 function logout() {
     post("auth/logout")
-    session.saveToken("", "")
+    session.saveToken("")
     router.push("/")
 }
 
 async function isSessionValid() {
-    if (session.session.token === "") return false
+    if (!session.user) return false
     try {
         await post("auth/valid")
         return true
     } catch (e) {
-        session.saveToken("", "")
+        session.saveToken("")
         return false
     }
 }
@@ -113,6 +116,10 @@ async function searchUsers(pagination: Pagination) {
 
 async function getNotifications() {
     return await get<Notification[]>("notifications")
+}
+
+async function readNotification(notification?: Notification) {
+    return await post<Notification[] | void>("notifications/read/" + (notification ? notification.id : ""))
 }
 
 
@@ -173,7 +180,7 @@ export {
     getSubscriptions, getProducts, getServices, getRequests, getProduct, searchProducts,
 
     // User
-    getUser, searchUsers, getNotifications,
+    getUser, searchUsers, getNotifications, readNotification,
     getBills, getContracts, getDeliveries, getPayments, getProofs,
 
     // Admin
