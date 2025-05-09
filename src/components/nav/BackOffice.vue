@@ -2,6 +2,7 @@
 import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 import Logo from '../Logo.vue'
+import router from '@/router'
 
 const burgerMenu = ref(false)
 
@@ -47,7 +48,7 @@ const pages = [
 <template>
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <Logo link="/backoffice" />
+            <Logo :link="router.currentRoute.value.path === '/backoffice' ? '/' : '/backoffice'" />
 
             <a :class="'navbar-burger' + (burgerMenu ? ' is-active' : '')" aria-label="menu" :aria-expanded="burgerMenu"
                 @click="toggleBurgerMenu()">
