@@ -1,39 +1,8 @@
-# Ecodeli-2A4-G1-Website-Vue
+# Ecodeli-2A4 Project
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## Links
+Our [Figma templates](https://www.figma.com/design/o5iH8dvg0ijLi78WzlaQVY/FRONT-END?node-id=0-1&p=f&t=bBtFDFrrQwny8KlR-0),
+our [Website](https://github.com/Tanguygab/Ecodeli-2A4-Website),
+our [API](https://github.com/Tanguygab/Ecodeli-2A4-API),
+our [Mobile App](https://github.com/Tanguygab/Ecodeli-2A4-Mobile)
+and our [Desktop Java app](https://github.com/Tanguygab/EcoDeli-2A4-Java)
