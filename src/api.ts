@@ -24,7 +24,7 @@ function api(newSession: Session) {
 async function request<type>(method: string, url: string, body?: object) {
     return (await axios.request<type>({
         method: method,
-        baseURL: "http://localhost:3000/",
+        baseURL: "http://localhost:3000/api/",
         url: url,
         data: body,
         headers: session.getHeader
@@ -47,8 +47,7 @@ async function del<type>(endpoint: string) {
 // Auth
 
 async function login(email: string, password: string) {
-    const res = {token: "abc", user: DummyUser}
-    // const res = await post<any>("auth/login", { email: email, password: password })
+    const res = await post<any>("auth/login", { email: email, password: password })
     session.saveToken(res.token, res.user)
     router.push("/")
             

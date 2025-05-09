@@ -5,7 +5,7 @@ const props = defineProps<{ image?: string, size?: string, text: string, link?: 
 const img = ref()
 
 if (props.image) {
-    import("/src/assets/" + props.image).then(image => {
+    import(/* @vite-ignore */ "/src/assets/" + props.image).then(image => {
         img.value.src = image.default
     })
 }
@@ -28,6 +28,7 @@ if (props.image) {
 img {
     border-radius: 5%;
 }
+
 p {
     text-align: center;
 }

@@ -27,7 +27,7 @@ const input = ref()
         <label class="label">{{ tr("label") }}</label>
         <div class="control has-icons-left has-icons-right">
             <input v-model="input" @input="$emit('input', input)"
-                :class="'input ' + (valid === undefined ? '' : valid ? 'is-success' : 'is-danger')" name="name"
+                :class="'input ' + (valid === undefined ? '' : valid ? 'is-success' : 'is-danger')" :name="name"
                 :type="type" :placeholder="tr('placeholder')">
 
             <Icon :icon="icon" class="is-small is-left" />
