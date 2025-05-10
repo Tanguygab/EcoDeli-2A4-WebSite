@@ -27,10 +27,10 @@ loadUser()
     <template v-if="user">
         <div class="columns">
 
-            <figure class="column is-one-third">
+            <figure class="column is-one-third is-flex is-flex-direction-column is-align-items-center has-text-centered">
                 <img src="@/assets/pedro.png">
-                <figcaption class="title is-4 has-text-centered">
-                    <span :class="'tag' + (user.role.name === 'admin' ? ' is-danger' : '')">
+                <figcaption class="title is-4">
+                    <span v-if="user.role.name !== 'user'" :class="'tag' + (user.role.name === 'admin' ? ' is-danger' : '')">
                         {{ $t("user.role." + user.role.name) }}
                     </span>
                     <span v-if="user.subscription.name !== 'free'" :class="'tag ml-2 is-' + user.subscription.color">
@@ -71,6 +71,6 @@ loadUser()
 }
 
 img {
-    width: 50em;
+    width: 20em;
 }
 </style>
