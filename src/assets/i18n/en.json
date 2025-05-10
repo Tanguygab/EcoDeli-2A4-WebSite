@@ -19,7 +19,23 @@
         "profile": "Profile",
         "notifications": "Notifications",
         "settings": "Settings",
-        "backoffice": "BackOffice"
+        "backoffice": "BackOffice",
+        "no-description": "No description set.",
+        "role": {
+            "admin": "Admin",
+            "support": "Support",
+            "hr": "HR",
+            "employee": "Employee",
+            "supplier": "Supplier",
+            "service-provider": "Service Provider",
+            "delivery": "Delivery",
+            "user": "User"
+        },
+        "subscription": {
+            "premium": "Premium",
+            "starter": "Starter",
+            "free": "Free"
+        }
     },
 
     "form": {

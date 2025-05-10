@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { api, getNotifications, readNotification } from '@/api';
+import { api, getNotifications, isSessionValid, readNotification } from '@/api';
 import router from '@/router';
 import { startSession } from '@/stores/session';
 import type { Notification } from '@/types/notification';
 import { ref } from 'vue';
 
 api(startSession())
+isSessionValid(true)
 
 const notifications = ref<Notification[]>([
     { id: 0, content: "Titouan purchased your product!", date: new Date(1), is_read: true, link: "profile/titouan.melchio" },

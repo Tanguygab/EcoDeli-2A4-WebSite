@@ -1,6 +1,7 @@
 export type Subscription = {
     id: number,
     name: string,
+    color: string,
     price: number,
     assurance_max: number,
     assurance_bonus: number,

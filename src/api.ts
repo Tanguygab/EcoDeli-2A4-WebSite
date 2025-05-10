@@ -64,13 +64,17 @@ export function logout() {
     router.push("/")
 }
 
-export async function isSessionValid() {
-    if (!session.user) return false
+export async function isSessionValid(home?: boolean) {
+    if (!session.user) {
+        if (home) router.push("/")
+        return false
+    }
     try {
         session.user = (await post<{user: User}>("auth/valid")).user
         return true
     } catch (e) {
         session.saveToken("")
+        if (home) router.push("/")
         return false
     }
 }

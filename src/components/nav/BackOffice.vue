@@ -3,6 +3,9 @@ import { RouterLink } from 'vue-router'
 import { ref } from 'vue'
 import Logo from '../Logo.vue'
 import router from '@/router'
+import { isSessionValid } from '@/api'
+
+isSessionValid(true)
 
 const burgerMenu = ref(false)
 
