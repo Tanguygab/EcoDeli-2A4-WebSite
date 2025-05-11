@@ -37,5 +37,3 @@ function read(notification?: Notification) {
     </div>
 
 </template>
-
-<style scoped></style>

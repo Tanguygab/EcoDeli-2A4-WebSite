@@ -1,5 +1,5 @@
 export type PackageSize = {
     id: number,
-    name: String,
+    name: string,
     size: number
 }

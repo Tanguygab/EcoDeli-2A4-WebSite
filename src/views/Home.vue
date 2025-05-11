@@ -1,16 +1,25 @@
 <script setup lang="ts">
 import Icon from '@/components/Icon.vue'
 import ImageView from '@/components/ImageView.vue';
+import router from '@/router'
+import { ref } from 'vue'
+
+const input = ref<string>()
+function search() {
+    if (input.value)
+        router.push("/products?filter=" + input.value)
+}
+
 </script>
 
 <template>
     <div id="search" class="control has-icons-right">
-        <input class="input is-rounded is-primary" type="text" :placeholder="$t('search.products')" />
+        <input v-model="input" class="input is-rounded is-primary" type="text" :placeholder="$t('search.products')" @keydown.enter="search" />
         <Icon icon="fa-search" class="is-small is-right mr-2" />
     </div>
 
     <div class="columns my-5">
-        <ImageView class="column" overlay image="home/products.png" :text="$t('home.all-products')" link="#" />
+        <ImageView class="column" overlay image="home/products.png" :text="$t('home.all-products')" link="products" />
         <ImageView class="column" overlay :text="$t('home.delivery-info')" link="#" />
         <ImageView class="column" overlay :text="$t('home.news')" link="#" />
     </div>

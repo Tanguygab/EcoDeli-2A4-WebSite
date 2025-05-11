@@ -37,6 +37,21 @@
             "free": "Free"
         }
     },
+    "product": {
+        "seller": "Seller",
+        "price": {
+            "name": "Price",
+            "min": "Min",
+            "max": "Max"
+        },
+        "size": {
+            "name": "Size",
+            "xxl": "XXL",
+            "large": "Large",
+            "medium": "Medium",
+            "small": "Small"
+        }
+    },
 
     "form": {
         "firstname": {
@@ -78,6 +93,7 @@
     },
 
     "search": {
+        "results": "Results for \"{{input}}\"",
         "products": "Search products/offers...",
         "bills": "Search Bills..."
     },

@@ -12,6 +12,8 @@ const router = createRouter({
     { path: '/profile/:id', component: Profile },
     { path: '/notifications', component: () => import('@/views/Notifications.vue') },
     { path: '/settings', component: () => import('@/views/Settings.vue') },
+    { path: '/products', component: () => import('@/views/products/Products.vue') },
+    { path: '/product/:id', component: () => import('@/views/products/Product.vue') },
     {
       path: '/backoffice',
       component: () => import('@/views/backoffice/Home.vue'),

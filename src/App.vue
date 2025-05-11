@@ -3,17 +3,19 @@ import { RouterView } from 'vue-router'
 import FrontOffice from "./components/nav/FrontOffice.vue"
 import router from './router';
 import BackOffice from './components/nav/BackOffice.vue';
+
+function path() {
+    return router.currentRoute.value?.path
+}
 </script>
 
 <template>
   <header class="header">
-    <BackOffice v-if="router.currentRoute.value?.path.startsWith('/backoffice')" />
+    <BackOffice v-if="path()?.startsWith('/backoffice')" />
     <FrontOffice v-else />
   </header>
-  <main>
-    <div class="container is-flex is-flex-direction-column is-align-items-center mt-5">
+  <main :class="(path()?.startsWith('/products') ? '' : 'container ') + 'is-flex is-flex-direction-column is-align-items-center my-5'">
       <RouterView />
-    </div>
   </main>
   <footer class="footer mt-auto">
     footer
@@ -22,6 +24,6 @@ import BackOffice from './components/nav/BackOffice.vue';
 
 <style scoped>
 .container {
-  width: 75%;
+    width: 75%;
 }
 </style>

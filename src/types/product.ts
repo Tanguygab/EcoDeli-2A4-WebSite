@@ -4,7 +4,7 @@ import type { User } from "./user"
 
 export type Product = {
     id: number,
-    name: String,
+    name: string,
     price: number,
     size: PackageSize,
     seller: User,
