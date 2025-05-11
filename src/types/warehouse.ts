@@ -1,7 +1,7 @@
 import type { Location } from "./location"
 
 export type Warehouse = {
-    id: number,
+    _id: number,
     location: Location,
     name: string
 }

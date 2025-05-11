@@ -5,8 +5,8 @@ import type { Pagination } from '@/types/pagination';
 async function search(pagination: Pagination, callback: (updatedList: Array<any>) => void) {
     //callback(await get (pagination))
     callback([
-        { id: 1, type: "Revenu", amount: "500€", date: "2024-03-12" },
-        { id: 2, type: "Dépense", amount: "200€", date: "2024-03-10" },
+        { _id: 1, type: "Revenu", amount: "500€", date: "2024-03-12" },
+        { _id: 2, type: "Dépense", amount: "200€", date: "2024-03-10" },
     ])
 }
 
@@ -20,5 +20,5 @@ async function handleDelete(item: any, callback: () => void) {
 
 <template>
     <h2 class="title">Gestion des Finances</h2>
-    <AdminTable name="finances" @search="search" @delete="handleDelete" :columns="['id', 'type', 'amount', 'date']" />
+    <AdminTable name="finances" @search="search" @delete="handleDelete" :columns="['_id', 'type', 'amount', 'date']" />
 </template>

@@ -9,9 +9,9 @@ api(startSession())
 isSessionValid(true)
 
 const notifications = ref<Notification[]>([
-    { id: 0, content: "Titouan purchased your product!", date: new Date(1), is_read: true, link: "profile/titouan.melchio" },
-    { id: 1, content: "Abdoullah is selling a new product!", date: new Date(2), is_read: false, link: "/product/123" },
-    { id: 2, content: "You've got a new review on your profile!", date: new Date(), is_read: false, link: "/profile" }
+    { _id: 0, content: "Titouan purchased your product!", date: new Date(1), is_read: true, link: "profile/titouan.melchio" },
+    { _id: 1, content: "Abdoullah is selling a new product!", date: new Date(2), is_read: false, link: "/product/123" },
+    { _id: 2, content: "You've got a new review on your profile!", date: new Date(), is_read: false, link: "/profile" }
 ])
 // getNotifications().then(notifs => notifications.value = notifs)
 notifications.value.sort((a, b) => b.date.getTime() - a.date.getTime())

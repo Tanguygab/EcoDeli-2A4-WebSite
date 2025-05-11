@@ -2,7 +2,7 @@ import type { Role } from "./role"
 import type { Subscription } from "./subscription"
 
 export type User = {
-    id: number,
+    _id: number,
     firstname: string,
     name: string,
     email: string,

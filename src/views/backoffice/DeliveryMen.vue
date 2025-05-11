@@ -6,8 +6,8 @@ import type { User } from '@/types/user';
 async function search(pagination: Pagination, callback: (updatedList: Array<any>) => void) {
     //callback(await get (pagination))
     callback([
-        { id: 1 },
-        { id: 2 },
+        { _id: 1 },
+        { _id: 2 },
     ])
 }
 
@@ -21,5 +21,5 @@ async function handleDelete(user: User, callback: () => void) {
 
 <template>
     <h2 class="title">Gestion des Livreurs</h2>
-    <AdminTable name="deliverymen" @search="search" @delete="handleDelete" :columns="['id']" />
+    <AdminTable name="deliverymen" @search="search" @delete="handleDelete" :columns="['_id']" />
 </template>

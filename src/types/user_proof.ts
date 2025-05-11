@@ -1,7 +1,7 @@
 import type { User } from "./user"
 
 export type UserProof = {
-    id: number,
+    _id: number,
     user: User,
     date: Date,
     name: string,

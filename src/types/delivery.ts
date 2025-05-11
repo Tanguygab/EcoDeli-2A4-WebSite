@@ -1,7 +1,7 @@
 import type { User } from "./user"
 
 export type Delivery = {
-    id: number,
+    _id: number,
     deliveryman: User,
     latitude: number,
     longitude: number,

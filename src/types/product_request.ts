@@ -6,7 +6,7 @@ import type { User } from "./user";
 import type { Warehouse } from "./warehouse";
 
 export type ProductRequest = {
-    id: number,
+    _id: number,
     creation_date: Date,
     date: Date,
     accepted_date?: Date,

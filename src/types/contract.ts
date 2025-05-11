@@ -1,7 +1,7 @@
 import type { User } from "./user"
 
 export type Contract = {
-    id: number,
+    _id: number,
     user: User,
     start_date: Date,
     end_date: Date,

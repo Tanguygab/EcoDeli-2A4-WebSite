@@ -1,5 +1,5 @@
 export type Notification = {
-    id: number,
+    _id: number,
     date: Date,
     is_read: boolean,
     content: string

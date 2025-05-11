@@ -1,5 +1,5 @@
 export type Role = {
-    id: number,
+    _id: number,
     name: string,
     access_level: number
 }

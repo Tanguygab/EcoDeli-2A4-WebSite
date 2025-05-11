@@ -1,7 +1,7 @@
 import type { User } from "./user"
 
 export type Location = {
-    id: number,
+    _id: number,
     user?: User,
     city: string,
     zipcode: string,

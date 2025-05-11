@@ -1,7 +1,7 @@
 import type { User } from "./user"
 
 export type Bill = {
-    id: number,
+    _id: number,
     buyer: User,
     receiver: User,
     date: Date,

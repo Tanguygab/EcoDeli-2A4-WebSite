@@ -7,8 +7,8 @@ import { getBills, deleteBill } from '@/api';
 async function search(pagination: Pagination, callback: (updatedList: Array<any>) => void) {
     //callback(await getBills(pagination))
     callback([
-        { id: 1, date: new Date("2024-03-15"), price: 150, filepath: "facture1.pdf", buyer: undefined, receiver: undefined },
-        { id: 2, date: new Date("2024-02-10"), price: 200, filepath: "facture2.pdf", buyer: undefined, receiver: undefined },
+        { _id: 1, date: new Date("2024-03-15"), price: 150, filepath: "facture1.pdf", buyer: undefined, receiver: undefined },
+        { _id: 2, date: new Date("2024-02-10"), price: 200, filepath: "facture2.pdf", buyer: undefined, receiver: undefined },
     ])
 }
 
@@ -22,5 +22,5 @@ async function handleDelete(bill: Bill, callback: () => void) {
 
 <template>
     <h2 class="title">Gestion des Factures</h2>
-    <AdminTable name="bills" @search="search" @delete="handleDelete" :columns="['id', 'date', 'price']" />
+    <AdminTable name="bills" @search="search" @delete="handleDelete" :columns="['_id', 'date', 'price']" />
 </template>

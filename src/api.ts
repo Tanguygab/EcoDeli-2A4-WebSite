@@ -50,7 +50,6 @@ export async function login(email: string, password: string) {
     const res = await post<{token: string, user: User}>("auth/login", { email: email, password: password })
     session.saveToken(res.token, res.user)
     router.push("/")
-            
 }
 
 export async function register(firstname: string, name:  string, email: string, password: string, birthday: string) {
@@ -122,7 +121,7 @@ export async function getNotifications() {
 }
 
 export async function readNotification(notification?: Notification) {
-    return await post<Notification[] | void>("notifications/read/" + (notification ? notification.id : ""))
+    return await post<Notification[] | void>("notifications/read/" + (notification ? notification._id : ""))
 }
 
 
@@ -150,19 +149,19 @@ export async function getProofs(pagination: Pagination) {
 // Admin
 
 export async function deleteBill(bill: Bill) {
-    return await del("bills/" + bill.id)
+    return await del("bills/" + bill._id)
 }
 
 export async function deleteContract(contract: Contract) {
-    return await del("contracts/" + contract.id)
+    return await del("contracts/" + contract._id)
 }
 
 export async function deleteDelivery(delivery: Delivery) {
-    return await del("deliveries/" + delivery.id)
+    return await del("deliveries/" + delivery._id)
 }
 
 export async function deletePayment(payment: Bill) {
-    return await del("payments/" + payment.id)
+    return await del("payments/" + payment._id)
 }
 
 
