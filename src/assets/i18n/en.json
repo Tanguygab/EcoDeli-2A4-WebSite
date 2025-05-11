@@ -38,6 +38,7 @@
         }
     },
     "product": {
+        "products": "Products",
         "seller": "Seller",
         "price": {
             "name": "Price",

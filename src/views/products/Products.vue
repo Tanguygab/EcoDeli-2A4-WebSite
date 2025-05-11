@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Product } from '@/types/product.ts'
-import { getProducts } from '@/api.ts'
+import { getProducts, getSellers } from '@/api.ts'
 import { newPagination } from '@/types/pagination.ts'
 import Pages from '@/components/Pages.vue'
 import ProductCard from '@/components/products/ProductCard.vue'
@@ -9,11 +9,26 @@ import type { User } from '@/types/user.ts'
 import Icon from '@/components/Icon.vue'
 
 const pagination = newPagination()
-const products = ref<Product[]>([])
 
+const products = ref<Product[]>([])
+getProducts(pagination).then(data => products.value = data)
+
+const sellerInput = ref<string>()
 const sellers = ref<User[]>([])
 const selectedSellers = ref<User[]>([])
-getProducts(pagination).then(data => products.value = data)
+
+function searchSellers() {
+    if (!sellerInput.value || sellerInput.value.length < 3) return
+    getSellers(sellerInput.value).then(data => {
+        sellers.value = data.filter(user => !selectedSellers.value.some(selected => selected._id === user._id))
+    })
+}
+
+function selectSeller(seller: User) {
+    selectedSellers.value.push(seller)
+    sellerInput.value = ""
+    sellers.value = []
+}
 
 const sizes = ['small', 'medium', 'large', 'xxl']
 </script>
@@ -46,13 +61,26 @@ const sizes = ['small', 'medium', 'large', 'xxl']
 
             <div class="content mb-5">
                 <label class="title is-5">{{ $t('product.seller') }}</label>
-                <div class="control has-icons-left mt-3">
-                    <input class="input" type="text" placeholder="Search" />
-                    <span class="icon is-left">
-                        <i class="fas fa-search" aria-hidden="true"></i>
-                      </span>
+
+                <div :class="'dropdown' + (sellerInput && sellers.length ? ' is-active' : '')">
+                    <div class="dropdown-trigger">
+                        <div class="control has-icons-left mt-3">
+                            <input v-model="sellerInput" class="input" type="text" placeholder="Search" @keyup="searchSellers">
+                            <span class="icon is-left">
+                                <i class="fas fa-search" aria-hidden="true"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                            <a class="dropdown-item" v-for="seller in sellers" @click="selectSeller(seller)" :key="seller._id">
+                                {{ seller.firstname + " " + seller.name }}
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <ul v-for="(seller, i) in selectedSellers" :key="seller.id">
+
+                <ul v-for="(seller, i) in selectedSellers" :key="seller._id">
                     <li>
                         {{ seller.firstname + " " + seller.name }}
                         <Icon icon="fa-trash" @click="selectedSellers.splice(i, 1)"/>
@@ -63,12 +91,14 @@ const sizes = ['small', 'medium', 'large', 'xxl']
 
         <div class="my-5 is-fullwidth is-flex is-flex-direction-column">
             <div class="is-fullheight">
-                <h1 class="title has-text-centered">{{ $t("search.results", {input: pagination.filter}) }}</h1>
+                <h1 class="title has-text-centered">
+                    {{ pagination.filter ? $t("search.results", {input: pagination.filter}) : $t("product.products") }}
+                </h1>
                 <div class="is-flex is-flex-wrap-wrap is-justify-content-center">
                     <ProductCard
                         class="mx-5"
                         v-for="product in products"
-                        :key="product.id"
+                        :key="product._id"
                         :product="product"
                     />
                     <div></div>

@@ -101,8 +101,8 @@ export async function getProduct(id: number) {
     return await get<Product>("products/" + id)
 }
 
-export async function searchProducts(pagination: Pagination) {
-    return await get<Product[]>(paginate("products", pagination))
+export async function getSellers(input: string) {
+    return await get<User[]>("products/sellers?input=" + input)
 }
 
 
