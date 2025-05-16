@@ -28,7 +28,7 @@ loadUser()
         <div class="columns">
 
             <figure class="column is-one-third is-flex is-flex-direction-column is-align-items-center has-text-centered">
-                <img src="@/assets/pedro.png">
+                <img alt="Profile Picture" src="@/assets/pedro.png">
                 <figcaption class="title is-4">
                     <span v-if="user.role.name !== 'user'" :class="'tag' + (user.role.name === 'admin' ? ' is-danger' : '')">
                         {{ $t("user.role." + user.role.name) }}

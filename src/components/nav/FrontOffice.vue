@@ -30,7 +30,7 @@ document.addEventListener("click", e => {
         <div class="navbar-menu navbar-end navbar-item buttons">
             <div v-if="session.user">
                 <div :class="'navbar-item has-dropdown is-hoverable' + (menu ? ' is-active' : '')" @click="openMenu">
-                    <img ref="menuIcon" src="@/assets/pedro.png">
+                    <img ref="menuIcon" alt="Profile Picture" src="@/assets/pedro.png">
                     <div class="navbar-dropdown is-boxed is-right">
                         <RouterLink class="navbar-item" to="/profile">{{ $t("user.profile") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/notifications">{{ $t("user.notifications") }}</RouterLink>
