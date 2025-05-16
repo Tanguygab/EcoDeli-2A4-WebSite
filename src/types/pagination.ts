@@ -1,8 +1,8 @@
 import router from "@/router"
 
-function def(key: any, defv: any) {
+function def(key: any, defV: any) {
     const query = router.currentRoute.value.query
-    return query[key] === undefined ? defv : query[key]
+    return query[key] === undefined ? defV : query[key]
 }
 
 function newPagination(): Pagination {

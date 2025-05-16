@@ -65,7 +65,7 @@ const pages = [
                 <div v-for="page in pages" class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">{{ page.name }}</a>
                     <div class="navbar-dropdown is-boxed">
-                        <RouterLink v-for="name, link in page.children" class="navbar-item" :to="'/backoffice/' + link">
+                        <RouterLink v-for="(name, link) in page.children" class="navbar-item" :to="'/backoffice/' + link">
                             {{ (page.prefix ? page.prefix + " " : "") + name }}
                         </RouterLink>
                     </div>
