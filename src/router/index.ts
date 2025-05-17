@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home.vue'
+import NotFound from '@/views/404.vue'
 import Profile from '@/views/Profile.vue'
 
 const router = createRouter({
@@ -29,7 +30,8 @@ const router = createRouter({
                 { path: 'follow-ups', component: () => import('@/views/backoffice/Prestations.vue') },
                 { path: 'finance', component: () => import('@/views/backoffice/Finances.vue') }
             ]
-        }
+        },
+        { path: '/:pathMatch(.*)*', component: NotFound }
     ]
 })
 

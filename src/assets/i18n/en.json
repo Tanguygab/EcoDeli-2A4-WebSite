@@ -5,6 +5,11 @@
         "logout": "Logout"
     },
 
+    "404": {
+        "home": "Home",
+        "back": "Back"
+    },
+
     "home": {
         "all-products": "All Products",
         "delivery-info": "Delivery Information",
