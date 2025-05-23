@@ -26,6 +26,7 @@
         "settings": "Settings",
         "backoffice": "BackOffice",
         "no-description": "No description set.",
+        "my-files": "My Files",
         "role": {
             "admin": "Admin",
             "support": "Support",
@@ -101,7 +102,8 @@
     "search": {
         "results": "Results for \"{{input}}\"",
         "products": "Search products/offers...",
-        "bills": "Search Bills..."
+        "bills": "Search bills...",
+        "files": "Search files..."
     },
 
     "pagination": {
@@ -158,6 +160,14 @@
         "traders": {
             "name": "Name",
             "email": "Email"
+        }
+    },
+    "files": {
+        "tabs": {
+            "all": "All",
+            "contracts": "Contracts",
+            "finances": "Finances",
+            "bills": "Bills"
         }
     }
 }

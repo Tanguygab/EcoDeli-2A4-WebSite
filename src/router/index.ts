@@ -15,6 +15,7 @@ const router = createRouter({
         { path: '/settings', component: () => import('@/views/Settings.vue') },
         { path: '/products', component: () => import('@/views/products/Products.vue') },
         { path: '/product/:id', component: () => import('@/views/products/Product.vue') },
+        { path: '/my-files', component: () => import('@/views/MyFiles.vue') },
         {
             path: '/backoffice',
             component: () => import('@/views/backoffice/Home.vue'),
