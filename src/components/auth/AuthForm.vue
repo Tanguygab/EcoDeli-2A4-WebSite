@@ -36,19 +36,21 @@ async function submit() {
 const validEmail = ref<boolean | undefined>()
 function checkEmail(value: string) {
     email = value
+    validEmail.value = true
 }
 const validFirstName = ref<boolean | undefined>()
 function checkFirstName(value: string) {
     firstname = value
     setTimeout(() => {
         if (firstname !== value) return
-        validFirstName.value = value === "Tanguy"
+        validFirstName.value = value !== "Tanguy"
     }, 1000);
 }
 
 const validName = ref<boolean | undefined>()
 function checkName(value: string) {
     name = value
+    validName.value = true
 }
 
 const validPassword = ref<boolean | undefined>()
