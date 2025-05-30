@@ -17,12 +17,12 @@ let email: string = "", password: string = "";
 let firstname: string = "", name: string = "", passwordConfirmation: string = "", birthday: string = "";
 
 async function submit() {
-    if (!validEmail || !validPassword) return
+    if (!validEmail.value || !validPassword.value) return
     error.value = "";
 
     try {
         if (!props.isLogin) {
-            if (validFirstName && validName && confirmedPassword)
+            if (validFirstName.value && validName.value && confirmedPassword.value)
                 register(firstname, name, email, password, birthday)
             return
         }
