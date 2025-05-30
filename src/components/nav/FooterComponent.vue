@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { ref } from 'vue'
-import router from '@/router'
 </script>
 
 <template>
@@ -10,9 +8,9 @@ import router from '@/router'
             <p>
                 © 2025 EcoDeli. Tous droits réservés.
             </p>
-            <button class="button is-primary" @click="contact">
+            <RouterLink class="button is-primary" to="contact">
                 Contactez-nous
-            </button>
+            </RouterLink>
         </div>
     </footer>
 </template>
