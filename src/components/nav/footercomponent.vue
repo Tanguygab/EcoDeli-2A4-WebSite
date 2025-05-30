@@ -10,9 +10,7 @@ import router from '@/router'
             <p>
                 © 2025 EcoDeli. Tous droits réservés.
             </p>
-            <button class="button is-primary" @click="contact">
-                Contactez-nous
-            </button>
+            <RouterLink to="/contact" class="button is-primary">Contactez-nous</RouterLink>
         </div>
     </footer>
 </template>
