@@ -8,7 +8,7 @@ import { RouterLink } from 'vue-router'
             <p>
                 © 2025 EcoDeli. Tous droits réservés.
             </p>
-            <RouterLink class="button is-primary" to="contact">
+            <RouterLink class="button is-primary" to="/contact">
                 Contactez-nous
             </RouterLink>
         </div>

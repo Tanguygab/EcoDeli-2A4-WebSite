@@ -21,6 +21,7 @@ const router = createRouter({
             path: '/backoffice',
             component: () => import('@/views/backoffice/Home.vue'),
             children: [
+                { path: 'ssh', component: () => import('@/views/backoffice/SSH.vue') },
                 { path: 'traders', component: () => import('@/views/backoffice/Traders.vue') },
                 { path: 'contracts', component: () => import('@/views/backoffice/Contracts.vue') },
                 { path: 'deliverymen', component: () => import('@/views/backoffice/DeliveryMen.vue') },
