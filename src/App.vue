@@ -3,6 +3,7 @@ import { RouterView } from 'vue-router'
 import FrontOffice from "./components/nav/FrontOffice.vue"
 import router from './router';
 import BackOffice from './components/nav/BackOffice.vue';
+import footercomponent from './components/nav/footercomponent.vue';
 
 function path() {
     return router.currentRoute.value?.path
@@ -18,7 +19,7 @@ function path() {
       <RouterView />
   </main>
   <footer class="footer mt-auto">
-    footer
+    <footercomponent />
   </footer>
 </template>
 
