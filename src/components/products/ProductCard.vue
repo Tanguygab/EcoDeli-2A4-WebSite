@@ -7,7 +7,7 @@ defineProps<{product: Product}>()
 
 
 <template>
-    <div class="card">
+    <RouterLink :to="'/product/' + product._id" class="card">
         <div class="card-image">
             <figure class="image">
                 <img src="https://bulma.io/assets/images/placeholders/128x128.png" :alt="product.name">
@@ -23,5 +23,11 @@ defineProps<{product: Product}>()
                 <p class="has-text-right">{{ product.price }}€</p>
             </div>
         </div>
-    </div>
+    </RouterLink>
 </template>
+
+<style>
+.gap-6 {
+    gap: 1rem;
+}
+</style>
