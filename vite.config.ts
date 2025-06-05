@@ -6,16 +6,16 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    vueDevTools(),
-  ],
-  watch: {
-    usePolling: true
-  },
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+    plugins: [
+        vue(),
+        vueDevTools(),
+    ],
+    server: {
+        host: "0.0.0.0"
     },
-  },
+    resolve: {
+        alias: {
+          '@': fileURLToPath(new URL('./src', import.meta.url))
+        },
+    },
 })

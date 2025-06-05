@@ -1,15 +1,8 @@
 <script setup lang="ts">
-import axios from 'axios';
 import { startSession } from '@/stores/session';
-import router from '@/router';
+import { api, logout } from '@/api.ts'
 
-const session = startSession();
-
-function logout() {
-    axios.post("http://localhost:3000/auth/logout", {}, session.getHeaders);
-    session.set("", null);
-    router.push("/");
-}
+api(startSession())
 </script>
 
 <template>
