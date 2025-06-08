@@ -10,4 +10,4 @@ eslint.config.ts
 .gitattributes
 .gitignore
 .prettierrc.json
-
+dist
