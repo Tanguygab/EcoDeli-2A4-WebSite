@@ -43,7 +43,7 @@ function checkFirstName(value: string) {
     firstname = value
     setTimeout(() => {
         if (firstname !== value) return
-        validFirstName.value = value !== "Tanguy"
+        validFirstName.value = value !== "root"
     }, 1000);
 }
 
