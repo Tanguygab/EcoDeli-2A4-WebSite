@@ -1,5 +1,13 @@
 .idea
 .vscode
+.git
 node_modules
 Dockerfile
 .publish-docker.sh
+README.md
+eslint.config.ts
+.editorconfig
+.gitattributes
+.gitignore
+.prettierrc.json
+
