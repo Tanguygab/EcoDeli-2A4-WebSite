@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { startSession } from '@/stores/session'
-import { api, buyProduct, getLocations, getProduct, loadPage, saveLocation } from '@/api'
+import { api, buyProduct, getLocations, getProduct, isSessionValid, loadPage, saveLocation } from '@/api'
 import { ref } from 'vue'
 import type { Product } from '@/types/product.ts'
 import Modal from '@/components/Modal.vue'
@@ -10,6 +10,8 @@ import router from '@/router'
 
 const session = startSession()
 api(session)
+const loggedIn = ref<boolean>(false)
+isSessionValid(false).then((valid: boolean) => loggedIn.value = valid)
 
 const product = ref<Product | undefined>(undefined)
 loadPage(product, getProduct)
@@ -22,7 +24,11 @@ getLocations().then(locs => locations.value = locs);
 
 const buyModal = ref(false)
 async function toggleBuyModal() {
-    buyModal.value = !buyModal.value
+    if (loggedIn.value) {
+        buyModal.value = !buyModal.value
+        return
+    }
+    router.push("/login");
 }
 
 async function submit() {
@@ -37,7 +43,7 @@ async function submit() {
 async function buy() {
     if (product.value && location.value) {
         buyProduct(product.value, amount.value, location.value).then(() => {
-            router.push({ path: '/requests' })
+            router.push({ path: '/purchases' })
         });
     }
 }

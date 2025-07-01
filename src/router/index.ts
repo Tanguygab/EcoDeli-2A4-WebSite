@@ -15,6 +15,8 @@ const router = createRouter({
         { path: '/settings', component: () => import('@/views/Settings.vue') },
         { path: '/products', component: () => import('@/views/products/Products.vue') },
         { path: '/product/:id', component: () => import('@/views/products/Product.vue') },
+        { path: '/requests', component: () => import('@/views/requests/Requests.vue') },
+        { path: '/requests/:id', component: () => import('@/views/requests/Request.vue') },
         { path: '/my-files', component: () => import('@/views/MyFiles.vue') },
         { path: '/contact', component: () => import('@/views/contact.vue') },
         {

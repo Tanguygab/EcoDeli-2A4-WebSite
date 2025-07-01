@@ -108,10 +108,6 @@ export async function getServices(pagination: Pagination) {
     return await get<Service[]>(paginate("products", pagination))
 }
 
-export async function getRequests(pagination: Pagination) {
-    return await get<ProductRequest[]>(paginate("products", pagination))
-}
-
 export async function getProduct(id: number) {
     return await get<Product>("products/" + id)
 }
@@ -144,6 +140,14 @@ export async function buyProduct(product: Product, amount: number, location: Loc
         amount: amount,
         location: location
     })
+}
+
+export async function getRequests(pagination: Pagination) {
+    return await get<ProductRequest[]>(paginate("products/requests", pagination))
+}
+
+export async function getRequest(id: number) {
+    return await get<ProductRequest>("products/requests/" + id)
 }
 
 export async function getLocations() {

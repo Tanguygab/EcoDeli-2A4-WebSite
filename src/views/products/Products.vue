@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { Product } from '@/types/product.ts'
 import { getProducts, getSellers } from '@/api.ts'
 import { newPagination } from '@/types/pagination.ts'
 import Pages from '@/components/Pages.vue'
 import ProductCard from '@/components/products/ProductCard.vue'
 import type { User } from '@/types/user.ts'
+import type { Product } from '@/types/product.ts'
 import Icon from '@/components/Icon.vue'
 
 const pagination = newPagination()
