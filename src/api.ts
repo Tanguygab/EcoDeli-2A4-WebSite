@@ -12,7 +12,9 @@ import type { Contract } from "./types/contract";
 import type { Warehouse } from "./types/warehouse";
 import type { Delivery } from "./types/delivery";
 import type { Notification } from "./types/notification";
+import type { Location } from './types/location.ts'
 import type { Session } from "./stores/session";
+import { type Ref, watch } from 'vue'
 
 
 let session: Session
@@ -41,6 +43,19 @@ async function get<type>(endpoint: string) {
 
 async function del<type>(endpoint: string) {
     return request<type>("DELETE", endpoint)
+}
+
+export async function loadPage<type>(ref: Ref<type>, fun: Function) {
+    const callFun = async () => {
+        const id = router.currentRoute.value.params.id as string
+        if (id) fun(parseInt(id))
+            .then((value: type) => ref.value = value)
+            .catch(() => router.push("/"))
+        else router.push("/")
+    }
+
+    watch(() => router.currentRoute.value.params, callFun)
+    callFun()
 }
 
 
@@ -122,6 +137,21 @@ export async function getNotifications() {
 
 export async function readNotification(notification?: Notification) {
     return await post<Notification[] | void>("notifications/read/" + (notification ? notification._id : ""))
+}
+
+export async function buyProduct(product: Product, amount: number, location: Location) {
+    return await post("products/" + product._id + "/buy", {
+        amount: amount,
+        location: location
+    })
+}
+
+export async function getLocations() {
+    return await get<Location[]>("locations")
+}
+
+export async function saveLocation(location: Location) {
+    return await post<Location>('locations/', { location: location })
 }
 
 

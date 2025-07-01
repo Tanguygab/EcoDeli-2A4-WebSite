@@ -8,13 +8,14 @@ import type { Warehouse } from "./warehouse";
 export type ProductRequest = {
     _id: number,
     creation_date: Date,
-    date: Date,
+    date?: Date,
     accepted_date?: Date,
     validation_code?: string,
     delivery_location: Location,
     receiver: User,
     product: Product,
-    delivery: Delivery,
-    delivery_status: DeliveryStatus,
+    amount: number,
+    delivery?: Delivery,
+    delivery_status?: DeliveryStatus,
     back_to_ware_house?: Warehouse
 }
