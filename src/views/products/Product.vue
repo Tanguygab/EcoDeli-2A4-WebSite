@@ -5,19 +5,19 @@ import { ref } from 'vue'
 import type { Product } from '@/types/product.ts'
 import Modal from '@/components/Modal.vue'
 import type { Location } from '@/types/location.ts'
-import IconInput from '@/components/IconInput.vue'
 import router from '@/router'
+import LocationSelector from '@/components/LocationSelector.vue'
+import LabelInput from '@/components/LabelInput.vue'
 
 const session = startSession()
 api(session)
 const loggedIn = ref<boolean>(false)
 isSessionValid(false).then((valid: boolean) => loggedIn.value = valid)
 
-const product = ref<Product | undefined>(undefined)
+const product = ref<Product | undefined>()
 loadPage(product, getProduct)
 
-const location = ref<Location | undefined>(undefined)
-const newLocation = ref<Location>({city: "", address: "", zipcode: ""})
+const location = ref<Location | undefined>()
 
 const locations = ref<Location[]>([])
 getLocations().then(locs => locations.value = locs);
@@ -32,8 +32,9 @@ async function toggleBuyModal() {
 }
 
 async function submit() {
-    if (location.value === newLocation.value) {
-        saveLocation(newLocation.value).then(loc => {
+    if (!location.value) return;
+    if (!!location.value._id) {
+        saveLocation(location.value).then(loc => {
             location.value = loc;
             buy();
         });
@@ -42,8 +43,8 @@ async function submit() {
 
 async function buy() {
     if (product.value && location.value) {
-        buyProduct(product.value, amount.value, location.value).then(() => {
-            router.push({ path: '/purchases' })
+        buyProduct(product.value, amount.value, location.value).then(p => {
+            router.push({ path: '/requests/' + p._id })
         });
     }
 }
@@ -80,50 +81,9 @@ const amount = ref(1);
                         @confirm="submit()"
                         @close="toggleBuyModal()"
                     >
-                        <div class="field is-horizontal">
-                            <div class="field-label is-normal">
-                                <label class="label">{{ $t("product.count") }}</label>
-                            </div>
-                            <div class="field-body">
-                                <div class="field">
-                                    <div class="control">
-                                        <input v-model="amount" class="input" type="number" :placeholder="$t('product.amount')">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <LabelInput v-model="amount" :label="$t('product.amount')" type="number" />
 
-                        <div class="control has-icons-left">
-                            <div class="select">
-                                <select v-model="location">
-                                    <option :value="undefined" selected>Select a location</option>
-                                    <option :value="newLocation">New</option>
-                                    <option v-for="location in locations" :value="location">
-                                        {{ location.address + ", " + location.city + " (" + location.zipcode + ")" }}
-                                    </option>
-                                </select>
-                            </div>
-                            <span class="icon is-left">
-                                <i class="fas fa-globe"></i>
-                            </span>
-                        </div>
-
-                        <div v-if="location === newLocation" class="mt-3 mx-6">
-                            <IconInput v-model="newLocation.address" placeholder="Address" icon="fa-address-card" />
-                            <div class="field is-horizontal">
-                                <div class="field-body">
-                                    <IconInput v-model="newLocation.city" placeholder="City" icon="fa-city" />
-                                    <IconInput
-                                        v-model="newLocation.zipcode"
-                                        placeholder="Zipcode"
-                                        icon="fa-address-card"
-                                        type="number"
-                                        :minlength="5"
-                                        :maxlength="5"
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                        <LocationSelector v-model="location" />
 
                         <br>
                         <h5 class="title is-5">

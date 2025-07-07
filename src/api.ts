@@ -105,11 +105,15 @@ export async function getProducts(pagination: Pagination) {
 }
 
 export async function getServices(pagination: Pagination) {
-    return await get<Service[]>(paginate("products", pagination))
+    return await get<Service[]>(paginate("services", pagination))
 }
 
 export async function getProduct(id: number) {
     return await get<Product>("products/" + id)
+}
+
+export async function getService(id: number) {
+    return await get<Service>("services/" + id)
 }
 
 export async function getSellers(input: string) {
@@ -136,9 +140,19 @@ export async function readNotification(notification?: Notification) {
 }
 
 export async function buyProduct(product: Product, amount: number, location: Location) {
-    return await post("products/" + product._id + "/buy", {
+    return await post<Product>("products/" + product._id + "/buy", {
         amount: amount,
         location: location
+    })
+}
+
+export async function createService(name: string, description: string, price: number, location: Location, date: string) {
+    return await post<Service>("services", {
+        name: name,
+        description: description,
+        price: price,
+        location: location,
+        date: date
     })
 }
 
