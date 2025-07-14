@@ -16,7 +16,7 @@ import type { Location } from './types/location.ts'
 import type { Session } from "./stores/session";
 import { type Ref, watch } from 'vue'
 
-const API_URL = import.meta.env.PROD ? "88.172.140.59:52000" : "localhost:3000"
+const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
 let session: Session
 
 export function api(newSession: Session) {
