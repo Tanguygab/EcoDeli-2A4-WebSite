@@ -10,7 +10,7 @@ const session = useSessionStore()
 
 const API_URL = 'http://88.172.140.59:51000'
 
-// Champs utilisateur
+
 const email = ref('')
 const name = ref('')
 const password = ref('')
@@ -19,7 +19,7 @@ const confirmPassword = ref('')
 const notifications = ref(false)
 const savedLocations = ref<string[]>([])
 
-// Récupérer les infos utilisateur au chargement
+
 onMounted(async () => {
   try {
     const res = await axios.get(`${API_URL}/users/${session.user._id}`, {
@@ -36,7 +36,6 @@ onMounted(async () => {
   }
 })
 
-// Mettre à jour nom, email, notifications
 async function updatePersonalInfo() {
   if (!email.value.includes('@')) {
     alert("Email invalide.")
@@ -59,7 +58,7 @@ async function updatePersonalInfo() {
   }
 }
 
-// Mettre à jour mot de passe
+
 async function updatePassword() {
   if (!password.value || !newPassword.value || !confirmPassword.value) {
     alert("Tous les champs sont requis")
@@ -94,7 +93,6 @@ async function updatePassword() {
   }
 }
 
-// Supprimer le compte
 async function deleteAccount() {
   if (!confirm('Confirmer la suppression du compte ?')) return
 
