@@ -10,12 +10,16 @@ api(session)
 
 const user = session.user!!
 
-const email = ref(user.email)
-const name = ref(user.name)
+const firstname = ref(user.firstname || '')
+const name = ref(user.name || '')
+const email = ref(user.email || '')
+const birthday = ref(user.birthday?.slice(0, 10) || '')
+const description = ref(user.description || '')
+const notifications = ref(user.notifications ?? false)
+
 const password = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
-const notifications = ref()
 const savedLocations = ref<Location[]>([])
 
 onMounted(async () => {
@@ -34,11 +38,19 @@ async function updatePersonalInfo() {
     }
 
     try {
-        session.user = await updateSettings(name.value, email.value, notifications.value)
+        const updatedUser = await updateSettings({
+            firstname: firstname.value,
+            name: name.value,
+            email: email.value,
+            birthday: birthday.value,
+            description: description.value,
+            notifications: notifications.value,
+        })
+        session.user = updatedUser
         alert('Profil mis à jour')
     } catch (err: any) {
         console.error(err)
-        alert(err.response?.data?.message || 'Erreur lors de la mise à jour')
+        alert(err.response?.data?.message || 'Erreur lors de la mise à jour du profil')
     }
 }
 
@@ -60,7 +72,6 @@ async function updatePass() {
 
     try {
         session.token = await updatePassword(newPassword.value)
-
         alert('Mot de passe mis à jour')
         password.value = ''
         newPassword.value = ''
@@ -96,8 +107,11 @@ async function deleteAccount() {
 
             <section class="card-section">
                 <h2>Informations personnelles</h2>
+                <input class="input" type="text" v-model="firstname" placeholder="Prénom" />
                 <input class="input" type="text" v-model="name" placeholder="Nom" />
                 <input class="input" type="email" v-model="email" placeholder="Email" />
+                <input class="input" type="date" v-model="birthday" placeholder="Date de naissance" />
+                <textarea class="input" v-model="description" placeholder="Parle un peu de toi..."></textarea>
                 <button class="button green" @click="updatePersonalInfo">Enregistrer</button>
             </section>
 
@@ -113,31 +127,16 @@ async function deleteAccount() {
                 <h2>Lieux enregistrés</h2>
                 <ul>
                     <li v-for="(location, i) in savedLocations" :key="i">
-                        {{ location.address + ", " + location.city + " (" + location.zipcode + ")" }}
+                        {{ location.address + ', ' + location.city + ' (' + location.zipcode + ')' }}
                     </li>
                 </ul>
             </section>
 
             <section class="card-section">
                 <h2>Changer le mot de passe</h2>
-                <input
-                    class="input"
-                    type="password"
-                    v-model="password"
-                    placeholder="Mot de passe actuel"
-                />
-                <input
-                    class="input"
-                    type="password"
-                    v-model="newPassword"
-                    placeholder="Nouveau mot de passe"
-                />
-                <input
-                    class="input"
-                    type="password"
-                    v-model="confirmPassword"
-                    placeholder="Confirmer"
-                />
+                <input class="input" type="password" v-model="password" placeholder="Mot de passe actuel" />
+                <input class="input" type="password" v-model="newPassword" placeholder="Nouveau mot de passe" />
+                <input class="input" type="password" v-model="confirmPassword" placeholder="Confirmer" />
                 <button class="button blue" @click="updatePass">Mettre à jour</button>
             </section>
 
@@ -193,6 +192,11 @@ async function deleteAccount() {
     color: black;
 }
 
+textarea.input {
+    min-height: 80px;
+    resize: vertical;
+}
+
 .button {
     padding: 0.5rem 1rem;
     border: none;
@@ -219,5 +223,11 @@ async function deleteAccount() {
 .danger {
     background-color: #2c2c2c;
     border: 1px solid #d33;
+}
+
+.role-display {
+    margin-top: 0.5rem;
+    font-weight: bold;
+    color: #ccc;
 }
 </style>
