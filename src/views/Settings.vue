@@ -30,8 +30,6 @@ function deleteAccount() {
 
 <template>
   <div class="settings-layout">
-
-    <!-- Bandeau supérieur -->
     <header class="navbar">
       <div class="logo">ECODELI</div>
       <div class="nav-buttons">
@@ -39,20 +37,14 @@ function deleteAccount() {
         <router-link to="/login" class="button green">Me Connecter</router-link>
       </div>
     </header>
-
-    <!-- Contenu principal -->
     <main class="settings-content">
       <h1 class="title">Paramètres du compte</h1>
-
-      <!-- Infos perso -->
       <section class="card-section">
         <h2>Informations personnelles</h2>
         <input class="input" type="text" v-model="name" placeholder="Nom" />
         <input class="input" type="email" v-model="email" placeholder="Email" />
         <button class="button green" @click="updateSettings">Enregistrer</button>
       </section>
-
-      <!-- Notifications -->
       <section class="card-section">
         <h2>Notifications</h2>
         <label>
@@ -60,16 +52,12 @@ function deleteAccount() {
           <span class="text">Recevoir des notifications par email</span>
         </label>
       </section>
-
-      <!-- Lieux -->
       <section class="card-section">
         <h2>Lieux enregistrés</h2>
         <ul>
           <li v-for="(loc, i) in savedLocations" :key="i">{{ loc }}</li>
         </ul>
       </section>
-
-      <!-- Mot de passe -->
       <section class="card-section">
         <h2>Changer le mot de passe</h2>
         <input class="input" type="password" v-model="password" placeholder="Mot de passe actuel" />
@@ -77,8 +65,6 @@ function deleteAccount() {
         <input class="input" type="password" v-model="confirmPassword" placeholder="Confirmer" />
         <button class="button blue" @click="updatePassword">Mettre à jour</button>
       </section>
-
-      <!-- Suppression -->
       <section class="card-section danger">
         <h2>Supprimer le compte</h2>
         <button class="button red" @click="deleteAccount">Supprimer définitivement</button>
