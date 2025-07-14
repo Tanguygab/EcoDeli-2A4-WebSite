@@ -5,24 +5,30 @@ function def(key: any, defV: any) {
     return query[key] === undefined ? defV : query[key]
 }
 
+export type Pagination = {
+    filter: string
+    page: number
+    limit: number
+    ascending: boolean
+}
+
 function newPagination(): Pagination {
     return {
         filter: def("filter", ""),
         page: parseInt(def("page", 0)),
-        max_entries: parseInt(def("max_entries", 20)),
-        ascending: def("ascending", true) === "true"
+        limit: parseInt(def("limit", 10)), 
+        ascending: def("ascending", "true") === "true"
     }
 }
 
 function paginate(url: string, pagination: Pagination): string {
-    return `${url}?filter=${pagination.filter}&page=${pagination.page}&max_entries=${pagination.max_entries}&ascending=${pagination.ascending}`
-}
+    const params = new URLSearchParams()
+    if (pagination.filter) params.append("filter", pagination.filter)
+    params.append("page", pagination.page.toString())
+    params.append("limit", pagination.limit.toString()) 
+    params.append("ascending", pagination.ascending.toString())
 
-export type Pagination = {
-    filter: string,
-    page: number,
-    max_entries: number,
-    ascending: boolean
+    return `${url}?${params.toString()}`
 }
 
 export { newPagination, paginate }
