@@ -198,6 +198,13 @@ export async function getProofs(pagination: Pagination) {
     return await get<UserProof[]>(paginate("proofs", pagination))
 }
 
+// DeliveryMen
+export async function acceptProductRequest(request: ProductRequest, delivery: Delivery) {
+    return await post<void>("products/requests/" + request._id + "/accept", {
+        delivery: delivery._id,
+    })
+}
+
 // User Settings
 export async function updateSettings(name: string, email: string, notifications: boolean) {
     return await put<User>("users/" + session.user?._id, {
