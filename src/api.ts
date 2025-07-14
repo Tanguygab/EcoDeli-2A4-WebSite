@@ -37,6 +37,10 @@ async function post<type>(endpoint: string, body?: object) {
     return request<type>("POST", endpoint, body)
 }
 
+async function put<type>(endpoint: string, body?: object) {
+    return request<type>("PUT", endpoint, body)
+}
+
 async function get<type>(endpoint: string) {
     return request<type>("GET", endpoint)
 }
@@ -192,6 +196,25 @@ export async function getPayments(pagination: Pagination) {
 
 export async function getProofs(pagination: Pagination) {
     return await get<UserProof[]>(paginate("proofs", pagination))
+}
+
+// User Settings
+export async function updateSettings(name: string, email: string, notifications: boolean) {
+    return await put<User>("users/" + session.user?._id, {
+        name: name,
+        email: email,
+        notifications: notifications,
+    })
+}
+
+export async function updatePassword(password: string) {
+    return await put<string>("users/" + session.user?._id + "/password", {
+        password: password
+    })
+}
+
+export async function deleteAccount() {
+    return await del("users/" + session.user?._id)
 }
 
 // Admin
