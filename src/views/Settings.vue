@@ -1,33 +1,62 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { updateUser, changePassword, deleteUser } from '@/api.ts'
+import { useSessionStore } from '@/stores/session'
 
 const router = useRouter()
 const route = useRoute()
+const session = useSessionStore()
 
-const email = ref('user@example.com')
-const name = ref('John Doe')
+const email = ref(session.user.email)
+const name = ref(session.user.name)
 const password = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
 const notifications = ref(true)
 const savedLocations = ref(['Paris', 'Lyon'])
 
-function updateSettings() {
-  console.log('Mise à jour du profil', { name: name.value, email: email.value })
+async function updateSettings() {
+  try {
+    await updateUser(session.user._id, {
+      name: name.value,
+      email: email.value,
+      notifications: notifications.value,
+    })
+    alert('Profil mis à jour avec succès')
+  } catch (err) {
+    console.error(err)
+    alert('Erreur lors de la mise à jour du profil')
+  }
 }
 
-function updatePassword() {
+async function updatePassword() {
   if (newPassword.value !== confirmPassword.value) {
     alert('Les mots de passe ne correspondent pas')
     return
   }
-  console.log('Changement mot de passe', { password: password.value, newPassword: newPassword.value })
+  try {
+    await changePassword(session.user._id, {
+      password: password.value,
+      newPassword: newPassword.value,
+    })
+    alert('Mot de passe mis à jour')
+  } catch (err) {
+    console.error(err)
+    alert('Erreur lors du changement de mot de passe')
+  }
 }
 
-function deleteAccount() {
+async function deleteAccount() {
   if (confirm('Confirmer la suppression du compte ?')) {
-    console.log('Compte supprimé')
+    try {
+      await deleteUser(session.user._id)
+      alert('Compte supprimé')
+      router.push('/login')
+    } catch (err) {
+      console.error(err)
+      alert('Erreur lors de la suppression du compte')
+    }
   }
 }
 </script>
@@ -35,12 +64,7 @@ function deleteAccount() {
 <template>
   <div class="settings-layout">
     <header class="navbar">
-      <div class="logo">ECODELI</div>
-      <div class="nav-right">
-        <span class="current-route">{{ route.fullPath }}</span>
-        <router-link to="/annonce" class="button green">Annonce</router-link>
-        <router-link to="/login" class="button green">Me Connecter</router-link>
-      </div>
+      <span class="current-route">{{ route.fullPath }}</span>
     </header>
 
     <main class="settings-content">
@@ -86,34 +110,22 @@ function deleteAccount() {
 
 <style scoped>
 .settings-layout {
-  background-color: #2A2A2A;
-  color: #FFFFFF;
+  background-color: #1e1e1e;
+  color: #ffffff;
   min-height: 100vh;
   font-family: sans-serif;
 }
 
 .navbar {
-  background-color: #333333;
+  background-color: #1e1e1e;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: 1rem 2rem;
 }
 
-.logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #09CE44;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
 .current-route {
-  color: #A2CAA2;
+  color: #a2caa2;
   font-size: 0.9rem;
 }
 
@@ -124,14 +136,14 @@ function deleteAccount() {
 }
 
 .card-section {
-  background-color: #333333;
+  background-color: #2c2c2c;
   padding: 1.5rem;
   border-radius: 10px;
   margin-bottom: 2rem;
 }
 
 .input {
-  background-color: #A2CAA2;
+  background-color: #a2caa2;
   border: none;
   padding: 0.5rem;
   margin: 0.5rem 0;
@@ -149,22 +161,22 @@ function deleteAccount() {
 }
 
 .button.green {
-  background-color: #09CE44;
+  background-color: #09ce44;
   color: white;
 }
 
 .button.blue {
-  background-color: #146EFF;
+  background-color: #146eff;
   color: white;
 }
 
 .button.red {
-  background-color: #D33;
+  background-color: #d33;
   color: white;
 }
 
 .danger {
-  background-color: #333;
-  border: 1px solid #D33;
+  background-color: #2c2c2c;
+  border: 1px solid #d33;
 }
 </style>
