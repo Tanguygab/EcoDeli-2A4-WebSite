@@ -12,5 +12,14 @@
   },
   "footer": {
     "contact": "Contactez-nous"
+  },
+  "user": {
+    "my-products": "Mes Produits",
+    "profile": "Profil",
+    "notifications": "Notifications",
+    "settings": "Paramètres",
+    "my-files": "Mes Fichiers",
+    "backoffice": "Backoffice",
+    "logout": "Déconnexion"
   }
 }

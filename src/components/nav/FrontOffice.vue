@@ -35,6 +35,7 @@ document.addEventListener("click", e => {
                         <RouterLink class="navbar-item" to="/profile">{{ $t("user.profile") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/notifications">{{ $t("user.notifications") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/my-files">{{ $t("user.my-files") }}</RouterLink>
+                        <RouterLink class="navbar-item" to="/my-products">{{ $t("user.my-products") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/settings">{{ $t("user.settings") }}</RouterLink>
                         <hr class="navbar-divider">
                         <RouterLink v-if="session.user.role.access_level >= 100" class="navbar-item has-text-danger-50"
