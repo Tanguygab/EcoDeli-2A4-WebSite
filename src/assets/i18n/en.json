@@ -60,6 +60,10 @@
         }
     },
 
+    "delivery": {
+        "name": "Delivery"
+    },
+
     "form": {
         "firstname": {
             "label": "First Name",
