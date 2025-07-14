@@ -5,6 +5,7 @@ export type Service = {
     creation_date?: Date,
     date: Date,
     name: string,
+    image: string,
     description: string,
     price: number,
     user?: User,

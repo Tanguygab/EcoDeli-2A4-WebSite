@@ -5,6 +5,7 @@ export type User = {
     _id: number,
     firstname: string,
     name: string,
+    image: string,
     email: string,
     birthday: Date,
     subscription: Subscription
