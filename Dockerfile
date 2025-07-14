@@ -24,6 +24,7 @@ FROM development as production
 # Compilation des fichiers source du site
 #RUN npm run build
 # On ne log uniquement les erreurs dans la console
+RUN mv .env.prod .env
 ENV LOG_LEVEL=error
 # Port 8080 ouvert
 #EXPOSE 8080
