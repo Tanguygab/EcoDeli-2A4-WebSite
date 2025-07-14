@@ -10,7 +10,7 @@ defineProps<{product: Product}>()
     <RouterLink :to="'/product/' + product._id" class="card">
         <div class="card-image">
             <figure class="image">
-                <img src="https://bulma.io/assets/images/placeholders/128x128.png" :alt="product.name">
+                <img :src="product.image ?? 'https://bulma.io/assets/images/placeholders/128x128.png'" :alt="product.name">
             </figure>
         </div>
         <div class="card-content">
