@@ -16,7 +16,7 @@ import type { Location } from './types/location.ts'
 import type { Session } from "./stores/session";
 import { type Ref, watch } from 'vue'
 
-
+const API_URL = import.meta.env.PROD ? "88.172.140.59:52000" : "localhost:3000"
 let session: Session
 
 export function api(newSession: Session) {
@@ -26,7 +26,7 @@ export function api(newSession: Session) {
 async function request<type>(method: string, url: string, body?: object) {
     return (await axios.request<type>({
         method: method,
-        baseURL: "http://localhost:3000/api",
+        baseURL: "http://" + API_URL + "/api",
         url: url,
         data: body,
         headers: session.getHeader
