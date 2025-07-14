@@ -116,6 +116,7 @@ async function deleteAccount() {
   font-family: sans-serif;
 }
 
+
 .navbar {
   background-color: #1e1e1e;
   display: flex;
