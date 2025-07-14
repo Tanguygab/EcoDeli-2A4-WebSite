@@ -16,7 +16,8 @@ import type { Location } from './types/location.ts'
 import type { Session } from "./stores/session";
 import { type Ref, watch } from 'vue'
 
-const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
+// const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
+const API_URL = "88.172.140.59:52000"
 let session: Session
 
 export function api(newSession: Session) {
@@ -35,6 +36,10 @@ async function request<type>(method: string, url: string, body?: object) {
 
 async function post<type>(endpoint: string, body?: object) {
     return request<type>("POST", endpoint, body)
+}
+
+async function put<type>(endpoint: string, body?: object) {
+    return request<type>("PUT", endpoint, body)
 }
 
 async function get<type>(endpoint: string) {
@@ -192,6 +197,32 @@ export async function getPayments(pagination: Pagination) {
 
 export async function getProofs(pagination: Pagination) {
     return await get<UserProof[]>(paginate("proofs", pagination))
+}
+
+// DeliveryMen
+export async function acceptProductRequest(request: ProductRequest, delivery: Delivery) {
+    return await post<void>("products/requests/" + request._id + "/accept", {
+        delivery: delivery._id,
+    })
+}
+
+// User Settings
+export async function updateSettings(name: string, email: string, notifications: boolean) {
+    return await put<User>("users/" + session.user?._id, {
+        name: name,
+        email: email,
+        notifications: notifications,
+    })
+}
+
+export async function updatePassword(password: string) {
+    return await put<string>("users/" + session.user?._id + "/password", {
+        password: password
+    })
+}
+
+export async function deleteAccount() {
+    return await del("users/" + session.user?._id)
 }
 
 // Admin

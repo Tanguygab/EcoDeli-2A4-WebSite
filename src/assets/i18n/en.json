@@ -21,6 +21,7 @@
     },
 
     "user": {
+        "my-products": "My Products",
         "profile": "Profile",
         "notifications": "Notifications",
         "settings": "Settings",
@@ -58,6 +59,10 @@
             "medium": "Medium",
             "small": "Small"
         }
+    },
+
+    "delivery": {
+        "name": "Delivery"
     },
 
     "form": {

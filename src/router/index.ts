@@ -20,6 +20,7 @@ const router = createRouter({
         { path: '/services', component: () => import('@/views/services/Services.vue') },
         { path: '/services/:id', component: () => import('@/views/services/Service.vue') },
         { path: '/my-files', component: () => import('@/views/MyFiles.vue') },
+        { path: '/my-products', component: () => import('@/views/MyProducts.vue') },
         { path: '/contact', component: () => import('@/views/contact.vue') },
         {
             path: '/backoffice',
