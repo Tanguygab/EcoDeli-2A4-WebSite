@@ -161,6 +161,17 @@ export async function createService(name: string, description: string, price: nu
     })
 }
 
+export async function createProduct(body: {
+  name: string,
+  image: string,
+  price: number,
+  size: number | null,
+  location: number | null
+}) {
+  // Le backend déduit le vendeur via le token. Pas besoin d'ajouter seller.
+  return await post<Product>('products', body)
+}
+
 export async function getRequests(pagination: Pagination) {
     return await get<ProductRequest[]>(paginate("products/requests", pagination))
 }
