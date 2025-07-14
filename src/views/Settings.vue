@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import { useSessionStore } from '@/stores/session'
@@ -8,50 +8,93 @@ const router = useRouter()
 const route = useRoute()
 const session = useSessionStore()
 
-const API_URL = 'http://88.172.140.59:51000' // ou localhost:3000 en dev
+const API_URL = 'http://88.172.140.59:51000'
 
 // Champs utilisateur
-const email = ref(session.user.email)
-const name = ref(session.user.name)
+const email = ref('')
+const name = ref('')
 const password = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
-const notifications = ref(true)
-const savedLocations = ref(['Paris', 'Lyon']) // pour affichage
+const notifications = ref(false)
+const savedLocations = ref<string[]>([])
 
-// Mettre à jour nom, email ou mot de passe (via PUT /users/:id)
-async function updateSettings() {
-  if (newPassword.value && newPassword.value !== confirmPassword.value) {
-    alert('Les mots de passe ne correspondent pas')
+// Récupérer les infos utilisateur au chargement
+onMounted(async () => {
+  try {
+    const res = await axios.get(`${API_URL}/users/${session.user._id}`, {
+      headers: { Authorization: `Bearer ${session.token}` },
+    })
+
+    name.value = res.data.name
+    email.value = res.data.email
+    notifications.value = res.data.notifications ?? false
+    savedLocations.value = res.data.savedLocations ?? []
+  } catch (err) {
+    console.error(err)
+    alert("Erreur lors du chargement du profil.")
+  }
+})
+
+// Mettre à jour nom, email, notifications
+async function updatePersonalInfo() {
+  if (!email.value.includes('@')) {
+    alert("Email invalide.")
     return
   }
 
   try {
-    const updateData: any = {
+    await axios.put(`${API_URL}/users/${session.user._id}`, {
       name: name.value,
       email: email.value,
       notifications: notifications.value,
-    }
-
-    if (password.value && newPassword.value) {
-      updateData.password = password.value
-      updateData.newPassword = newPassword.value
-    }
-
-    await axios.put(`${API_URL}/users/${session.user._id}`, updateData, {
-      headers: {
-        Authorization: `Bearer ${session.token}`,
-      },
+    }, {
+      headers: { Authorization: `Bearer ${session.token}` },
     })
 
     alert('Profil mis à jour')
-  } catch (err) {
+  } catch (err: any) {
     console.error(err)
-    alert('Erreur lors de la mise à jour du profil')
+    alert(err.response?.data?.message || "Erreur lors de la mise à jour")
   }
 }
 
-// Supprimer le compte via DELETE /users/:id
+// Mettre à jour mot de passe
+async function updatePassword() {
+  if (!password.value || !newPassword.value || !confirmPassword.value) {
+    alert("Tous les champs sont requis")
+    return
+  }
+
+  if (newPassword.value !== confirmPassword.value) {
+    alert("Les mots de passe ne correspondent pas")
+    return
+  }
+
+  if (newPassword.value.length < 6) {
+    alert("Le nouveau mot de passe doit contenir au moins 6 caractères")
+    return
+  }
+
+  try {
+    await axios.put(`${API_URL}/users/${session.user._id}`, {
+      password: password.value,
+      newPassword: newPassword.value,
+    }, {
+      headers: { Authorization: `Bearer ${session.token}` },
+    })
+
+    alert("Mot de passe mis à jour")
+    password.value = ''
+    newPassword.value = ''
+    confirmPassword.value = ''
+  } catch (err: any) {
+    console.error(err)
+    alert(err.response?.data?.message || "Erreur lors du changement de mot de passe")
+  }
+}
+
+// Supprimer le compte
 async function deleteAccount() {
   if (!confirm('Confirmer la suppression du compte ?')) return
 
@@ -83,7 +126,7 @@ async function deleteAccount() {
         <h2>Informations personnelles</h2>
         <input class="input" type="text" v-model="name" placeholder="Nom" />
         <input class="input" type="email" v-model="email" placeholder="Email" />
-        <button class="button green" @click="updateSettings">Enregistrer</button>
+        <button class="button green" @click="updatePersonalInfo">Enregistrer</button>
       </section>
 
       <section class="card-section">
@@ -106,7 +149,7 @@ async function deleteAccount() {
         <input class="input" type="password" v-model="password" placeholder="Mot de passe actuel" />
         <input class="input" type="password" v-model="newPassword" placeholder="Nouveau mot de passe" />
         <input class="input" type="password" v-model="confirmPassword" placeholder="Confirmer" />
-        <button class="button blue" @click="updateSettings">Mettre à jour</button>
+        <button class="button blue" @click="updatePassword">Mettre à jour</button>
       </section>
 
       <section class="card-section danger">
