@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
 
 const email = ref('user@example.com')
 const name = ref('John Doe')
@@ -32,19 +36,23 @@ function deleteAccount() {
   <div class="settings-layout">
     <header class="navbar">
       <div class="logo">ECODELI</div>
-      <div class="nav-buttons">
+      <div class="nav-right">
+        <span class="current-route">{{ route.fullPath }}</span>
         <router-link to="/annonce" class="button green">Annonce</router-link>
         <router-link to="/login" class="button green">Me Connecter</router-link>
       </div>
     </header>
+
     <main class="settings-content">
       <h1 class="title">Paramètres du compte</h1>
+
       <section class="card-section">
         <h2>Informations personnelles</h2>
         <input class="input" type="text" v-model="name" placeholder="Nom" />
         <input class="input" type="email" v-model="email" placeholder="Email" />
         <button class="button green" @click="updateSettings">Enregistrer</button>
       </section>
+
       <section class="card-section">
         <h2>Notifications</h2>
         <label>
@@ -52,12 +60,14 @@ function deleteAccount() {
           <span class="text">Recevoir des notifications par email</span>
         </label>
       </section>
+
       <section class="card-section">
         <h2>Lieux enregistrés</h2>
         <ul>
           <li v-for="(loc, i) in savedLocations" :key="i">{{ loc }}</li>
         </ul>
       </section>
+
       <section class="card-section">
         <h2>Changer le mot de passe</h2>
         <input class="input" type="password" v-model="password" placeholder="Mot de passe actuel" />
@@ -65,6 +75,7 @@ function deleteAccount() {
         <input class="input" type="password" v-model="confirmPassword" placeholder="Confirmer" />
         <button class="button blue" @click="updatePassword">Mettre à jour</button>
       </section>
+
       <section class="card-section danger">
         <h2>Supprimer le compte</h2>
         <button class="button red" @click="deleteAccount">Supprimer définitivement</button>
@@ -85,18 +96,25 @@ function deleteAccount() {
   background-color: #333333;
   display: flex;
   justify-content: space-between;
-  padding: 1rem 2rem;
   align-items: center;
+  padding: 1rem 2rem;
 }
 
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
+  color: #09CE44;
 }
 
-.nav-buttons {
+.nav-right {
   display: flex;
+  align-items: center;
   gap: 1rem;
+}
+
+.current-route {
+  color: #A2CAA2;
+  font-size: 0.9rem;
 }
 
 .settings-content {
