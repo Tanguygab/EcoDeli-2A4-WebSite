@@ -1,62 +1,71 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { updateUser, changePassword, deleteUser } from '@/api.ts'
+import axios from 'axios'
 import { useSessionStore } from '@/stores/session'
 
 const router = useRouter()
 const route = useRoute()
 const session = useSessionStore()
 
+const API_URL = 'http://88.172.140.59:51000' // ou localhost:3000 en dev
+
+// Champs utilisateur
 const email = ref(session.user.email)
 const name = ref(session.user.name)
 const password = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
 const notifications = ref(true)
-const savedLocations = ref(['Paris', 'Lyon'])
+const savedLocations = ref(['Paris', 'Lyon']) // pour affichage
 
+// Mettre à jour nom, email ou mot de passe (via PUT /users/:id)
 async function updateSettings() {
+  if (newPassword.value && newPassword.value !== confirmPassword.value) {
+    alert('Les mots de passe ne correspondent pas')
+    return
+  }
+
   try {
-    await updateUser(session.user._id, {
+    const updateData: any = {
       name: name.value,
       email: email.value,
       notifications: notifications.value,
+    }
+
+    if (password.value && newPassword.value) {
+      updateData.password = password.value
+      updateData.newPassword = newPassword.value
+    }
+
+    await axios.put(`${API_URL}/users/${session.user._id}`, updateData, {
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+      },
     })
-    alert('Profil mis à jour avec succès')
+
+    alert('Profil mis à jour')
   } catch (err) {
     console.error(err)
     alert('Erreur lors de la mise à jour du profil')
   }
 }
 
-async function updatePassword() {
-  if (newPassword.value !== confirmPassword.value) {
-    alert('Les mots de passe ne correspondent pas')
-    return
-  }
+// Supprimer le compte via DELETE /users/:id
+async function deleteAccount() {
+  if (!confirm('Confirmer la suppression du compte ?')) return
+
   try {
-    await changePassword(session.user._id, {
-      password: password.value,
-      newPassword: newPassword.value,
+    await axios.delete(`${API_URL}/users/${session.user._id}`, {
+      headers: {
+        Authorization: `Bearer ${session.token}`,
+      },
     })
-    alert('Mot de passe mis à jour')
+    alert('Compte supprimé')
+    router.push('/login')
   } catch (err) {
     console.error(err)
-    alert('Erreur lors du changement de mot de passe')
-  }
-}
-
-async function deleteAccount() {
-  if (confirm('Confirmer la suppression du compte ?')) {
-    try {
-      await deleteUser(session.user._id)
-      alert('Compte supprimé')
-      router.push('/login')
-    } catch (err) {
-      console.error(err)
-      alert('Erreur lors de la suppression du compte')
-    }
+    alert('Erreur lors de la suppression du compte')
   }
 }
 </script>
@@ -97,7 +106,7 @@ async function deleteAccount() {
         <input class="input" type="password" v-model="password" placeholder="Mot de passe actuel" />
         <input class="input" type="password" v-model="newPassword" placeholder="Nouveau mot de passe" />
         <input class="input" type="password" v-model="confirmPassword" placeholder="Confirmer" />
-        <button class="button blue" @click="updatePassword">Mettre à jour</button>
+        <button class="button blue" @click="updateSettings">Mettre à jour</button>
       </section>
 
       <section class="card-section danger">
@@ -115,7 +124,6 @@ async function deleteAccount() {
   min-height: 100vh;
   font-family: sans-serif;
 }
-
 
 .navbar {
   background-color: #1e1e1e;
