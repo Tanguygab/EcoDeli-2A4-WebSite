@@ -65,15 +65,15 @@ function setLang(lang: string) {
                         <RouterLink class="navbar-item" to="/my-files">{{ $t("user.my-files") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/my-products">{{ $t("user.my-products") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/settings">{{ $t("user.settings") }}</RouterLink>
-                        <RouterLink class="navbar-item" to="/requests">Carte</RouterLink>
+                        <RouterLink class="navbar-item" to="/requests">{{ $t("menu.card") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/livreur/form">
-                            Demande livreur
+                            {{ $t("menu.delivery-request") }}
                         </RouterLink>
                         <RouterLink class="navbar-item" to="/client/annonce">
-                            Déposer une annonce
+                            {{ $t("menu.post-announcement") }}
                         </RouterLink>
                         <RouterLink class="navbar-item" to="/client/box">
-                          Mes box de stockage
+                          {{ $t("menu.my-storage-boxes") }}
                         </RouterLink>
                         <hr class="navbar-divider">
                         <RouterLink v-if="session.user.role.access_level >= 100" class="navbar-item has-text-danger-50"

@@ -179,5 +179,11 @@
   },
   "footer": {
     "contact": "Contact us"
+  },
+  "menu": {
+    "card": "Card",
+    "delivery-request": "Delivery request",
+    "post-announcement": "Post announcement",
+    "my-storage-boxes": "My storage boxes"
   }
 }
