@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { startSession } from "@/stores/session"
-import { api, logout } from "@/api";
+import { api, getImageURL, logout } from '@/api'
 import Logo from "../Logo.vue";
 import { ref } from "vue";
 import i18next from "i18next"
@@ -58,7 +58,7 @@ function setLang(lang: string) {
             </div>
             <div v-if="session.user">
                 <div :class="'navbar-item has-dropdown is-hoverable' + (menu ? ' is-active' : '')" @click="openMenu">
-                    <img ref="menuIcon" alt="Profile Picture" src="@/assets/pedro.png" style="width: 28px; height: 28px; object-fit: cover;">
+                    <img ref="menuIcon" alt="Profile Picture" :src="getImageURL(session.user.image)" style="width: 28px; height: 28px; object-fit: cover;">
                     <div class="navbar-dropdown is-boxed is-right">
                         <RouterLink class="navbar-item" to="/profile">{{ $t("user.profile") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/notifications">{{ $t("user.notifications") }}</RouterLink>

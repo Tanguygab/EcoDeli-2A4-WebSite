@@ -24,6 +24,10 @@ export function api(newSession: Session) {
     session = newSession
 }
 
+export function getImageURL(name: string) {
+    return "http://" + API_URL + "/data/images/" + name
+}
+
 async function request<type>(method: string, url: string, body?: object) {
     return (await axios.request<type>({
         method: method,
@@ -206,6 +210,10 @@ export async function getProofs(pagination: Pagination) {
 }
 
 // DeliveryMen
+export async function joinDeliveries(formData: FormData) {
+    return await post<void>("deliveries/join", formData)
+}
+
 export async function getDeliveries(pagination: Pagination) {
     return await get<Delivery[]>(paginate("deliveries", pagination))
 }

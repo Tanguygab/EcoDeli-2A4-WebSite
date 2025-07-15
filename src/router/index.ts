@@ -46,7 +46,7 @@ const router = createRouter({
             children: [
                 { path: 'deliveries', component: () => import('@/views/deliverymen/Deliveries.vue') },
                 { path: 'deliveries/:id', component: () => import('@/views/deliverymen/Delivery.vue') },
-                { path: 'form', component: () => import('@/views/deliverymen/LivrForm.vue') },
+                { path: 'form', component: () => import('@/views/deliverymen/JoinForm.vue') },
             ]
         },
         { path: '/client/annonce', component: () => import('@/views/client/ClientAnnonceForm.vue') },
