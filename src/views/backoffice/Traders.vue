@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import AdminTable from '@/components/AdminTable.vue';
 import type { Pagination } from '@/types/pagination';
+import { getTraders, deleteTrader } from '@/api';
 
 async function search(pagination: Pagination, callback: (updatedList: Array<any>) => void) {
-    //callback(await get (pagination))
-    callback([
-        { _id: 1, name: "Commerçant 1", email: "com1@mail.com" },
-        { _id: 2, name: "Commerçant 2", email: "com2@mail.com" },
-    ])
+    try {
+        const traders = await getTraders(pagination);
+        callback(traders);
+    } catch (e) {
+        callback([]);
+    }
 }
 
 async function handleDelete(item: any, callback: () => void) {
     try {
-        //await delete (user)
-        callback()
+        await deleteTrader(item);
+        callback();
     } catch (e) { }
 }
 </script>

@@ -16,8 +16,8 @@ import type { Location } from './types/location.ts'
 import type { Session } from "./stores/session";
 import { type Ref, watch } from 'vue'
 
-const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
-//const API_URL = "88.172.140.59:52000"
+// const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
+const API_URL = "88.172.140.59:52000"
 let session: Session
 
 export function api(newSession: Session) {
@@ -266,6 +266,14 @@ export async function deletePayment(payment: Bill) {
     return await del("payments/" + payment._id)
 }
 
+export async function getFinances(pagination: Pagination) {
+    return await get<any[]>(paginate("finances", pagination))
+}
+
+export async function deleteFinance(finance: any) {
+    return await del("finances/" + finance._id)
+}
+
 
 
 // Other
@@ -285,4 +293,36 @@ export async function updateProfile(formData: FormData) {
             }
         }
     )).data
+}
+
+export async function getDeliveryApplications() {
+    return await get("postannouncements")
+}
+
+export async function updateDeliveryApplicationStatus(id: string, status: string) {
+    return await put("postannouncements/" + id, { status })
+}
+
+export async function getPrestataires(pagination: Pagination) {
+    return await get<any[]>(paginate("prestataires", pagination));
+}
+
+export async function deletePrestataire(prestataire: any) {
+    return await del("prestataires/" + prestataire._id);
+}
+
+export async function getPrestations(pagination: Pagination) {
+    return await get<any[]>(paginate("prestations", pagination));
+}
+
+export async function deletePrestation(prestation: any) {
+    return await del("prestations/" + prestation._id);
+}
+
+export async function getTraders(pagination: Pagination) {
+    return await get<any[]>(paginate("traders", pagination));
+}
+
+export async function deleteTrader(trader: any) {
+    return await del("traders/" + trader._id);
 }

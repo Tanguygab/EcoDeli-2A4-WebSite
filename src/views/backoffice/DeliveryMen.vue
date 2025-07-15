@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { getDeliveryApplications, updateDeliveryApplicationStatus } from '@/api'
 
 interface Candidature {
-  _id: number
+  _id: string
   firstname: string
   lastname: string
   email: string
@@ -11,33 +12,20 @@ interface Candidature {
   status: 'pending' | 'accepted' | 'refused'
 }
 
-const candidatures = ref<Candidature[]>([
-  {
-    _id: 1,
-    firstname: 'Jean',
-    lastname: 'Dupont',
-    email: 'jean.dupont@email.fr',
-    phone: '0601020304',
-    justificatif: 'justif1.pdf',
-    status: 'pending'
-  },
-  {
-    _id: 2,
-    firstname: 'Marie',
-    lastname: 'Durand',
-    email: 'marie.durand@email.fr',
-    phone: '0605060708',
-    justificatif: 'justif2.pdf',
-    status: 'pending'
-  }
-])
+const candidatures = ref<Candidature[]>([])
 
-function acceptCandidature(id: number) {
+onMounted(async () => {
+  candidatures.value = await getDeliveryApplications() as Candidature[]
+})
+
+async function acceptCandidature(id: string) {
+  await updateDeliveryApplicationStatus(id, 'accepted')
   const cand = candidatures.value.find(c => c._id === id)
   if (cand) cand.status = 'accepted'
 }
 
-function refuseCandidature(id: number) {
+async function refuseCandidature(id: string) {
+  await updateDeliveryApplicationStatus(id, 'refused')
   const cand = candidatures.value.find(c => c._id === id)
   if (cand) cand.status = 'refused'
 }
