@@ -145,7 +145,7 @@ onMounted(loadNotifications)
 .notifications-list {
   max-height: 600px;
   overflow-y: auto;
-  padding: 0;
+  padding: 0 12px 0 0;
   max-width: 750px;
   margin: 0 auto;
 }
@@ -161,13 +161,13 @@ onMounted(loadNotifications)
 }
 
 .notifications-list::-webkit-scrollbar-thumb {
-  background: #00d1b2;
+  background: #A2CAA2;
   border-radius: 4px;
   transition: background 0.2s ease;
 }
 
 .notifications-list::-webkit-scrollbar-thumb:hover {
-  background: #00b8a3;
+  background: #8BB88B;
 }
 
 .notification-item {
@@ -176,12 +176,17 @@ onMounted(loadNotifications)
   justify-content: space-between;
   padding: 20px 25px;
   margin-bottom: 15px;
-  border: 1px solid #00d1b2;
+  border: 1px solid #A2CAA2;
   border-radius: 8px;
   cursor: pointer;
   position: relative;
   background: transparent;
   min-height: 80px;
+  transition: background-color 0.2s ease;
+}
+
+.notification-item:hover {
+  background-color: rgba(162, 202, 162, 0.1);
 }
 
 .notification-item:last-child {
@@ -268,6 +273,10 @@ onMounted(loadNotifications)
   .notification-item {
     padding: 18px 20px;
     min-height: 70px;
+  }
+  
+  .notification-item:hover {
+    background-color: rgba(162, 202, 162, 0.1);
   }
 }
 </style>
