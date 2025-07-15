@@ -16,8 +16,8 @@ import type { Location } from './types/location.ts'
 import type { Session } from "./stores/session";
 import { type Ref, watch } from 'vue'
 
-const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
-//const API_URL = "88.172.140.59:52000"
+//const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
+const API_URL = "88.172.140.59:52000"
 let session: Session
 
 export function api(newSession: Session) {
@@ -264,4 +264,17 @@ export async function deletePayment(payment: Bill) {
 
 export async function getWarehouses() {
     return await get<Warehouse>("warehouses")
+}
+
+export async function updateProfile(formData: FormData) {
+    return (await axios.put(
+        "http://" + API_URL + "/api/users/" + session.user?._id,
+        formData,
+        {
+            headers: {
+                ...session.getHeader,
+                'Content-Type': 'multipart/form-data'
+            }
+        }
+    )).data
 }
