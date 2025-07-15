@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { getProducts, getSellers } from '@/api.ts'
 import { newPagination } from '@/types/pagination.ts'
 import Pages from '@/components/Pages.vue'
@@ -8,6 +9,7 @@ import type { User } from '@/types/user.ts'
 import type { Product } from '@/types/product.ts'
 import Icon from '@/components/Icon.vue'
 
+const route = useRoute()
 const pagination = newPagination()
 pagination.limit = 10
 
@@ -21,6 +23,12 @@ const selectedSizes = ref<string[]>([])
 const sellerInput = ref<string>()
 const sellers = ref<User[]>([])
 const selectedSellers = ref<User[]>([])
+const search = ref('')
+
+// Initialiser la recherche avec le paramètre d'URL
+if (route.query.filter) {
+  search.value = String(route.query.filter)
+}
 
 const sizes = ['small', 'medium', 'large', 'xxl']
 
@@ -75,6 +83,24 @@ loadProducts()
 function onSearch() {
   pagination.page = 0
   loadProducts()
+}
+
+function filteredProducts() {
+  let filtered = [...allProducts.value]
+  // Appliquer tous les filtres
+  if (priceMin.value !== null) filtered = filtered.filter(p => p.price >= priceMin.value)
+  if (priceMax.value !== null) filtered = filtered.filter(p => p.price <= priceMax.value)
+  if (selectedSizes.value.length) filtered = filtered.filter(p => p.size && selectedSizes.value.includes(p.size.name))
+  if (selectedSellers.value.length) filtered = filtered.filter(p => p.seller && selectedSellers.value.some(s => s._id === p.seller._id))
+  // Filtre sur le nom
+  if (search.value.trim()) {
+    const term = search.value.trim().toLowerCase()
+    filtered = filtered.filter(p => p.name?.toLowerCase().includes(term))
+  }
+  // Pagination locale
+  const start = pagination.page * pagination.limit
+  const end = start + pagination.limit
+  return filtered.slice(start, end)
 }
 </script>
 
@@ -131,6 +157,22 @@ function onSearch() {
           </li>
         </ul>
       </div>
+
+      <!-- Barre de recherche -->
+      <div class="field mb-4" style="max-width:400px;">
+        <div class="control has-icons-right">
+          <input
+            v-model="search"
+            class="input"
+            type="text"
+            placeholder="Rechercher un produit…"
+          />
+          <span class="icon is-small is-right">
+            <i class="fas fa-search"></i>
+          </span>
+        </div>
+      </div>
+
       <button class="button is-primary mt-4" @click="onSearch">Rechercher</button>
     </nav>
 
@@ -142,7 +184,7 @@ function onSearch() {
         <div class="is-flex is-flex-wrap-wrap is-justify-content-center">
           <ProductCard
             class="mx-5"
-            v-for="product in products"
+            v-for="product in filteredProducts()"
             :key="product._id"
             :product="product"
           />

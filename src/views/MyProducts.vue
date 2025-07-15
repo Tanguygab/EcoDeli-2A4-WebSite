@@ -19,6 +19,7 @@ const pagination = newPagination()
 const products   = ref<Product[]>([])
 const loading    = ref(false)
 const showForm   = ref(false)
+const search = ref('')
 
 interface ProductInput {
   name: string
@@ -109,6 +110,13 @@ async function submitForm () {
   }
 }
 
+function filteredProducts() {
+  if (!search.value.trim()) return products.value
+  return products.value.filter(p =>
+    p.name.toLowerCase().includes(search.value.trim().toLowerCase())
+  )
+}
+
 onMounted(loadProducts)
 </script>
 
@@ -116,11 +124,26 @@ onMounted(loadProducts)
   <div class="myproduct">
     <h1 class="title has-text-centered mb-4">Mes Produits</h1>
 
+    <!-- Barre de recherche -->
+    <div class="field mb-4" style="max-width:400px;margin:auto;">
+      <div class="control has-icons-right">
+        <input
+          v-model="search"
+          class="input"
+          type="text"
+          placeholder="Rechercher un produit…"
+        />
+        <span class="icon is-small is-right">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
+    </div>
+
     <div v-if="loading" class="loading">Chargement…</div>
 
     <div v-else class="cards">
       <ProductCard
-        v-for="p in products"
+        v-for="p in filteredProducts()"
         :key="p._id"
         :product="p"
       />

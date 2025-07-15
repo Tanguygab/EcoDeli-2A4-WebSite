@@ -143,6 +143,12 @@ async function buy() {
       <p>Chargement du produit...</p>
     </div>
   </template>
+
+  <ProductCard
+    v-for="product in filteredProducts()"
+    :key="product._id"
+    :product="product"
+  />
 </template>
 
 <style scoped>
