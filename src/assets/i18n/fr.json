@@ -185,5 +185,22 @@
   },
   "footer": {
     "contact": "Contactez-nous"
+  },
+  "settings": {
+    "title": "Paramètres du compte",
+    "personal": "Informations personnelles",
+    "description": "Parle un peu de toi...",
+    "image": "URL de l'image de profil",
+    "tutorial": "Afficher le tutoriel à la connexion",
+    "save": "Enregistrer",
+    "notifications": "Notifications",
+    "emailNotifications": "Recevoir des notifications par email",
+    "locations": "Lieux enregistrés",
+    "password": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmPassword": "Confirmer",
+    "updatePassword": "Mettre à jour",
+    "deleteAccount": "Supprimer le compte"
   }
 }

@@ -16,6 +16,8 @@ const email = ref(user.email || '')
 const birthday = ref(user.birthday?.slice(0, 10) || '')
 const description = ref(user.description || '')
 const notifications = ref(user.notifications ?? false)
+const image = ref<File | null>(null)
+const tutorial = ref(user.tutorial ?? false)
 
 const password = ref('')
 const newPassword = ref('')
@@ -31,21 +33,33 @@ onMounted(async () => {
     }
 })
 
+function handleImageUpload(event: Event) {
+    const files = (event.target as HTMLInputElement).files
+    if (files && files.length > 0) {
+        image.value = files[0]
+    }
+}
+
 async function updatePersonalInfo() {
     if (!email.value.includes('@')) {
         alert('Email invalide.')
         return
     }
 
+    const formData = new FormData()
+    formData.append('firstname', firstname.value)
+    formData.append('name', name.value)
+    formData.append('email', email.value)
+    formData.append('birthday', birthday.value)
+    formData.append('description', description.value)
+    formData.append('notifications', String(notifications.value))
+    formData.append('tutorial', String(tutorial.value))
+    if (image.value) {
+        formData.append('image', image.value)
+    }
+
     try {
-        const updatedUser = await updateSettings({
-            firstname: firstname.value,
-            name: name.value,
-            email: email.value,
-            birthday: birthday.value,
-            description: description.value,
-            notifications: notifications.value,
-        })
+        const updatedUser = await updateSettings(formData)
         session.user = updatedUser
         alert('Profil mis à jour')
     } catch (err: any) {
@@ -97,137 +111,210 @@ async function deleteAccount() {
 </script>
 
 <template>
-    <div class="settings-layout">
-        <header class="navbar">
-            <span class="current-route">{{ router.currentRoute.value.fullPath }}</span>
-        </header>
+  <div class="container is-max-desktop mt-6">
+    <div class="box">
+      <h1 class="title has-text-centered mb-5">Paramètres du compte</h1>
+      <form @submit.prevent="updatePersonalInfo">
+        <!-- Informations personnelles -->
+        <div class="field">
+          <label class="label">Prénom</label>
+          <div class="control">
+            <input class="input" type="text" v-model="firstname" placeholder="Prénom" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Nom</label>
+          <div class="control">
+            <input class="input" type="text" v-model="name" placeholder="Nom" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Email</label>
+          <div class="control has-icons-right">
+            <input class="input" type="email" v-model="email" placeholder="Email" />
+            <span class="icon is-small is-right">
+              <i class="fas fa-envelope"></i>
+            </span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Date de naissance</label>
+          <div class="control">
+            <input class="input" type="date" v-model="birthday" placeholder="Date de naissance" />
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Description</label>
+          <div class="control">
+            <textarea class="textarea" v-model="description" placeholder="Parle un peu de toi..."></textarea>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Image de profil</label>
+          <div class="file is-boxed is-success has-name is-fullwidth custom-file">
+            <label class="file-label">
+              <input class="file-input" type="file" accept="image/*" @change="handleImageUpload" />
+              <span class="file-cta custom-file-cta">
+                <span class="file-icon"><i class="fas fa-upload" /></span>
+                <span class="file-label custom-file-label">Choisir un fichier…</span>
+              </span>
+              <span class="file-name">{{ image?.name || 'Aucun fichier' }}</span>
+            </label>
+          </div>
+        </div>
+        <div class="field mt-4">
+          <label class="custom-checkbox">
+            <input type="checkbox" v-model="tutorial" />
+            <span class="custom-checkmark"></span>
+            <span class="ml-2">Afficher le tutoriel à la connexion</span>
+          </label>
+        </div>
+        <div class="field mt-4">
+          <button class="button is-success is-fullwidth" type="submit">Enregistrer</button>
+        </div>
+      </form>
 
-        <main class="settings-content">
-            <h1 class="title">Paramètres du compte</h1>
+      <!-- Notifications -->
+      <div class="field mt-5">
+        <label class="label">Notifications</label>
+        <label class="custom-checkbox">
+          <input type="checkbox" v-model="notifications" />
+          <span class="custom-checkmark"></span>
+          <span class="ml-2">Recevoir des notifications par email</span>
+        </label>
+      </div>
 
-            <section class="card-section">
-                <h2>Informations personnelles</h2>
-                <input class="input" type="text" v-model="firstname" placeholder="Prénom" />
-                <input class="input" type="text" v-model="name" placeholder="Nom" />
-                <input class="input" type="email" v-model="email" placeholder="Email" />
-                <input class="input" type="date" v-model="birthday" placeholder="Date de naissance" />
-                <textarea class="input" v-model="description" placeholder="Parle un peu de toi..."></textarea>
-                <button class="button green" @click="updatePersonalInfo">Enregistrer</button>
-            </section>
+      <!-- Lieux enregistrés -->
+      <div class="field mt-5">
+        <label class="label">Lieux enregistrés</label>
+        <div class="content">
+          <ul>
+            <li v-for="(location, i) in savedLocations" :key="i">
+              {{ location.address + ', ' + location.city + ' (' + location.zipcode + ')' }}
+            </li>
+          </ul>
+        </div>
+      </div>
 
-            <section class="card-section">
-                <h2>Notifications</h2>
-                <label>
-                    <input type="checkbox" v-model="notifications" />
-                    <span class="text">Recevoir des notifications par email</span>
-                </label>
-            </section>
+      <!-- Changer le mot de passe -->
+      <form @submit.prevent="updatePass" class="mt-5">
+        <label class="label">Changer le mot de passe</label>
+        <div class="field">
+          <input class="input" type="password" v-model="password" placeholder="Mot de passe actuel" />
+        </div>
+        <div class="field">
+          <input class="input" type="password" v-model="newPassword" placeholder="Nouveau mot de passe" />
+        </div>
+        <div class="field">
+          <input class="input" type="password" v-model="confirmPassword" placeholder="Confirmer" />
+        </div>
+        <div class="field">
+          <button class="button is-link is-fullwidth" type="submit">Mettre à jour</button>
+        </div>
+      </form>
 
-            <section class="card-section">
-                <h2>Lieux enregistrés</h2>
-                <ul>
-                    <li v-for="(location, i) in savedLocations" :key="i">
-                        {{ location.address + ', ' + location.city + ' (' + location.zipcode + ')' }}
-                    </li>
-                </ul>
-            </section>
-
-            <section class="card-section">
-                <h2>Changer le mot de passe</h2>
-                <input class="input" type="password" v-model="password" placeholder="Mot de passe actuel" />
-                <input class="input" type="password" v-model="newPassword" placeholder="Nouveau mot de passe" />
-                <input class="input" type="password" v-model="confirmPassword" placeholder="Confirmer" />
-                <button class="button blue" @click="updatePass">Mettre à jour</button>
-            </section>
-
-            <section class="card-section danger">
-                <h2>Supprimer le compte</h2>
-                <button class="button red" @click="deleteAccount">Supprimer définitivement</button>
-            </section>
-        </main>
+      <!-- Supprimer le compte -->
+      <div class="field mt-5">
+        <label class="label has-text-danger">Supprimer le compte</label>
+        <button class="button is-danger is-fullwidth" @click="deleteAccount">Supprimer définitivement</button>
+      </div>
     </div>
+  </div>
 </template>
 
 <style scoped>
-.settings-layout {
-    background-color: #1e1e1e;
-    color: #ffffff;
-    min-height: 100vh;
-    font-family: sans-serif;
+.container {
+  margin-top: 3rem;
+}
+.box {
+  background: #222;
+  color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px #0004;
+  padding: 2rem 2.5rem;
+}
+.label {
+  color: #a2caa2;
+}
+.input, .textarea {
+  background: #a2caa2;
+  color: #222;
+}
+.button.is-success {
+  background: #09ce44;
+  color: #fff;
+}
+.button.is-link {
+  background: #146eff;
+  color: #fff;
+}
+.button.is-danger {
+  background: #d33;
+  color: #fff;
+}
+.custom-file-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+}
+.custom-file-label {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+.file-name {
+  color: #222;
+  text-align: center;
+  width: 100%;
+  display: block;
+  margin-top: 0.5rem;
 }
 
-.navbar {
-    background-color: #1e1e1e;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 1rem 2rem;
+/* Custom round checkbox */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
 }
-
-.current-route {
-    color: #a2caa2;
-    font-size: 0.9rem;
+.custom-checkbox input[type="checkbox"] {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
-
-.settings-content {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 1rem;
+.custom-checkmark {
+  height: 22px;
+  width: 22px;
+  background-color: #222;
+  border: 2px solid #09ce44;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  transition: background 0.2s;
+  margin-right: 8px;
 }
-
-.card-section {
-    background-color: #2c2c2c;
-    padding: 1.5rem;
-    border-radius: 10px;
-    margin-bottom: 2rem;
+.custom-checkbox input:checked ~ .custom-checkmark {
+  background-color: #09ce44;
+  border-color: #09ce44;
 }
-
-.input {
-    background-color: #a2caa2;
-    border: none;
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    width: 100%;
-    border-radius: 5px;
-    color: black;
+.custom-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
 }
-
-textarea.input {
-    min-height: 80px;
-    resize: vertical;
+.custom-checkbox input:checked ~ .custom-checkmark:after {
+  display: block;
 }
-
-.button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.button.green {
-    background-color: #09ce44;
-    color: white;
-}
-
-.button.blue {
-    background-color: #146eff;
-    color: white;
-}
-
-.button.red {
-    background-color: #d33;
-    color: white;
-}
-
-.danger {
-    background-color: #2c2c2c;
-    border: 1px solid #d33;
-}
-
-.role-display {
-    margin-top: 0.5rem;
-    font-weight: bold;
-    color: #ccc;
+.custom-checkbox .custom-checkmark:after {
+  left: 6px;
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
 }
 </style>

@@ -185,5 +185,23 @@
     "delivery-request": "Delivery request",
     "post-announcement": "Post announcement",
     "my-storage-boxes": "My storage boxes"
+  },
+  "settings": {
+    "title": "Account Settings",
+    "personal": "Personal Information",
+    "description": "Tell us about yourself...",
+    "image": "Profile image URL",
+    "tutorial": "Show tutorial on login",
+    "save": "Save",
+    "notifications": "Notifications",
+    "emailNotifications": "Receive notifications by email",
+    "locations": "Saved Locations",
+    "password": "Change Password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm password",
+    "updatePassword": "Update",
+    "deleteAccount": "Delete Account",
+    "deleteAccountButton": "Delete permanently"
   }
 }
