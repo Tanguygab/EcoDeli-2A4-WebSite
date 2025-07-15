@@ -33,7 +33,7 @@ const pages = [
         children: {
             "traders": "commerçants",
             "contracts": "contrats",
-            "deliverymen": "livreurs",
+            "candidature": "Candidatures livreurs",
             "prestataires": "prestataires",
             "deliveries": "livraisons"
         },
