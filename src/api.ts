@@ -165,6 +165,16 @@ export async function readNotification(notification?: Notification) {
     return await post<Notification[] | void>("notifications/read/" + (notification ? notification._id : ""))
 }
 
+// Créer une nouvelle notification
+export async function createNotification(userId: number, content: string, link?: string) {
+    return await post<Notification>("notifications", {
+        user: userId,
+        content: content,
+        link: link,
+        date: new Date().toISOString()
+    })
+}
+
 export async function buyProduct(product: Product, amount: number, location: Location) {
     return await post<Product>("products/" + product._id + "/buy", {
         amount: amount,
@@ -189,7 +199,20 @@ export async function getUserProducts(userId: number) {
 
 // Créer un produit avec upload
 export async function createProduct(body: FormData | object) {
-  return await post<Product>('products', body)
+  const product = await post<Product>('products', body)
+  
+  // Créer une notification pour informer l'utilisateur
+  try {
+    if (session.user) {
+      const notificationContent = `Votre produit "${product.name}" a bien été créé`
+      await createNotification(session.user._id, notificationContent, `/products/${product._id}`)
+    }
+  } catch (error) {
+    console.warn('Erreur lors de la création de la notification:', error)
+    // Ne pas faire échouer la création du produit si la notification échoue
+  }
+  
+  return product
 }
 
 export async function getRequests(pagination: Pagination) {
