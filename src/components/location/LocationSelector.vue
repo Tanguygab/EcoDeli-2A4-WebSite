@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import IconInput from '@/components/IconInput.vue'
 import { ref } from 'vue'
 import type { Location } from '@/types/location.ts'
 import { getLocations } from '@/api.ts'
+import LocationSaver from '@/components/location/LocationSaver.vue'
 
 const location = defineModel<Location | undefined>()
 const newLocation = ref<Location>({city: "", address: "", zipcode: ""})
@@ -28,19 +28,6 @@ getLocations().then(locs => locations.value = locs);
     </div>
 
     <div v-if="location === newLocation" class="mt-3 mx-6">
-        <IconInput v-model="newLocation.address" placeholder="Address" icon="fa-address-card" />
-        <div class="field is-horizontal">
-            <div class="field-body">
-                <IconInput v-model="newLocation.city" placeholder="City" icon="fa-city" />
-                <IconInput
-                    v-model="newLocation.zipcode"
-                    placeholder="Zipcode"
-                    icon="fa-address-card"
-                    type="number"
-                    :minlength="5"
-                    :maxlength="5"
-                />
-            </div>
-        </div>
+        <LocationSaver v-model="newLocation" />
     </div>
 </template>

@@ -14,7 +14,7 @@ import type { Product } from '@/types/product'
 import Modal from '@/components/Modal.vue'
 import type { Location } from '@/types/location'
 import router from '@/router'
-import LocationSelector from '@/components/LocationSelector.vue'
+import LocationSelector from '@/components/location/LocationSelector.vue'
 import LabelInput from '@/components/LabelInput.vue'
 import { computed } from 'vue'
 
