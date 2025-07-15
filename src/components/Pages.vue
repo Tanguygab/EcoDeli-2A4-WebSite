@@ -7,25 +7,21 @@ const props = defineProps<{
   list: any[]
 }>()
 
-const emit = defineEmits(['update'])
+const emit = defineEmits(['changePage'])
 
 const currentPage = computed(() => props.pagination.page)
 const limit = computed(() => props.pagination.limit)
-const isFirstPage = computed(() => currentPage.value === 0)
-const isLastPage = computed(() => props.list.length < limit.value)
+const totalItems = computed(() => props.list.length)
+const totalPages = computed(() => Math.max(1, Math.ceil(totalItems.value / limit.value)))
+
+const isFirstPage = computed(() => currentPage.value <= 0)
+const isLastPage = computed(() => currentPage.value >= totalPages.value - 1)
 
 function nextPage() {
-  if (!isLastPage.value) {
-    props.pagination.page++
-    emit('update')
-  }
+  if (!isLastPage.value) emit('changePage', currentPage.value + 1)
 }
-
 function previousPage() {
-  if (!isFirstPage.value) {
-    props.pagination.page--
-    emit('update')
-  }
+  if (!isFirstPage.value) emit('changePage', currentPage.value - 1)
 }
 </script>
 
@@ -40,7 +36,7 @@ function previousPage() {
     </button>
 
     <span class="pagination-info">
-      Page {{ currentPage + 1 }}
+      Page {{ currentPage + 1 }} / {{ totalPages }}
     </span>
 
     <button

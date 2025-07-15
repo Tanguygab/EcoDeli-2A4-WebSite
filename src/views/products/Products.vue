@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getProducts, getSellers } from '@/api.ts'
 import { newPagination } from '@/types/pagination.ts'
@@ -10,10 +10,9 @@ import type { Product } from '@/types/product.ts'
 import Icon from '@/components/Icon.vue'
 
 const route = useRoute()
-const pagination = newPagination()
-pagination.limit = 10
+const pagination = ref(newPagination())
+pagination.value.limit = 10
 
-const products = ref<Product[]>([])
 const allProducts = ref<Product[]>([])
 
 // Filtres
@@ -32,29 +31,12 @@ if (route.query.filter) {
 
 const sizes = ['small', 'medium', 'large', 'xxl']
 
-// Appliquer les filtres
+// Charger tous les produits une seule fois
 async function loadProducts () {
-  // Charge toutes les données
-  const data = await getProducts(pagination)
+  const data = await getProducts(pagination.value)
   allProducts.value = data
-
-  // Filtrage local
-  let filtered = [...allProducts.value]
-  if (priceMin.value !== null) filtered = filtered.filter(p => priceMin.value !== null && p.price >= priceMin.value)
-  if (priceMax.value !== null) filtered = filtered.filter(p => p.price <= priceMax.value!)
-  if (selectedSizes.value.length) filtered = filtered.filter(p => p.size && selectedSizes.value.includes(p.size.name))
-  if (selectedSellers.value.length) filtered = filtered.filter(p => p.seller && selectedSellers.value.some(s => s._id === p.seller._id))
-
-  // Pagination locale
-  const start = pagination.page * pagination.limit
-  const end = start + pagination.limit
-  products.value = filtered.slice(start, end)
 }
-
-// Pagination
-watch(() => pagination.page, () => {
-  loadProducts()
-})
+loadProducts()
 
 // Recherche vendeur
 function searchSellers() {
@@ -77,30 +59,35 @@ function toggleSize(size: string) {
   else selectedSizes.value.splice(idx, 1)
 }
 
-// Initial load
-loadProducts()
-
+// Barre de recherche
 function onSearch() {
-  pagination.page = 0
-  loadProducts()
+  pagination.value.page = 0
 }
 
-function filteredProducts() {
+// Liste filtrée complète
+const filteredProductsAll = computed(() => {
   let filtered = [...allProducts.value]
-  // Appliquer tous les filtres
-  if (priceMin.value !== null) filtered = filtered.filter(p => p.price >= priceMin.value)
-  if (priceMax.value !== null) filtered = filtered.filter(p => p.price <= priceMax.value)
+  if (priceMin.value !== null && priceMin.value !== undefined) filtered = filtered.filter(p => p.price >= (priceMin.value as number))
+  if (priceMax.value !== null && priceMax.value !== undefined) filtered = filtered.filter(p => p.price <= (priceMax.value as number))
   if (selectedSizes.value.length) filtered = filtered.filter(p => p.size && selectedSizes.value.includes(p.size.name))
   if (selectedSellers.value.length) filtered = filtered.filter(p => p.seller && selectedSellers.value.some(s => s._id === p.seller._id))
-  // Filtre sur le nom
   if (search.value.trim()) {
     const term = search.value.trim().toLowerCase()
     filtered = filtered.filter(p => p.name?.toLowerCase().includes(term))
   }
-  // Pagination locale
-  const start = pagination.page * pagination.limit
-  const end = start + pagination.limit
-  return filtered.slice(start, end)
+  return filtered
+})
+
+// Liste paginée à afficher
+const paginatedProducts = computed(() => {
+  const start = pagination.value.page * pagination.value.limit
+  const end = start + pagination.value.limit
+  return filteredProductsAll.value.slice(start, end)
+})
+
+// Changement de page
+function onPageChange(page: number) {
+  pagination.value.page = page
 }
 </script>
 
@@ -179,18 +166,23 @@ function filteredProducts() {
     <div class="my-5 is-fullwidth is-flex is-flex-direction-column">
       <div class="is-fullheight">
         <h1 class="title has-text-centered">
-          {{ pagination.filter ? $t("search.results", { input: pagination.filter }) : $t("product.products") }}
+          {{ search ? $t("search.results", { input: search }) : $t("product.products") }}
         </h1>
         <div class="is-flex is-flex-wrap-wrap is-justify-content-center">
           <ProductCard
             class="mx-5"
-            v-for="product in filteredProducts()"
+            v-for="product in paginatedProducts"
             :key="product._id"
             :product="product"
           />
         </div>
       </div>
-      <Pages class="mb-auto" :list="products" :pagination="pagination" @update="loadProducts" />
+      <Pages
+        class="mb-auto"
+        :list="filteredProductsAll"
+        :pagination="pagination"
+        @changePage="onPageChange"
+      />
     </div>
   </div>
 </template>
