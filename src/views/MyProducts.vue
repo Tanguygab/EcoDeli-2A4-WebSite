@@ -12,14 +12,10 @@ const session = startSession()
 api(session)
 const user = session.user!!
 
-/* -------------------------------------------
- * STATE & PAGINATION
- * -----------------------------------------*/
 const pagination = newPagination()
 const products   = ref<Product[]>([])
 const loading    = ref(false)
 const showForm   = ref(false)
-const search = ref('')
 
 interface ProductInput {
   name: string
@@ -32,16 +28,6 @@ const form = ref<ProductInput>({ name: '', price: 0, size: null, location: null 
 const selectedFile = ref<File | null>(null)
 const fileName     = ref('')
 
-const sizes = [
-  { _id: 1, name: 'small' },
-  { _id: 2, name: 'medium' },
-  { _id: 3, name: 'large' },
-  { _id: 4, name: 'xxl' }
-]
-
-/* -------------------------------------------
- * NORMALISATION DES CHAMPS RELATIONNELS
- * -----------------------------------------*/
 function normalizeProduct(raw: Product): Product {
   const p: any = { ...raw }
   if (!p.seller || typeof p.seller === 'number') {
@@ -60,9 +46,6 @@ function normalizeProduct(raw: Product): Product {
   return p as Product
 }
 
-/* -------------------------------------------
- * CHARGEMENT DES PRODUITS DU VENDEUR
- * -----------------------------------------*/
 async function loadProducts () {
   loading.value = true
   try {
@@ -78,9 +61,6 @@ async function loadProducts () {
   }
 }
 
-/* -------------------------------------------
- * FORMULAIRES
- * -----------------------------------------*/
 function openForm () {
   form.value = { name: '', price: 0, size: null, location: null }
   selectedFile.value = null
@@ -117,13 +97,6 @@ async function submitForm () {
   }
 }
 
-function filteredProducts() {
-  if (!search.value.trim()) return products.value
-  return products.value.filter(p =>
-    p.name.toLowerCase().includes(search.value.trim().toLowerCase())
-  )
-}
-
 onMounted(loadProducts)
 </script>
 
@@ -131,26 +104,11 @@ onMounted(loadProducts)
   <div class="myproduct">
     <h1 class="title has-text-centered mb-4">Mes Produits</h1>
 
-    <!-- Barre de recherche -->
-    <div class="field mb-4" style="max-width:400px;margin:auto;">
-      <div class="control has-icons-right">
-        <input
-          v-model="search"
-          class="input"
-          type="text"
-          placeholder="Rechercher un produit…"
-        />
-        <span class="icon is-small is-right">
-          <i class="fas fa-search"></i>
-        </span>
-      </div>
-    </div>
-
     <div v-if="loading" class="loading">Chargement…</div>
 
     <div v-else class="cards">
       <ProductCard
-        v-for="p in filteredProducts()"
+        v-for="p in products"
         :key="p._id"
         :product="p"
       />
@@ -195,19 +153,8 @@ onMounted(loadProducts)
           </div>
           <div class="field is-flex gap">
             <div class="mr-2" style="flex:1">
-              <label class="label">Taille</label>
-              <div class="select is-fullwidth">
-                <select v-model.number="form.size">
-                  <option :value="null">Choisir…</option>
-                  <option
-                    v-for="size in sizes"
-                    :key="size._id"
-                    :value="size._id"
-                  >
-                    {{ size.name }}
-                  </option>
-                </select>
-              </div>
+              <label class="label">Taille (ID)</label>
+              <input v-model.number="form.size" class="input" type="number" min="1" />
             </div>
             <div style="flex:1">
               <label class="label">Lieu (ID)</label>

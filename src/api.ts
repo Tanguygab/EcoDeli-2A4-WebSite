@@ -361,3 +361,13 @@ export async function updateUserRole(userId: number | string, role: number) {
 export async function deleteNotification(id: number | string) {
     return await del(`notifications/${id}`)
 }
+
+export async function createNotification(notification: {
+  user: number,
+  date: Date,
+  is_read: boolean,
+  content: string,
+  link?: string
+}) {
+  return await post("notifications", notification)
+}
