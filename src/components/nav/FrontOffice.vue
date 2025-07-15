@@ -43,6 +43,9 @@ document.addEventListener("click", e => {
                         <RouterLink class="navbar-item" to="/client/annonce">
                             Déposer une annonce
                         </RouterLink>
+                        <RouterLink class="navbar-item" to="/client/box">
+                          Mes box de stockage
+                        </RouterLink>
                         <hr class="navbar-divider">
                         <RouterLink v-if="session.user.role.access_level >= 100" class="navbar-item has-text-danger-50"
                             to="/backoffice">
