@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { startSession } from '@/stores/session'
 import { api, getClientAnnonces, createClientAnnonce } from '@/api.ts'
 import { newPagination } from '@/types/pagination.ts'
@@ -52,12 +52,12 @@ async function submitForm() {
   }
 }
 
-function filteredAnnonces() {
+const filteredAnnonces = computed(() => {
   if (!search.value.trim()) return annonces.value
   return annonces.value.filter(a =>
     a.title.toLowerCase().includes(search.value.trim().toLowerCase())
   )
-}
+})
 
 onMounted(loadAnnonces)
 </script>
@@ -84,7 +84,7 @@ onMounted(loadAnnonces)
     <div v-if="loading" class="loading">Chargement…</div>
 
     <div v-else class="cards">
-      <div v-for="a in filteredAnnonces()" :key="a._id" class="box mb-3">
+      <div v-for="a in filteredAnnonces" :key="a._id" class="box mb-3">
         <h3 class="is-size-5 has-text-weight-bold">{{ a.title }}</h3>
         <div>{{ a.description }}</div>
         <div class="is-size-7 has-text-grey">{{ a.date }} • {{ a.location }}</div>
