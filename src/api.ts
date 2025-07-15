@@ -356,3 +356,8 @@ export async function deleteProof(proofId: number | string) {
 export async function updateUserRole(userId: number | string, role: number) {
     return await put(`users/${userId}`, { role })
 }
+
+// Supprimer une notification
+export async function deleteNotification(id: number | string) {
+    return await del(`notifications/${id}`)
+}

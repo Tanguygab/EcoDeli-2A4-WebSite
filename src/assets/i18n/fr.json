@@ -21,6 +21,13 @@
     "my-products": "Mes Produits",
     "profile": "Profil",
     "notifications": "Notifications",
+    "notifications-title": "Mes notifications",
+    "notifications-search": "Rechercher une notification...",
+    "notifications-sort": {
+      "label": "Trier par date :",
+      "desc": "Plus récent d'abord",
+      "asc": "Plus ancien d'abord"
+    },
     "settings": "Paramètres",
     "backoffice": "Backoffice",
     "no-description": "Aucune description définie.",

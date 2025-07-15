@@ -21,6 +21,13 @@
     "my-products": "My Products",
     "profile": "Profile",
     "notifications": "Notifications",
+    "notifications-title": "My notifications",
+    "notifications-search": "Search a notification...",
+    "notifications-sort": {
+      "label": "Sort by date:",
+      "desc": "Newest first",
+      "asc": "Oldest first"
+    },
     "settings": "Settings",
     "backoffice": "BackOffice",
     "no-description": "No description set.",
@@ -242,6 +249,16 @@
         "date": "Date",
         "location": "Location",
         "submit": "Post"
+      }
+    }
+  },
+  "notification": {
+    "toolbar": {
+      "search": "Search a notification...",
+      "sort": {
+        "label": "Sort by date:",
+        "desc": "Newest first",
+        "asc": "Oldest first"
       }
     }
   }
