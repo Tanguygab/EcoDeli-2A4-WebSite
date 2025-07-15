@@ -40,7 +40,14 @@ const router = createRouter({
                 { path: 'finance', component: () => import('@/views/backoffice/Finances.vue') }
             ]
         },
-        { path: '/livreur/form', component: () => import('@/views/livreur/LivrForm.vue') },
+        {
+            path: '/deliverymen',
+            component: () => import('@/views/deliverymen/Home.vue'),
+            children: [
+                { path: 'deliveries', component: () => import('@/views/deliverymen/Deliveries.vue') },
+                { path: 'form', component: () => import('@/views/deliverymen/LivrForm.vue') },
+            ]
+        },
         { path: '/client/annonce', component: () => import('@/views/client/ClientAnnonceForm.vue') },
         { path: '/client/box', component: () => import('@/views/client/ClientBox.vue') },
         { path: '/:pathMatch(.*)*', component: NotFound }

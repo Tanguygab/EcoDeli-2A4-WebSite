@@ -66,7 +66,7 @@ function setLang(lang: string) {
                         <RouterLink class="navbar-item" to="/my-products">{{ $t("user.my-products") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/settings">{{ $t("user.settings") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/requests">{{ $t("menu.card") }}</RouterLink>
-                        <RouterLink class="navbar-item" to="/livreur/form">
+                        <RouterLink class="navbar-item" to="/deliverymen/form">
                             {{ $t("menu.delivery-request") }}
                         </RouterLink>
                         <RouterLink class="navbar-item" to="/client/annonce">

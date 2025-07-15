@@ -36,7 +36,7 @@ loadPage(request, getRequest)
 
             </div>
         </div>
-        <div class="mt-5" v-if="request.delivery">
+        <div class="mt-5" v-if="request.delivery && request.delivery_status?.name === 'ongoing'">
             <h1 class="title is-6 has-text-centered">
                 Delivery Status
             </h1>

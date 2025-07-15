@@ -6,4 +6,6 @@ export type Delivery = {
     latitude: number,
     longitude: number,
     products: number
+    first_product_date: string,
+    last_product_date: string,
 }
