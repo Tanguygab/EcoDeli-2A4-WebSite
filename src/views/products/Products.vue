@@ -9,7 +9,7 @@ import type { Product } from '@/types/product.ts'
 import Icon from '@/components/Icon.vue'
 
 const pagination = newPagination()
-pagination.limit = 10 // Limiter à 10 produits par page
+pagination.limit = 10
 
 const products = ref<Product[]>([])
 
@@ -18,15 +18,12 @@ const loadProducts = async () => {
   products.value = data
 }
 
-// Initial load
 loadProducts()
 
-// Recharger les produits quand on change de page
 watch(() => pagination.page, () => {
   loadProducts()
 })
 
-// Recherche et sélection des vendeurs
 const sellerInput = ref<string>()
 const sellers = ref<User[]>([])
 const selectedSellers = ref<User[]>([])
@@ -49,7 +46,6 @@ const sizes = ['small', 'medium', 'large', 'xxl']
 
 <template>
   <div class="columns is-fullwidth is-fullheight">
-    <!-- FILTRES -->
     <nav class="box ml-3 mt-5">
       <div>
         <label class="title is-5">{{ $t('product.price.name') }}</label>
@@ -117,9 +113,7 @@ const sizes = ['small', 'medium', 'large', 'xxl']
           />
         </div>
       </div>
-
-    
-      <Pages class="mb-auto" :list="products" :pagination="pagination" />
+      <Pages class="mb-auto" :list="products" :pagination="pagination" @update="loadProducts" />
     </div>
   </div>
 </template>
