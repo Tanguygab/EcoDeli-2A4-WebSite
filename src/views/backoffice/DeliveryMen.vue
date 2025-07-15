@@ -7,9 +7,8 @@ import Pages from '@/components/Pages.vue'
 const proofs = ref<any[]>([])
 const users = ref<Record<number, any>>({})
 const pdf = ref<string | null>(null)
-const pagination = ref({ page: 0, limit: 5, filter: '', ascending: true }) // Limite à 5, ajout des propriétés manquantes
+const pagination = ref({ page: 0, limit: 5, filter: '', ascending: true }) 
 
-// Charger les proofs et les users associés
 onMounted(async () => {
   proofs.value = await getDeliveryApplications(pagination.value)
   for (const proof of proofs.value) {
@@ -19,14 +18,13 @@ onMounted(async () => {
   }
 })
 
-// Liste paginée à afficher
 const paginatedProofs = computed(() => {
   const start = pagination.value.page * pagination.value.limit
   const end = start + pagination.value.limit
   return proofs.value.slice(start, end)
 })
 
-// Changement de page
+
 function changePage(page: number) {
   pagination.value.page = page
 }
@@ -37,14 +35,14 @@ async function handleDelete(proof: any) {
 }
 
 async function handleValidate(proof: any) {
-  // Met à jour le rôle du user
+  
   await apiUpdateUserRole(proof.user, 6)
-  // Supprime toutes les proofs associées à ce user
+ 
   const userProofs = proofs.value.filter(p => p.user === proof.user)
   for (const p of userProofs) {
     await deleteProof(p._id)
   }
-  // Mets à jour la liste côté front
+ 
   proofs.value = proofs.value.filter(p => p.user !== proof.user)
 }
 </script>
@@ -92,14 +90,14 @@ async function handleValidate(proof: any) {
     </tbody>
   </table>
 
-  <!-- Pagination -->
+  
   <Pages
     :pagination="pagination"
     :list="proofs"
     @changePage="changePage"
   />
 
-  <!-- Visionneuse PDF -->
+  
   <VPdfViewer
     v-if="pdf"
     :src="'http://88.172.140.59:52000/data/proofs/' + pdf"

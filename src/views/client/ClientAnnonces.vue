@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getClientAnnonces, createClientAnnonce } from '@/api.ts'
+import { startSession } from '@/stores/session'
+import { api, getClientAnnonces, createClientAnnonce } from '@/api.ts'
 import { newPagination } from '@/types/pagination.ts'
+
+// Initialisation de la session et de l'API
+const session = startSession()
+api(session)
+const user = session.user
 
 const pagination = newPagination()
 const annonces = ref<any[]>([])
