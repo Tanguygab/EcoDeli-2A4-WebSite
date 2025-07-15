@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { startSession } from '@/stores/session'
-import { api, getUser, isSessionValid } from '@/api'
+import { api, getImageURL, getUser, isSessionValid } from '@/api'
 import { ref, watch } from 'vue'
 import router from '@/router'
 import type { User } from '@/types/user'
@@ -33,12 +33,7 @@ loadUser()
         <div class="columns">
 
             <figure class="column is-one-third is-flex is-flex-direction-column is-align-items-center has-text-centered">
-                <img
-                  v-if="user.image"
-                  alt="Profile Picture"
-                  :src="`http://88.172.140.59:52000${user.image}`"
-                  style="object-fit: cover; border-radius: 1em; width: 20em;"
-                >
+                <img alt="Profile Picture" :src="getImageURL(user.image)">
                 <figcaption class="title is-4">
                     <span v-if="user.role.name !== 'user'" :class="'tag' + (user.role.name === 'admin' ? ' is-danger' : '')">
                         {{ $t("user.role." + user.role.name) }}
