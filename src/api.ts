@@ -161,14 +161,13 @@ export async function createService(name: string, description: string, price: nu
     })
 }
 
-export async function createProduct(body: {
-  name: string,
-  image: string,
-  price: number,
-  size: number | null,
-  location: number | null
-}) {
-  // Le backend déduit le vendeur via le token. Pas besoin d'ajouter seller.
+// Récupérer les produits d'un vendeur
+export async function getUserProducts(userId: number) {
+  return await get<Product[]>(`products?seller=${userId}`)
+}
+
+// Créer un produit avec upload
+export async function createProduct(body: FormData) {
   return await post<Product>('products', body)
 }
 
