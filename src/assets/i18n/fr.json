@@ -39,13 +39,13 @@
       "premium": "Premium",
       "starter": "Starter",
       "free": "Gratuit"
-    },
-    "menu": {
-      "card": "Carte",
-      "delivery-request": "Demande livreur",
-      "post-announcement": "Déposer une annonce",
-      "my-storage-boxes": "Mes box de stockage"
     }
+  },
+  "menu": {
+    "card": "Carte",
+    "delivery-request": "Demande livreur",
+    "post-announcement": "Déposer une annonce",
+    "my-storage-boxes": "Mes box de stockage"
   },
   "product": {
     "products": "Produits",
