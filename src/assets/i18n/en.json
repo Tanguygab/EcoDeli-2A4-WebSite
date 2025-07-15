@@ -1,192 +1,189 @@
 {
-    "auth": {
-        "login": "Login",
-        "register": "Register",
-        "logout": "Logout"
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout"
+  },
+  "404": {
+    "home": "Home",
+    "back": "Back"
+  },
+  "home": {
+    "all-products": "All Products",
+    "delivery-info": "Delivery Information",
+    "news": "News",
+    "quality-information": "Quality Information",
+    "quick-deliveries": "Quick Deliveries",
+    "assurance-&-refunds": "Assurance and Refunds",
+    "guaranteed-satisfaction": "Guaranteed Satisfaction"
+  },
+  "user": {
+    "my-products": "My Products",
+    "profile": "Profile",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "backoffice": "BackOffice",
+    "no-description": "No description set.",
+    "my-files": "My Files",
+    "role": {
+      "admin": "Admin",
+      "support": "Support",
+      "hr": "HR",
+      "employee": "Employee",
+      "supplier": "Supplier",
+      "service-provider": "Service Provider",
+      "delivery": "Delivery",
+      "user": "User"
     },
-
-    "404": {
-        "home": "Home",
-        "back": "Back"
-    },
-
-    "home": {
-        "all-products": "All Products",
-        "delivery-info": "Delivery Information",
-        "news": "News",
-        "quality-information": "Quality Information",
-        "quick-deliveries": "Quick Deliveries",
-        "assurance-&-refunds": "Assurance and Refunds",
-        "guaranteed-satisfaction": "Guaranteed Satisfaction"
-    },
-
-    "user": {
-        "my-products": "My Products",
-        "profile": "Profile",
-        "notifications": "Notifications",
-        "settings": "Settings",
-        "backoffice": "BackOffice",
-        "no-description": "No description set.",
-        "my-files": "My Files",
-        "role": {
-            "admin": "Admin",
-            "support": "Support",
-            "hr": "HR",
-            "employee": "Employee",
-            "supplier": "Supplier",
-            "service-provider": "Service Provider",
-            "delivery": "Delivery",
-            "user": "User"
-        },
-        "subscription": {
-            "premium": "Premium",
-            "starter": "Starter",
-            "free": "Free"
-        }
-    },
-    "product": {
-        "products": "Products",
-        "seller": "Seller",
-        "price": {
-            "name": "Price",
-            "min": "Min",
-            "max": "Max"
-        },
-        "size": {
-            "name": "Size",
-            "xxl": "XXL",
-            "large": "Large",
-            "medium": "Medium",
-            "small": "Small"
-        }
-    },
-
-    "delivery": {
-        "name": "Delivery"
-    },
-
-    "form": {
-        "firstname": {
-            "label": "First Name",
-            "placeholder": "Tanguy",
-            "valid": "",
-            "invalid": "This name is invalid"
-        },
-        "name": {
-            "label": "Family Name",
-            "placeholder": "Gabril",
-            "valid": "",
-            "invalid": "This name is invalid"
-        },
-        "email": {
-            "label": "Email",
-            "placeholder": "tanguy@gabril.com",
-            "valid": "",
-            "invalid": "This email is invalid"
-        },
-        "password": {
-            "label": "Password",
-            "placeholder": "MySuperSecretPassword123!",
-            "valid": "",
-            "invalid": "Your password should be between 6 and 20 characters!"
-        },
-        "confirm": {
-            "label": "Confirm Password",
-            "placeholder": "MySuperSecretPassword123!",
-            "valid": "",
-            "invalid": "Your passwords don't match!"
-        },
-        "birthday": {
-            "label": "Birthday",
-            "placeholder": "",
-            "valid": "",
-            "invalid": ""
-        }
-    },
-
-    "search": {
-        "results": "Results for \"{{input}}\"",
-        "products": "Search products/offers...",
-        "bills": "Search bills...",
-        "files": "Search files..."
-    },
-
-    "pagination": {
-        "previous": "Previous",
-        "next": "Next",
-        "page": "Page {{page}}"
-    },
-
-
-    "table": {
-        "actions": {
-            "label": "Actions",
-            "see": "See",
-            "edit": "Edit",
-            "delete": "Delete"
-        },
-        "global": {
-            "id": "ID"
-        },
-        "bills": {
-            "date": "Date",
-            "price": "Price"
-        },
-        "contracts": {
-            "start_date": "Start Date",
-            "end_date": "End Price"
-        },
-        "deliveries": {
-            "latitude": "Latitude",
-            "longitude": "Longitude",
-            "products": "Products"
-        },
-        "deliverymen": {},
-        "finances": {
-            "type": "Type",
-            "amount": "Amount",
-            "date": "Date"
-        },
-        "payments": {
-            "date": "Date",
-            "amount": "Amount",
-            "status": "Status"
-        },
-        "prestataires": {
-            "name": "Name",
-            "email": "Email",
-            "phone": "Phone"
-        },
-        "prestations": {
-            "service": "Service",
-            "client": "Client",
-            "status": "Status"
-        },
-        "traders": {
-            "name": "Name",
-            "email": "Email"
-        }
-    },
-    "files": {
-        "tabs": {
-            "all": "All",
-            "contracts": "Contracts",
-            "finances": "Finances",
-            "bills": "Bills"
-        }
-    },
-    "contact": {
-        "title": "Contact us",
-        "lastname": "Last name",
-        "firstname": "First name",
-        "email": "Email",
-        "request": "Your request",
-        "file": "Attachment",
-        "no-file": "No file selected",
-        "send": "Send",
-        "required": "Please fill in all required fields."
-    },
-    "footer": {
-        "contact": "Contact us"
+    "subscription": {
+      "premium": "Premium",
+      "starter": "Starter",
+      "free": "Free"
     }
+  },
+  "product": {
+    "products": "Products",
+    "seller": "Seller",
+    "price": {
+      "name": "Price",
+      "min": "Min",
+      "max": "Max"
+    },
+    "size": {
+      "name": "Size",
+      "xxl": "XXL",
+      "large": "Large",
+      "medium": "Medium",
+      "small": "Small"
+    }
+  },
+  "delivery": {
+    "name": "Delivery"
+  },
+  "form": {
+    "firstname": {
+      "label": "First Name",
+      "placeholder": "Tanguy",
+      "valid": "",
+      "invalid": "This name is invalid"
+    },
+    "name": {
+      "label": "Family Name",
+      "placeholder": "Gabril",
+      "valid": "",
+      "invalid": "This name is invalid"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "tanguy@gabril.com",
+      "valid": "",
+      "invalid": "This email is invalid"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "MySuperSecretPassword123!",
+      "valid": "",
+      "invalid": "Your password should be between 6 and 20 characters!"
+    },
+    "confirm": {
+      "label": "Confirm Password",
+      "placeholder": "MySuperSecretPassword123!",
+      "valid": "",
+      "invalid": "Your passwords don't match!"
+    },
+    "birthday": {
+      "label": "Birthday",
+      "placeholder": "",
+      "valid": "",
+      "invalid": ""
+    }
+  },
+  "search": {
+    "results": "Results for \"{{input}}\"",
+    "products": "Search products/offers...",
+    "bills": "Search bills...",
+    "files": "Search files..."
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{page}}"
+  },
+  "table": {
+    "actions": {
+      "label": "Actions",
+      "see": "See",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "global": {
+      "id": "ID"
+    },
+    "bills": {
+      "date": "Date",
+      "price": "Price"
+    },
+    "contracts": {
+      "start_date": "Start Date",
+      "end_date": "End Price"
+    },
+    "deliveries": {
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "products": "Products"
+    },
+    "deliverymen": {},
+    "finances": {
+      "type": "Type",
+      "amount": "Amount",
+      "date": "Date"
+    },
+    "payments": {
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "prestataires": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone"
+    },
+    "prestations": {
+      "service": "Service",
+      "client": "Client",
+      "status": "Status"
+    },
+    "traders": {
+      "name": "Name",
+      "email": "Email"
+    }
+  },
+  "files": {
+    "tabs": {
+      "all": "All",
+      "contracts": "Contracts",
+      "finances": "Finances",
+      "bills": "Bills"
+    }
+  },
+  "contact": {
+    "title": "Contact us",
+    "lastname": "Last name",
+    "firstname": "First name",
+    "email": "Email",
+    "request": "Your request",
+    "file": "Attachment",
+    "no-file": "No file selected",
+    "send": "Send",
+    "required": "Please fill in all required fields."
+  },
+  "footer": {
+    "contact": "Contact us"
+  },
+  "menu": {
+    "card": "Card",
+    "delivery-request": "Delivery request",
+    "post-announcement": "Post announcement",
+    "my-storage-boxes": "My storage boxes"
+  }
 }

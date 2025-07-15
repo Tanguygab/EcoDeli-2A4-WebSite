@@ -32,6 +32,13 @@ const form = ref<ProductInput>({ name: '', price: 0, size: null, location: null 
 const selectedFile = ref<File | null>(null)
 const fileName     = ref('')
 
+const sizes = [
+  { _id: 1, name: 'small' },
+  { _id: 2, name: 'medium' },
+  { _id: 3, name: 'large' },
+  { _id: 4, name: 'xxl' }
+]
+
 /* -------------------------------------------
  * NORMALISATION DES CHAMPS RELATIONNELS
  * -----------------------------------------*/
@@ -188,8 +195,19 @@ onMounted(loadProducts)
           </div>
           <div class="field is-flex gap">
             <div class="mr-2" style="flex:1">
-              <label class="label">Taille (ID)</label>
-              <input v-model.number="form.size" class="input" type="number" min="1" />
+              <label class="label">Taille</label>
+              <div class="select is-fullwidth">
+                <select v-model.number="form.size">
+                  <option :value="null">Choisir…</option>
+                  <option
+                    v-for="size in sizes"
+                    :key="size._id"
+                    :value="size._id"
+                  >
+                    {{ size.name }}
+                  </option>
+                </select>
+              </div>
             </div>
             <div style="flex:1">
               <label class="label">Lieu (ID)</label>
