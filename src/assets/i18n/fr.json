@@ -1,4 +1,171 @@
 {
+  "auth": {
+    "login": "Connexion",
+    "register": "Inscription",
+    "logout": "Déconnexion"
+  },
+  "404": {
+    "home": "Accueil",
+    "back": "Retour"
+  },
+  "home": {
+    "all-products": "Tous les produits",
+    "delivery-info": "Informations sur la livraison",
+    "news": "Actualités",
+    "quality-information": "Informations qualité",
+    "quick-deliveries": "Livraisons rapides",
+    "assurance-&-refunds": "Assurance et remboursements",
+    "guaranteed-satisfaction": "Satisfaction garantie"
+  },
+  "user": {
+    "my-products": "Mes Produits",
+    "profile": "Profil",
+    "notifications": "Notifications",
+    "settings": "Paramètres",
+    "backoffice": "Backoffice",
+    "no-description": "Aucune description définie.",
+    "my-files": "Mes Fichiers",
+    "role": {
+      "admin": "Admin",
+      "support": "Support",
+      "hr": "RH",
+      "employee": "Employé",
+      "supplier": "Fournisseur",
+      "service-provider": "Prestataire",
+      "delivery": "Livreur",
+      "user": "Utilisateur"
+    },
+    "subscription": {
+      "premium": "Premium",
+      "starter": "Starter",
+      "free": "Gratuit"
+    }
+  },
+  "product": {
+    "products": "Produits",
+    "seller": "Vendeur",
+    "price": {
+      "name": "Prix",
+      "min": "Min",
+      "max": "Max"
+    },
+    "size": {
+      "name": "Taille",
+      "xxl": "XXL",
+      "large": "Grande",
+      "medium": "Moyenne",
+      "small": "Petite"
+    }
+  },
+  "delivery": {
+    "name": "Livraison"
+  },
+  "form": {
+    "firstname": {
+      "label": "Prénom",
+      "placeholder": "Tanguy",
+      "valid": "",
+      "invalid": "Ce prénom est invalide"
+    },
+    "name": {
+      "label": "Nom de famille",
+      "placeholder": "Gabril",
+      "valid": "",
+      "invalid": "Ce nom est invalide"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "tanguy@gabril.com",
+      "valid": "",
+      "invalid": "Cet email est invalide"
+    },
+    "password": {
+      "label": "Mot de passe",
+      "placeholder": "MonSuperMotDePasse123!",
+      "valid": "",
+      "invalid": "Votre mot de passe doit comporter entre 6 et 20 caractères !"
+    },
+    "confirm": {
+      "label": "Confirmer le mot de passe",
+      "placeholder": "MonSuperMotDePasse123!",
+      "valid": "",
+      "invalid": "Les mots de passe ne correspondent pas !"
+    },
+    "birthday": {
+      "label": "Date de naissance",
+      "placeholder": "",
+      "valid": "",
+      "invalid": ""
+    }
+  },
+  "search": {
+    "results": "Résultats pour \"{{input}}\"",
+    "products": "Rechercher des produits/offres...",
+    "bills": "Rechercher des factures...",
+    "files": "Rechercher des fichiers..."
+  },
+  "pagination": {
+    "previous": "Précédent",
+    "next": "Suivant",
+    "page": "Page {{page}}"
+  },
+  "table": {
+    "actions": {
+      "label": "Actions",
+      "see": "Voir",
+      "edit": "Modifier",
+      "delete": "Supprimer"
+    },
+    "global": {
+      "id": "ID"
+    },
+    "bills": {
+      "date": "Date",
+      "price": "Prix"
+    },
+    "contracts": {
+      "start_date": "Date de début",
+      "end_date": "Date de fin"
+    },
+    "deliveries": {
+      "latitude": "Latitude",
+      "longitude": "Longitude",
+      "products": "Produits"
+    },
+    "deliverymen": {},
+    "finances": {
+      "type": "Type",
+      "amount": "Montant",
+      "date": "Date"
+    },
+    "payments": {
+      "date": "Date",
+      "amount": "Montant",
+      "status": "Statut"
+    },
+    "prestataires": {
+      "name": "Nom",
+      "email": "Email",
+      "phone": "Téléphone"
+    },
+    "prestations": {
+      "service": "Service",
+      "client": "Client",
+      "status": "Statut"
+    },
+    "traders": {
+      "name": "Nom",
+      "email": "Email"
+    }
+  },
+  "files": {
+    "tabs": {
+      "all": "Tous",
+      "contracts": "Contrats",
+      "finances": "Finances",
+      "bills": "Factures"
+    }
+  },
   "contact": {
     "title": "Contactez-nous",
     "lastname": "Nom",
@@ -12,14 +179,5 @@
   },
   "footer": {
     "contact": "Contactez-nous"
-  },
-  "user": {
-    "my-products": "Mes Produits",
-    "profile": "Profil",
-    "notifications": "Notifications",
-    "settings": "Paramètres",
-    "my-files": "Mes Fichiers",
-    "backoffice": "Backoffice",
-    "logout": "Déconnexion"
   }
 }
