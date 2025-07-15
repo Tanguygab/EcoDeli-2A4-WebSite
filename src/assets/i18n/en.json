@@ -242,5 +242,19 @@
     "updatePassword": "Update",
     "deleteAccount": "Delete Account",
     "deleteAccountButton": "Delete permanently"
+  },
+  "client": {
+    "annonces": {
+      "title": "My Announcements",
+      "search": "Search an announcement…",
+      "add": "Post an announcement",
+      "form": {
+        "title": "Title",
+        "description": "Description",
+        "date": "Date",
+        "location": "Location",
+        "submit": "Post"
+      }
+    }
   }
 }

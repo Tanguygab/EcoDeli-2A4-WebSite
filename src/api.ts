@@ -334,3 +334,11 @@ export async function getTraders(pagination: Pagination) {
 export async function deleteTrader(trader: any) {
     return await del("traders/" + trader._id);
 }
+
+export async function getClientAnnonces(pagination: Pagination) {
+    return await get<any[]>(paginate("annonces", pagination))
+}
+
+export async function createClientAnnonce(body: object) {
+    return await post<any>("annonces", body)
+}

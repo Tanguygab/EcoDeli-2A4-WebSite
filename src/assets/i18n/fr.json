@@ -241,5 +241,19 @@
     "confirmPassword": "Confirmer",
     "updatePassword": "Mettre à jour",
     "deleteAccount": "Supprimer le compte"
+  },
+  "client": {
+    "annonces": {
+      "title": "Mes Annonces",
+      "search": "Rechercher une annonce…",
+      "add": "Déposer une annonce",
+      "form": {
+        "title": "Titre",
+        "description": "Description",
+        "date": "Date",
+        "location": "Lieu",
+        "submit": "Déposer"
+      }
+    }
   }
 }

@@ -49,7 +49,7 @@ const router = createRouter({
                 { path: 'form', component: () => import('@/views/deliverymen/JoinForm.vue') },
             ]
         },
-        { path: '/client/annonce', component: () => import('@/views/client/ClientAnnonceForm.vue') },
+        { path: '/client/annonce', component: () => import('@/views/client/ClientAnnonces.vue') },
         { path: '/client/box', component: () => import('@/views/client/ClientBox.vue') },
         { path: '/:pathMatch(.*)*', component: NotFound }
     ]
