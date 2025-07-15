@@ -42,7 +42,7 @@ search()
     <table class="table">
         <thead>
             <tr>
-                <th v-for="column in columns">{{ $t(`table.${column === 'id' ? 'global' : name}.${column}`) }}</th>
+                <th v-for="column in columns">{{ $t(`table.${column === '_id' ? 'global' : name}.${column}`) }}</th>
                 <th>{{ $t("table.actions.label") }}</th>
             </tr>
         </thead>
