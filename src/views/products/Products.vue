@@ -32,8 +32,8 @@ async function loadProducts () {
 
   // Filtrage local
   let filtered = [...allProducts.value]
-  if (priceMin.value !== null) filtered = filtered.filter(p => p.price >= priceMin.value)
-  if (priceMax.value !== null) filtered = filtered.filter(p => p.price <= priceMax.value)
+  if (priceMin.value !== null) filtered = filtered.filter(p => priceMin.value !== null && p.price >= priceMin.value)
+  if (priceMax.value !== null) filtered = filtered.filter(p => p.price <= priceMax.value!)
   if (selectedSizes.value.length) filtered = filtered.filter(p => p.size && selectedSizes.value.includes(p.size.name))
   if (selectedSellers.value.length) filtered = filtered.filter(p => p.seller && selectedSellers.value.some(s => s._id === p.seller._id))
 
