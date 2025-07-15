@@ -125,11 +125,10 @@
       "delete": "Supprimer"
     },
     "global": {
-      "id": "ID"
+      "_id": "ID"
     },
     "bills": {
       "title": "Gestion des Factures",
-      "_id": "Identifiant",
       "date": "Date",
       "price": "Prix",
       "filepath": "Fichier",
@@ -138,7 +137,6 @@
     },
     "contracts": {
       "title": "Gestion des Contrats",
-      "_id": "Identifiant",
       "start_date": "Date de début",
       "end_date": "Date de fin",
       "filepath": "Fichier",
@@ -146,7 +144,6 @@
     },
     "deliveries": {
       "title": "Gestion des Livraisons",
-      "_id": "Identifiant",
       "latitude": "Latitude",
       "longitude": "Longitude",
       "products": "Produits",
@@ -170,35 +167,30 @@
     },
     "finances": {
       "title": "Gestion des Finances",
-      "_id": "Identifiant",
       "type": "Type",
       "amount": "Montant",
       "date": "Date"
     },
     "payments": {
       "title": "Gestion des Paiements",
-      "_id": "Identifiant",
       "date": "Date",
       "amount": "Montant",
       "status": "Statut"
     },
     "prestataires": {
       "title": "Gestion des Prestataires",
-      "_id": "Identifiant",
       "name": "Nom",
       "email": "Email",
       "phone": "Téléphone"
     },
     "prestations": {
       "title": "Gestion des Prestations",
-      "_id": "Identifiant",
       "service": "Service",
       "client": "Client",
       "status": "Statut"
     },
     "traders": {
       "title": "Gestion des Commerçants",
-      "_id": "Identifiant",
       "name": "Nom",
       "email": "Email"
     }

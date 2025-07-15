@@ -119,11 +119,10 @@
       "delete": "Delete"
     },
     "global": {
-      "id": "ID"
+      "_id": "ID"
     },
     "bills": {
       "title": "Bill Management",
-      "_id": "ID",
       "date": "Date",
       "price": "Price",
       "filepath": "File",
@@ -132,7 +131,6 @@
     },
     "contracts": {
       "title": "Contract Management",
-      "_id": "ID",
       "start_date": "Start Date",
       "end_date": "End Date",
       "filepath": "File",
@@ -140,7 +138,6 @@
     },
     "deliveries": {
       "title": "Delivery Management",
-      "_id": "ID",
       "latitude": "Latitude",
       "longitude": "Longitude",
       "products": "Products",
@@ -164,35 +161,30 @@
     },
     "finances": {
       "title": "Finance Management",
-      "_id": "ID",
       "type": "Type",
       "amount": "Amount",
       "date": "Date"
     },
     "payments": {
       "title": "Payments Management",
-      "_id": "ID",
       "date": "Date",
       "amount": "Amount",
       "status": "Status"
     },
     "prestataires": {
       "title": "Service Providers Management",
-      "_id": "ID",
       "name": "Name",
       "email": "Email",
       "phone": "Phone"
     },
     "prestations": {
       "title": "Service Management",
-      "_id": "ID",
       "service": "Service",
       "client": "Client",
       "status": "Status"
     },
     "traders": {
       "title": "Trader Management",
-      "_id": "ID",
       "name": "Name",
       "email": "Email"
     }

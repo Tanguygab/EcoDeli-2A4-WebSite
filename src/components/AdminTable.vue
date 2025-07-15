@@ -5,7 +5,6 @@ import { newPagination, type Pagination } from '@/types/pagination';
 const pagination: Pagination = newPagination()
 
 import { ref } from 'vue';
-import type { PropType } from 'vue';
 const input = ref()
 const list = ref<Array<any>>([])
 
@@ -24,13 +23,7 @@ async function handleDelete(item: any, index: number) {
     emit('delete', item, () => list.value.splice(index, 1))
 }
 
-defineProps({
-    name: String,
-    columns: {
-        type: Array as PropType<Array<{ key: string; label: string }>>,
-        required: true
-    },
-})
+defineProps<{ name: string, columns: string[] }>()
 
 function printColumn(string: string, key: string) {
     return key.includes("date") ? new Date(string).toLocaleDateString() : string
@@ -49,13 +42,13 @@ search()
     <table class="table">
         <thead>
             <tr>
-                <th v-for="column in columns">{{ $t(`table.${column.key === 'id' ? 'global' : name}.${column.key}`) }}</th>
+                <th v-for="column in columns">{{ $t(`table.${column === '_id' ? 'global' : name}.${column}`) }}</th>
                 <th>{{ $t("table.actions.label") }}</th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(item, index) in list" :key="item['id']">
-                <td v-for="column in columns">{{ printColumn(item[column.key], column.key) }}</td>
+                <td v-for="column in columns">{{ printColumn(item[column], column) }}</td>
                 <td>
                     <a :title="$t('table.actions.see')" class="button is-info" :href="name + '/' + item['id']">
                         <Icon icon="fa-eye" />

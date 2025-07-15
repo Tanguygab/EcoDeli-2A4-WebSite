@@ -3,12 +3,6 @@ import AdminTable from '@/components/AdminTable.vue';
 import type { Pagination } from '@/types/pagination';
 import { getTraders, deleteTrader } from '@/api';
 
-const columns = [
-    { key: '_id', label: 'table.traders._id' },
-    { key: 'name', label: 'table.traders.name' },
-    { key: 'email', label: 'table.traders.email' }
-];
-
 async function search(pagination: Pagination, callback: (updatedList: Array<any>) => void) {
     try {
         const traders = await getTraders(pagination);
@@ -27,6 +21,6 @@ async function handleDelete(item: any, callback: () => void) {
 </script>
 
 <template>
-    <h2 class="title">{{ $t('table.traders.title') }}</h2>
-    <AdminTable name="traders" @search="search" @delete="handleDelete" :columns="columns" />
+    <h2 class="title">Gestion des Commerçants</h2>
+    <AdminTable name="traders" @search="search" @delete="handleDelete" :columns="['_id', 'name', 'email']" />
 </template>

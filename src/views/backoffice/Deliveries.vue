@@ -4,14 +4,6 @@ import AdminTable from '@/components/AdminTable.vue';
 import type { Delivery } from '@/types/delivery';
 import type { Pagination } from '@/types/pagination';
 
-const columns = [
-    { key: '_id', label: 'table.deliveries._id' },
-    { key: 'latitude', label: 'table.deliveries.latitude' },
-    { key: 'longitude', label: 'table.deliveries.longitude' },
-    { key: 'products', label: 'table.deliveries.products' },
-    { key: 'deliveryman', label: 'table.deliveries.deliveryman' }
-];
-
 async function search(pagination: Pagination, callback: (updatedList: Array<Delivery>) => void) {
     try {
         const deliveries = await getDeliveries(pagination);
@@ -32,11 +24,11 @@ async function handleDelete(delivery: Delivery, callback: () => void) {
 </script>
 
 <template>
-    <h2 class="title">{{ $t('table.deliveries.title') }}</h2>
+    <h2 class="title">Gestion des Livraisons</h2>
     <AdminTable
         name="deliveries"
         @search="search"
         @delete="handleDelete"
-        :columns="columns"
+        :columns="['_id', 'latitude', 'longitude', 'products', 'deliveryman']"
     />
 </template>
