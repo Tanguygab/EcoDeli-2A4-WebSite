@@ -12,22 +12,43 @@ const pagination = newPagination()
 pagination.limit = 10
 
 const products = ref<Product[]>([])
+const allProducts = ref<Product[]>([])
 
-const loadProducts = async () => {
-  const data = await getProducts(pagination)
-  products.value = data
-}
-
-loadProducts()
-
-watch(() => pagination.page, () => {
-  loadProducts()
-})
-
+// Filtres
+const priceMin = ref<number | null>(null)
+const priceMax = ref<number | null>(null)
+const selectedSizes = ref<string[]>([])
 const sellerInput = ref<string>()
 const sellers = ref<User[]>([])
 const selectedSellers = ref<User[]>([])
 
+const sizes = ['small', 'medium', 'large', 'xxl']
+
+// Appliquer les filtres
+async function loadProducts () {
+  // Charge toutes les données
+  const data = await getProducts(pagination)
+  allProducts.value = data
+
+  // Filtrage local
+  let filtered = [...allProducts.value]
+  if (priceMin.value !== null) filtered = filtered.filter(p => p.price >= priceMin.value)
+  if (priceMax.value !== null) filtered = filtered.filter(p => p.price <= priceMax.value)
+  if (selectedSizes.value.length) filtered = filtered.filter(p => p.size && selectedSizes.value.includes(p.size.name))
+  if (selectedSellers.value.length) filtered = filtered.filter(p => p.seller && selectedSellers.value.some(s => s._id === p.seller._id))
+
+  // Pagination locale
+  const start = pagination.page * pagination.limit
+  const end = start + pagination.limit
+  products.value = filtered.slice(start, end)
+}
+
+// Pagination
+watch(() => pagination.page, () => {
+  loadProducts()
+})
+
+// Recherche vendeur
 function searchSellers() {
   if (!sellerInput.value || sellerInput.value.length < 3) return
   getSellers(sellerInput.value).then(data => {
@@ -41,7 +62,20 @@ function selectSeller(seller: User) {
   sellers.value = []
 }
 
-const sizes = ['small', 'medium', 'large', 'xxl']
+// Checkbox tailles
+function toggleSize(size: string) {
+  const idx = selectedSizes.value.indexOf(size)
+  if (idx === -1) selectedSizes.value.push(size)
+  else selectedSizes.value.splice(idx, 1)
+}
+
+// Initial load
+loadProducts()
+
+function onSearch() {
+  pagination.page = 0
+  loadProducts()
+}
 </script>
 
 <template>
@@ -50,11 +84,11 @@ const sizes = ['small', 'medium', 'large', 'xxl']
       <div>
         <label class="title is-5">{{ $t('product.price.name') }}</label>
         <div class="control has-icons-right my-3">
-          <input class="input" type="number" :placeholder="$t('product.price.min')" min="0" />
+          <input v-model.number="priceMin" class="input" type="number" :placeholder="$t('product.price.min')" min="0" />
           <span class="icon is-small is-right">€</span>
         </div>
         <div class="control has-icons-right">
-          <input class="input" type="number" :placeholder="$t('product.price.max')" min="0"/>
+          <input v-model.number="priceMax" class="input" type="number" :placeholder="$t('product.price.max')" min="0"/>
           <span class="icon is-small is-right">€</span>
         </div>
       </div>
@@ -63,7 +97,7 @@ const sizes = ['small', 'medium', 'large', 'xxl']
         <label class="title is-5">{{ $t('product.size.name') }}</label>
         <div class="checkboxes is-flex-direction-column mt-3">
           <label v-for="size in sizes" class="checkbox">
-            <input type="checkbox" />
+            <input type="checkbox" :value="size" :checked="selectedSizes.includes(size)" @change="toggleSize(size)" />
             {{ $t('product.size.' + size) }}
           </label>
         </div>
@@ -97,6 +131,7 @@ const sizes = ['small', 'medium', 'large', 'xxl']
           </li>
         </ul>
       </div>
+      <button class="button is-primary mt-4" @click="onSearch">Rechercher</button>
     </nav>
 
     <div class="my-5 is-fullwidth is-flex is-flex-direction-column">

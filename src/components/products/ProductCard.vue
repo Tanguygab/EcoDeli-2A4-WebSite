@@ -18,7 +18,7 @@ defineProps<{product: Product}>()
                 <p class="mb-0">
                     {{ product.name }}
                     <br>
-                    {{ $t("product.size." + product.size.name) }}
+                    {{ product.size && product.size.name ? $t("product.size." + product.size.name) : '' }}
                 </p>
                 <p class="has-text-right">{{ product.price }}€</p>
             </div>
