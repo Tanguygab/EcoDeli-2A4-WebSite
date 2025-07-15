@@ -32,17 +32,17 @@ async function refuseCandidature(id: string) {
 </script>
 
 <template>
-  <h2 class="title">Candidatures Livreurs</h2>
+  <h2 class="title">{{ $t('table.deliverymen.title') }}</h2>
   <table class="table is-fullwidth">
     <thead>
       <tr>
-        <th>Prénom</th>
-        <th>Nom</th>
-        <th>Email</th>
-        <th>Téléphone</th>
-        <th>Justificatif</th>
-        <th>Statut</th>
-        <th>Actions</th>
+        <th>{{ $t('table.deliverymen.firstname') }}</th>
+        <th>{{ $t('table.deliverymen.lastname') }}</th>
+        <th>{{ $t('table.deliverymen.email') }}</th>
+        <th>{{ $t('table.deliverymen.phone') }}</th>
+        <th>{{ $t('table.deliverymen.justificatif') }}</th>
+        <th>{{ $t('table.deliverymen.status') }}</th>
+        <th>{{ $t('table.deliverymen.actions') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -52,12 +52,12 @@ async function refuseCandidature(id: string) {
         <td>{{ cand.email }}</td>
         <td>{{ cand.phone }}</td>
         <td>
-          <a :href="'/uploads/' + cand.justificatif" target="_blank">Voir</a>
+          <a :href="'/uploads/' + cand.justificatif" target="_blank">{{ $t('table.deliverymen.see') }}</a>
         </td>
         <td>
-          <span v-if="cand.status === 'pending'" class="has-text-warning">En attente</span>
-          <span v-if="cand.status === 'accepted'" class="has-text-success">Acceptée</span>
-          <span v-if="cand.status === 'refused'" class="has-text-danger">Refusée</span>
+          <span v-if="cand.status === 'pending'" class="has-text-warning">{{ $t('table.deliverymen.pending') }}</span>
+          <span v-if="cand.status === 'accepted'" class="has-text-success">{{ $t('table.deliverymen.accepted') }}</span>
+          <span v-if="cand.status === 'refused'" class="has-text-danger">{{ $t('table.deliverymen.refused') }}</span>
         </td>
         <td>
           <button
@@ -65,14 +65,14 @@ async function refuseCandidature(id: string) {
             @click="acceptCandidature(cand._id)"
             :disabled="cand.status !== 'pending'"
           >
-            Accepter
+            {{ $t('table.deliverymen.accept') }}
           </button>
           <button
             class="button is-danger is-small"
             @click="refuseCandidature(cand._id)"
             :disabled="cand.status !== 'pending'"
           >
-            Recaler
+            {{ $t('table.deliverymen.refuse') }}
           </button>
         </td>
       </tr>

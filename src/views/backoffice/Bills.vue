@@ -4,6 +4,15 @@ import type { Pagination } from '@/types/pagination';
 import type { Bill } from '@/types/bill';
 import { getBills, deleteBill } from '@/api';
 
+const columns = [
+    { key: '_id', label: 'table.bills._id' },
+    { key: 'date', label: 'table.bills.date' },
+    { key: 'price', label: 'table.bills.price' },
+    { key: 'filepath', label: 'table.bills.filepath' },
+    { key: 'buyer', label: 'table.bills.buyer' },
+    { key: 'receiver', label: 'table.bills.receiver' }
+];
+
 async function search(pagination: Pagination, callback: (updatedList: Array<Bill>) => void) {
     try {
         const bills = await getBills(pagination);
@@ -24,11 +33,11 @@ async function handleDelete(bill: Bill, callback: () => void) {
 </script>
 
 <template>
-    <h2 class="title">Gestion des Factures</h2>
+    <h2 class="title">{{ $t('table.bills.title') }}</h2>
     <AdminTable
         name="bills"
         @search="search"
         @delete="handleDelete"
-        :columns="['_id', 'date', 'price', 'filepath', 'buyer', 'receiver']"
+        :columns="columns"
     />
 </template>
