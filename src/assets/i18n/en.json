@@ -209,7 +209,8 @@
     "file": "Attachment",
     "no-file": "No file selected",
     "send": "Send",
-    "required": "Please fill in all required fields."
+    "required": "Please fill in all required fields.",
+    "sent": "Mail sent"
   },
   "footer": {
     "contact": "Contact us"

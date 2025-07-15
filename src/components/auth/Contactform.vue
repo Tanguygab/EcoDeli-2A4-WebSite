@@ -1,77 +1,73 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import {t} from "i18next";
+import emailjs from "emailjs-com";
 
 const firstname = ref("");
 const lastname = ref("");
 const email = ref("");
 const demande = ref("");
-const fileName = ref("");
-const file = ref<File | null>(null);
+const sent = ref(false);
 
-function handleFileChange(event: Event) {
-    const target = event.target as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-        file.value = target.files[0];
-        fileName.value = target.files[0].name;
-    } else {
-        file.value = null;
-        fileName.value = "";
-    }
-}
-
-function submit() {
+async function sendMail() {
     if (!firstname.value || !lastname.value || !email.value || !demande.value) {
-        alert(t("contact.required"));
+        alert("Veuillez remplir tous les champs obligatoires.");
         return;
     }
-    alert(
-        `${t("contact.lastname")}: ${lastname.value}\n${t("contact.firstname")}: ${firstname.value}\n${t("contact.email")}: ${email.value}\n${t("contact.request")}: ${demande.value}\n${t("contact.file")}: ${fileName.value || t("contact.no-file")}`
-    );
+
+    // Les clés doivent correspondre à celles du template EmailJS
+    const templateParams = {
+        from_name: `${firstname.value} ${lastname.value}`,
+        from_email: email.value,
+        message: demande.value
+    };
+
+    try {
+        await emailjs.send(
+            "service_xxxxx",    // Ton vrai Service ID
+            "template_xxxxx",   // Ton vrai Template ID
+            templateParams,
+            "public_xxxxx"      // Ta vraie Public Key
+        );
+        sent.value = true;
+    } catch (err) {
+        alert("Erreur lors de l'envoi du mail.");
+        console.error(err);
+    }
 }
 </script>
 
 <template>
-    <h1 class="title">{{ $t('contact.title') }}</h1>
-    <form @submit.prevent="submit" class="container">
+    <h1 class="title">Contact</h1>
+    <form v-if="!sent" @submit.prevent="sendMail" class="container">
         <div class="field">
-            <label class="label">{{ $t('contact.lastname') }}</label>
+            <label class="label">Nom</label>
             <div class="control">
                 <input class="input" type="text" v-model="lastname" required />
             </div>
         </div>
         <div class="field">
-            <label class="label">{{ $t('contact.firstname') }}</label>
+            <label class="label">Prénom</label>
             <div class="control">
                 <input class="input" type="text" v-model="firstname" required />
             </div>
         </div>
         <div class="field">
-            <label class="label">{{ $t('contact.email') }}</label>
+            <label class="label">Email</label>
             <div class="control">
                 <input class="input" type="email" v-model="email" required />
             </div>
         </div>
         <div class="field">
-            <label class="label">{{ $t('contact.request') }}</label>
+            <label class="label">Demande</label>
             <div class="control">
                 <textarea class="textarea" v-model="demande" required></textarea>
             </div>
         </div>
-        <div class="file is-centered is-boxed is-success has-name">
-            <label class="file-label">
-                <input class="file-input" type="file" @change="handleFileChange" />
-                <span class="file-cta">
-                    <span class="file-icon">
-                        <i class="fas fa-upload"></i>
-                    </span>
-                    <span class="file-label">{{ t('contact.file') }}</span>
-                </span>
-                <span class="file-name">{{ fileName || t('contact.no-file') }}</span>
-            </label>
-        </div>
-        <input class="button is-link" type="submit" :value="t('contact.send')">
+        <input class="button is-link" type="submit" value="Envoyer">
     </form>
+    <div v-else class="has-text-centered is-size-4 has-text-success">
+        Mail envoyé !
+    </div>
 </template>
 
 <style scoped>
