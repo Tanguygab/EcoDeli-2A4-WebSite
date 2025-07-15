@@ -76,24 +76,120 @@ function handleFileChange (e: Event) {
 }
 
 async function submitForm () {
-  if (!form.value.name || !selectedFile.value) {
-    alert('Nom et image requis')
+  console.log('[MyProducts] Current user:', user)
+  console.log('[MyProducts] Session token:', session.token)
+  
+  if (!form.value.name?.trim()) {
+    alert('Le nom du produit est requis')
     return
   }
+  
+  // Temporairement désactivé pour le test
+  // if (!selectedFile.value) {
+  //   alert('Une image est requise')
+  //   return
+  // }
+  
+  // // Vérifier le type de fichier
+  // const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif']
+  // if (!allowedTypes.includes(selectedFile.value.type)) {
+  //   alert('Format d\'image non supporté. Utilisez JPG, PNG ou GIF.')
+  //   return
+  // }
+  
+  // // Vérifier la taille du fichier (limite à 5MB)
+  // if (selectedFile.value.size > 5 * 1024 * 1024) {
+  //   alert('L\'image est trop volumineuse. Limite: 5MB')
+  //   return
+  // }
+  if (form.value.price <= 0) {
+    alert('Le prix doit être supérieur à 0')
+    return
+  }
+  
   try {
-    const data = new FormData()
-    data.append('name',  form.value.name)
-    data.append('price', form.value.price.toString())
-    if (form.value.size      !== null) data.append('size',      form.value.size.toString())
-    if (form.value.location  !== null) data.append('location',  form.value.location.toString())
-    data.append('image', selectedFile.value)
-
-    const created = normalizeProduct(await createProduct(data))
+    console.log('[MyProducts] Creating product with data:', {
+      name: form.value.name.trim(),
+      price: form.value.price,
+      size: form.value.size,
+      location: form.value.location,
+      imageSize: selectedFile.value?.size,
+      imageType: selectedFile.value?.type
+    })
+    
+    // TEST 1: Essayons d'abord avec un simple objet JSON
+    const productData = {
+      name: form.value.name.trim(),
+      price: form.value.price,
+      description: 'Produit créé depuis l\'interface',
+      // Ajoutons des champs qui pourraient être requis
+      size: form.value.size || 1,
+      location: form.value.location || 1
+    }
+    
+    console.log('[MyProducts] JSON data prepared, calling API...')
+    
+    // Test préliminaire : vérifier si l'endpoint existe
+    try {
+      const testResponse = await fetch(`http://88.172.140.59:52000/api/products`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${session.token}`
+        }
+      })
+      console.log('[MyProducts] GET test response:', testResponse.status)
+    } catch (e) {
+      console.error('[MyProducts] GET test error:', e)
+    }
+    
+    // Testons d'abord en appelant directement l'API sans passer par createProduct
+    const response = await fetch(`http://88.172.140.59:52000/api/products`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.token}`
+      },
+      body: JSON.stringify(productData)
+    })
+    
+    console.log('[MyProducts] Response status:', response.status)
+    console.log('[MyProducts] Response headers:', response.headers)
+    
+    let responseData
+    const contentType = response.headers.get('content-type')
+    if (contentType && contentType.includes('application/json')) {
+      responseData = await response.json()
+    } else {
+      responseData = await response.text()
+    }
+    
+    console.log('[MyProducts] Response data:', responseData)
+    console.log('[MyProducts] Response content-type:', contentType)
+    
+    if (!response.ok) {
+      console.error('[MyProducts] Error response:', {
+        status: response.status,
+        statusText: response.statusText,
+        data: responseData
+      })
+      throw new Error(`HTTP ${response.status}: ${responseData?.message || responseData || 'Erreur inconnue'}`)
+    }
+    
+    const created = normalizeProduct(responseData)
+    console.log('[MyProducts] Product created successfully:', created)
+    
     products.value.unshift(created)
     showForm.value = false
+    
+    // Réinitialiser le formulaire
+    form.value = { name: '', price: 0, size: null, location: null }
+    selectedFile.value = null
+    fileName.value = ''
   } catch (err: any) {
-    console.error(err)
-    alert(err.response?.data?.message || 'Création impossible')
+    console.error('[MyProducts] Error creating product:', err)
+    console.error('[MyProducts] Error details:', err.response?.data)
+    const errorMessage = err.response?.data?.message || err.message || 'Erreur lors de la création du produit'
+    alert(errorMessage)
   }
 }
 

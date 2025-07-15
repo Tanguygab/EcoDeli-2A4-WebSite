@@ -28,17 +28,34 @@ export function getImageURL(name: string) {
     return "http://" + API_URL + "/data/images/" + name
 }
 
-async function request<type>(method: string, url: string, body?: object) {
-    return (await axios.request<type>({
-        method: method,
-        baseURL: "http://" + API_URL + "/api",
-        url: url,
-        data: body,
-        headers: session.getHeader
-    })).data
+async function request<type>(method: string, url: string, body?: object | FormData) {
+    const headers = { ...session.getHeader }
+    
+    console.log(`[API] ${method} ${url}`, { body, headers })
+    
+    // Pour FormData, ne pas définir Content-Type (le navigateur le fait automatiquement)
+    if (body instanceof FormData) {
+        console.log('[API] FormData detected, entries:', [...body.entries()])
+    }
+    
+    try {
+        const response = await axios.request<type>({
+            method: method,
+            baseURL: "http://" + API_URL + "/api",
+            url: url,
+            data: body,
+            headers: headers
+        })
+        
+        console.log(`[API] ${method} ${url} - Success:`, response.data)
+        return response.data
+    } catch (error: any) {
+        console.error(`[API] ${method} ${url} - Error:`, error.response?.data || error.message)
+        throw error
+    }
 }
 
-async function post<type>(endpoint: string, body?: object) {
+async function post<type>(endpoint: string, body?: object | FormData) {
     return request<type>("POST", endpoint, body)
 }
 
@@ -171,7 +188,7 @@ export async function getUserProducts(userId: number) {
 }
 
 // Créer un produit avec upload
-export async function createProduct(body: FormData) {
+export async function createProduct(body: FormData | object) {
   return await post<Product>('products', body)
 }
 
@@ -360,14 +377,4 @@ export async function updateUserRole(userId: number | string, role: number) {
 // Supprimer une notification
 export async function deleteNotification(id: number | string) {
     return await del(`notifications/${id}`)
-}
-
-export async function createNotification(notification: {
-  user: number,
-  date: Date,
-  is_read: boolean,
-  content: string,
-  link?: string
-}) {
-  return await post("notifications", notification)
 }
