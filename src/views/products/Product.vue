@@ -16,6 +16,7 @@ import type { Location } from '@/types/location'
 import router from '@/router'
 import LocationSelector from '@/components/LocationSelector.vue'
 import LabelInput from '@/components/LabelInput.vue'
+import { computed } from 'vue'
 
 // Auth & API Setup
 const session = startSession()
@@ -28,10 +29,16 @@ isSessionValid(false).then((valid: boolean) => (loggedIn.value = valid))
 // Produit à afficher
 const product = ref<Product | undefined>()
 loadPage(product, getProduct)
-
 // Liste des lieux pour sélection
 const location = ref<Location | undefined>()
 const locations = ref<Location[]>([])
+getLocations().then((locs) => (locations.value = locs))
+
+// Dummy filteredProducts function (replace with your actual filter logic)
+const filteredProducts = computed<Product[]>(() => {
+  // If you have a products array, filter it here. For now, return an empty array.
+  return []
+})
 getLocations().then((locs) => (locations.value = locs))
 
 // Modal d'achat
@@ -145,7 +152,7 @@ async function buy() {
   </template>
 
   <ProductCard
-    v-for="product in filteredProducts()"
+    v-for="product in filteredProducts"
     :key="product._id"
     :product="product"
   />
