@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Delivery } from '@/types/delivery'
-import { getDeliveries } from '@/api'
+import { createDelivery, getDeliveries } from '@/api'
 import { newPagination } from '@/types/pagination'
 import router from '@/router'
 
@@ -10,9 +10,14 @@ const pagination = newPagination()
 const deliveries = ref<Delivery[]>([])
 getDeliveries(pagination).then(data => deliveries.value = data)
 
+async function newDelivery() {
+  createDelivery().then(delivery => router.push('/deliverymen/deliveries/' + delivery._id))
+}
+
 </script>
 
 <template>
+    <button class="button mb-5" @click="newDelivery">New Delivery</button>
     <article
         class="media has-background-dark p-2"
         v-for="delivery in deliveries"

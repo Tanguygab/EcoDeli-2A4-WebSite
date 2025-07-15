@@ -16,8 +16,8 @@ import type { Location } from './types/location.ts'
 import type { Session } from "./stores/session";
 import { type Ref, watch } from 'vue'
 
-//const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
-const API_URL = "88.172.140.59:52000"
+const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
+//const API_URL = "88.172.140.59:52000"
 let session: Session
 
 export function api(newSession: Session) {
@@ -196,10 +196,6 @@ export async function getContracts(pagination: Pagination) {
     return await get<Contract[]>(paginate("contracts", pagination))
 }
 
-export async function getDeliveries(pagination: Pagination) {
-    return await get<Delivery[]>(paginate("deliveries", pagination))
-}
-
 export async function getPayments(pagination: Pagination) {
     return await get<Bill[]>(paginate("payments", pagination))
 }
@@ -210,6 +206,18 @@ export async function getProofs(pagination: Pagination) {
 }
 
 // DeliveryMen
+export async function getDeliveries(pagination: Pagination) {
+    return await get<Delivery[]>(paginate("deliveries", pagination))
+}
+
+export async function createDelivery() {
+    return await post<Delivery>("deliveries")
+}
+
+export async function getDelivery(id: number) {
+    return await get<Delivery>("deliveries/" + id)
+}
+
 export async function acceptProductRequest(request: ProductRequest, delivery: Delivery) {
     return await post<void>("products/requests/" + request._id + "/accept", {
         delivery: delivery._id,
