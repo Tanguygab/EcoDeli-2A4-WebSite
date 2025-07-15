@@ -13,14 +13,19 @@ const user = ref<User | undefined>(undefined)
 async function loadUser() {
     const id = router.currentRoute.value.params.id as string
     if (id) getUser(parseInt(id))
-        .then(u => user.value = u)
+        .then(u => {
+            user.value = u
+            console.log("user.image:", u.image)
+        })
         .catch(() => router.push("/"))
-    else if (await isSessionValid(true)) user.value = session.user!!
+    else if (await isSessionValid(true)) {
+        user.value = session.user!!
+        console.log("user.image:", session.user!!.image)
+    }
 }
 
 watch(() => router.currentRoute.value.params, loadUser)
 loadUser()
-
 </script>
 
 <template>
@@ -28,7 +33,12 @@ loadUser()
         <div class="columns">
 
             <figure class="column is-one-third is-flex is-flex-direction-column is-align-items-center has-text-centered">
-                <img alt="Profile Picture" src="@/assets/pedro.png">
+                <img
+                  v-if="user.image"
+                  alt="Profile Picture"
+                  :src="`http://88.172.140.59:52000${user.image}`"
+                  style="object-fit: cover; border-radius: 1em; width: 20em;"
+                >
                 <figcaption class="title is-4">
                     <span v-if="user.role.name !== 'user'" :class="'tag' + (user.role.name === 'admin' ? ' is-danger' : '')">
                         {{ $t("user.role." + user.role.name) }}
