@@ -32,11 +32,11 @@ function previousPage() {
       :disabled="isFirstPage"
       @click="previousPage"
     >
-      ◀ Précédent
+      ◀ {{ $t('pagination.previous') }}
     </button>
 
     <span class="pagination-info">
-      Page {{ currentPage + 1 }} / {{ totalPages }}
+      {{ $t('pagination.page', { page: currentPage + 1 }) }} / {{ totalPages }}
     </span>
 
     <button
@@ -44,7 +44,7 @@ function previousPage() {
       :disabled="isLastPage"
       @click="nextPage"
     >
-      Suivant ▶
+      {{ $t('pagination.next') }} ▶
     </button>
   </div>
 </template>
