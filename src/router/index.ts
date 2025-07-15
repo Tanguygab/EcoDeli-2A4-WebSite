@@ -41,6 +41,7 @@ const router = createRouter({
             ]
         },
         { path: '/livreur/form', component: () => import('@/views/livreur/LivrForm.vue') },
+        { path: '/client/annonce', component: () => import('@/views/client/ClientAnnonceForm.vue') },
         { path: '/:pathMatch(.*)*', component: NotFound }
     ]
 })
