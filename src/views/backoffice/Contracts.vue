@@ -4,14 +4,6 @@ import AdminTable from '@/components/AdminTable.vue';
 import type { Contract } from '@/types/contract';
 import type { Pagination } from '@/types/pagination';
 
-const columns = [
-    { key: '_id', label: 'table.contracts._id' },
-    { key: 'start_date', label: 'table.contracts.start_date' },
-    { key: 'end_date', label: 'table.contracts.end_date' },
-    { key: 'filepath', label: 'table.contracts.filepath' },
-    { key: 'user', label: 'table.contracts.user' }
-];
-
 async function search(pagination: Pagination, callback: (updatedList: Array<Contract>) => void) {
     try {
         const contracts = await getContracts(pagination);
@@ -32,11 +24,11 @@ async function handleDelete(contract: Contract, callback: () => void) {
 </script>
 
 <template>
-    <h2 class="title">{{ $t('table.contracts.title') }}</h2>
+    <h2 class="title">Gestion des Contrats</h2>
     <AdminTable
         name="contracts"
         @search="search"
         @delete="handleDelete"
-        :columns="columns"
+        :columns="['_id', 'start_date', 'end_date', 'filepath', 'user']"
     />
 </template>

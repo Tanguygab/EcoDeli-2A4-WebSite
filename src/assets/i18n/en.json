@@ -122,77 +122,40 @@
       "id": "ID"
     },
     "bills": {
-      "title": "Bill Management",
-      "_id": "ID",
       "date": "Date",
-      "price": "Price",
-      "filepath": "File",
-      "buyer": "Buyer",
-      "receiver": "Receiver"
+      "price": "Price"
     },
     "contracts": {
-      "title": "Contract Management",
-      "_id": "ID",
       "start_date": "Start Date",
-      "end_date": "End Date",
-      "filepath": "File",
-      "user": "User"
+      "end_date": "End Price"
     },
     "deliveries": {
-      "title": "Delivery Management",
-      "_id": "ID",
       "latitude": "Latitude",
       "longitude": "Longitude",
-      "products": "Products",
-      "deliveryman": "Deliveryman"
+      "products": "Products"
     },
-    "deliverymen": {
-      "title": "Deliverymen Applications",
-      "firstname": "First Name",
-      "lastname": "Last Name",
-      "email": "Email",
-      "phone": "Phone",
-      "justificatif": "Proof",
-      "status": "Status",
-      "actions": "Actions",
-      "pending": "Pending",
-      "accepted": "Accepted",
-      "refused": "Refused",
-      "see": "See",
-      "accept": "Accept",
-      "refuse": "Reject"
-    },
+    "deliverymen": {},
     "finances": {
-      "title": "Finance Management",
-      "_id": "ID",
       "type": "Type",
       "amount": "Amount",
       "date": "Date"
     },
     "payments": {
-      "title": "Payments Management",
-      "_id": "ID",
       "date": "Date",
       "amount": "Amount",
       "status": "Status"
     },
     "prestataires": {
-      "title": "Service Providers Management",
-      "_id": "ID",
       "name": "Name",
       "email": "Email",
       "phone": "Phone"
     },
     "prestations": {
-      "title": "Service Management",
-      "_id": "ID",
       "service": "Service",
       "client": "Client",
       "status": "Status"
     },
     "traders": {
-      "title": "Trader Management",
-      "_id": "ID",
       "name": "Name",
       "email": "Email"
     }
