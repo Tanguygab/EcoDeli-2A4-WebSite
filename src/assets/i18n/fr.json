@@ -215,7 +215,8 @@
     "file": "Pièce Jointe",
     "no-file": "Aucun fichier sélectionné",
     "send": "Envoyer",
-    "required": "Veuillez remplir tous les champs obligatoires."
+    "required": "Veuillez remplir tous les champs obligatoires.",
+    "sent": "Mail envoyé"
   },
   "footer": {
     "contact": "Contactez-nous"
