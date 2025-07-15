@@ -6,7 +6,7 @@ import Profile from '@/views/Profile.vue'
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
-        { path: '/', name: 'home', component: Home },
+        { path: '/',  component: Home },
         { path: '/login', component: () => import('@/views/auth/Login.vue') },
         { path: '/register', component: () => import('@/views/auth/Register.vue') },
         { path: '/profile', component: Profile },
@@ -21,6 +21,7 @@ const router = createRouter({
         { path: '/services/:id', component: () => import('@/views/services/Service.vue') },
         { path: '/my-files', component: () => import('@/views/MyFiles.vue') },
         { path: '/my-products', component: () => import('@/views/MyProducts.vue') },
+        { path: '/planning', component: () => import('@/views/Planning.vue') },
         { path: '/contact', component: () => import('@/views/contact.vue') },
         {
             path: '/backoffice',
