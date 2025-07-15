@@ -148,16 +148,12 @@
       "firstname": "First Name",
       "lastname": "Last Name",
       "email": "Email",
-      "phone": "Phone",
-      "justificatif": "Proof",
-      "status": "Status",
+      "date": "Application date",
+      "justificatif": "Proof PDF",
       "actions": "Actions",
-      "pending": "Pending",
-      "accepted": "Accepted",
-      "refused": "Refused",
-      "see": "See",
       "accept": "Accept",
-      "refuse": "Reject"
+      "refuse": "Reject",
+      "empty": "No application found"
     },
     "finances": {
       "title": "Finance Management",

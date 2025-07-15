@@ -154,16 +154,12 @@
       "firstname": "Prénom",
       "lastname": "Nom",
       "email": "Email",
-      "phone": "Téléphone",
-      "justificatif": "Justificatif",
-      "status": "Statut",
+      "date": "Date de candidature",
+      "justificatif": "Justificatif PDF",
       "actions": "Actions",
-      "pending": "En attente",
-      "accepted": "Acceptée",
-      "refused": "Refusée",
-      "see": "Voir",
-      "accept": "Accepter",
-      "refuse": "Recaler"
+      "accept": "Valider",
+      "refuse": "Refuser",
+      "empty": "Aucune candidature trouvée"
     },
     "finances": {
       "title": "Gestion des Finances",

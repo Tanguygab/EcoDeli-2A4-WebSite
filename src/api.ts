@@ -303,8 +303,8 @@ export async function updateProfile(formData: FormData) {
     )).data
 }
 
-export async function getDeliveryApplications() {
-    return await get("postannouncements")
+export async function getDeliveryApplications(pagination: Pagination) {
+    return await get<UserProof[]>(paginate("proofs", pagination))
 }
 
 export async function updateDeliveryApplicationStatus(id: string, status: string) {
@@ -341,4 +341,14 @@ export async function getClientAnnonces(pagination: Pagination) {
 
 export async function createClientAnnonce(body: object) {
     return await post<any>("annonces", body)
+}
+
+// Supprimer une candidature (proof)
+export async function deleteProof(proofId: number | string) {
+    return await del(`proofs/${proofId}`)
+}
+
+// Mettre à jour le rôle d'un utilisateur
+export async function updateUserRole(userId: number | string, role: number) {
+    return await put(`users/${userId}`, { role })
 }
