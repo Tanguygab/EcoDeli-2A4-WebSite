@@ -1,53 +1,57 @@
 <template>
   <div class="planning-page p-6">
-    <div class="box has-text-centered mb-5">
-      <img
-        src="https://placekitten.com/128/128"
-        alt="User avatar"
-        class="is-rounded"
-        style="border-radius: 50%; width: 128px; height: 128px"
-      />
-      <p class="mt-3">Nom : <strong>Jean</strong></p>
-      <p>Prénom : <strong>Dupont</strong></p>
+    <h2 class="title is-4 mb-4">Mon planning de livraisons</h2>
+    <div class="box">
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Début</th>
+            <th>Fin</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="slot in slots" :key="slot.id">
+            <td>{{ slot.date }}</td>
+            <td>{{ slot.start }}</td>
+            <td>{{ slot.end }}</td>
+            <td>
+              <button class="button is-warning is-small mr-2" @click="openEditModal(slot)">Modifier</button>
+              <button class="button is-danger is-small" @click="deleteSlot(slot.id)">Supprimer</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="button is-success mt-3" @click="openAddModal">Ajouter un créneau</button>
     </div>
 
-    <div class="columns">
-      <div class="column has-text-centered">
-        <label class="label">Liste des livraisons effectuées :</label>
-        <div class="box">(contenu à ajouter)</div>
-      </div>
-      <div class="column has-text-centered">
-        <label class="label">Liste des livraisons privées :</label>
-        <div class="box">(contenu à ajouter)</div>
-      </div>
-    </div>
-
-    <div class="buttons is-centered mt-5 mb-3">
-      <button class="button is-success" @click="openPopup('add')">Ajouter</button>
-      <button class="button is-danger" @click="openPopup('delete')">Supprimer</button>
-      <button class="button is-warning" @click="openPopup('edit')">Modifier</button>
-      <button class="button is-info" @click="openPopup('validate')">Valider</button>
-      <button class="button is-dark" @click="openPopup('refuse')">Refuser</button>
-    </div>
-
-    <div class="box has-text-centered">
-      <h2 class="title is-5">Planning :</h2>
-      <div class="calendar-placeholder mt-4" />
-    </div>
-
-    <div v-if="activePopup" class="modal is-active">
-      <div class="modal-background" @click="closePopup"></div>
+    <div v-if="showModal" class="modal is-active">
+      <div class="modal-background" @click="showModal = false"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">{{ popupTitle }}</p>
-          <button class="delete" aria-label="close" @click="closePopup"></button>
+          <p class="modal-card-title">
+            {{ modalType === 'add' ? 'Ajouter un créneau' : 'Modifier le créneau' }}
+          </p>
+          <button class="delete" aria-label="close" @click="showModal = false"></button>
         </header>
         <section class="modal-card-body">
-          (Contenu pour l'action : <strong>{{ activePopup }}</strong>)
+          <div class="field">
+            <label class="label">Date</label>
+            <input v-model="currentSlot!.date" class="input" type="date" />
+          </div>
+          <div class="field">
+            <label class="label">Début</label>
+            <input v-model="currentSlot!.start" class="input" type="time" />
+          </div>
+          <div class="field">
+            <label class="label">Fin</label>
+            <input v-model="currentSlot!.end" class="input" type="time" />
+          </div>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success" @click="closePopup">Confirmer</button>
-          <button class="button" @click="closePopup">Annuler</button>
+          <button class="button is-success" @click="saveSlot">Confirmer</button>
+          <button class="button" @click="showModal = false">Annuler</button>
         </footer>
       </div>
     </div>
@@ -55,34 +59,54 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
-const activePopup = ref<string | null>(null)
-
-const popupTitle = computed(() => {
-  switch (activePopup.value) {
-    case 'add': return 'Ajouter un créneau'
-    case 'delete': return 'Supprimer une entrée'
-    case 'edit': return 'Modifier une disponibilité'
-    case 'validate': return 'Valider une réunion'
-    case 'refuse': return 'Refuser une réunion'
-    default: return ''
-  }
-})
-
-function openPopup(type: string) {
-  activePopup.value = type
+interface Slot {
+  id: number
+  date: string
+  start: string
+  end: string
 }
-function closePopup() {
-  activePopup.value = null
+
+const slots = ref<Slot[]>([
+  { id: 1, date: '2025-07-16', start: '08:00', end: '12:00' },
+  { id: 2, date: '2025-07-17', start: '14:00', end: '18:00' }
+])
+
+const showModal = ref(false)
+const modalType = ref<'add' | 'edit' | null>(null)
+const currentSlot = ref<Slot | null>(null)
+
+function openAddModal() {
+  modalType.value = 'add'
+  currentSlot.value = { id: Date.now(), date: '', start: '', end: '' }
+  showModal.value = true
+}
+
+function openEditModal(slot: Slot) {
+  modalType.value = 'edit'
+  currentSlot.value = { ...slot }
+  showModal.value = true
+}
+
+function saveSlot() {
+  if (modalType.value === 'add' && currentSlot.value) {
+    slots.value.push({ ...currentSlot.value })
+  } else if (modalType.value === 'edit' && currentSlot.value) {
+    const idx = slots.value.findIndex(s => s.id === currentSlot.value!.id)
+    if (idx !== -1) slots.value[idx] = { ...currentSlot.value }
+  }
+  showModal.value = false
+}
+
+function deleteSlot(id: number) {
+  slots.value = slots.value.filter(s => s.id !== id)
 }
 </script>
 
 <style scoped>
-.calendar-placeholder {
-  height: 300px;
-  border: 2px dashed #999;
-  border-radius: 8px;
-  background-color: #f4f4f4;
+.planning-page {
+  max-width: 700px;
+  margin: auto;
 }
 </style>
