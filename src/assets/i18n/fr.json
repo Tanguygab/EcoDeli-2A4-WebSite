@@ -64,7 +64,9 @@
     }
   },
   "delivery": {
-    "name": "Livraison"
+    "name": "Livraison",
+    "request-title": "Demande de recrutement livreur",
+    "thanks": "Merci pour votre candidature ! Nous reviendrons vers vous rapidement."
   },
   "form": {
     "firstname": {
