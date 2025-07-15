@@ -1,7 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { getClientAnnonces, createClientAnnonce } from '@/api.ts'
+import { startSession } from '@/stores/session'
+import { api, getClientAnnonces, createClientAnnonce } from '@/api.ts'
 import { newPagination } from '@/types/pagination.ts'
+
+
+const session = startSession()
+api(session)
+const user = session.user
 
 const pagination = newPagination()
 const annonces = ref<any[]>([])
@@ -60,7 +66,7 @@ onMounted(loadAnnonces)
   <div class="client-annonces">
     <h1 class="title has-text-centered mb-4">{{ $t('client.annonces.title') }}</h1>
 
-    <!-- Barre de recherche -->
+
     <div class="field mb-4" style="max-width:400px;margin:auto;">
       <div class="control has-icons-right">
         <input
@@ -86,13 +92,13 @@ onMounted(loadAnnonces)
       <div style="flex:0 0 200px" />
     </div>
 
-    <!-- Bouton ajout -->
+ 
     <button class="button is-link is-rounded is-medium add-btn" type="button" @click="openForm">
       <span class="icon"><i class="fas fa-plus" /></span>
       <span>{{ $t('client.annonces.add') }}</span>
     </button>
 
-    <!-- Modal formulaire -->
+
     <div v-if="showForm" class="modal is-active">
       <div class="modal-background" @click="showForm = false" />
       <div class="modal-card">
