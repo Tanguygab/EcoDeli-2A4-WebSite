@@ -15,6 +15,9 @@ export const startSession = defineStore('session', {
       this.token = token;
       this.user = user ?? null;
     },
+    updateUser(user: User) {
+      this.user = user;
+    },
   },
 })
 

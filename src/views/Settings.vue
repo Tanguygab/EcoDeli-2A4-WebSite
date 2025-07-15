@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { startSession } from '@/stores/session'
-import { api, getLocations, updatePassword, updateSettings } from '@/api.ts'
+import { api, deleteAccount, getLocations, saveLocation, updatePassword, updateSettings } from '@/api.ts'
 import router from '@/router'
 import type { Location } from '@/types/location.ts'
+import LocationSaver from '@/components/location/LocationSaver.vue'
 
 const session = startSession()
 api(session)
@@ -13,7 +14,7 @@ const user = session.user!!
 const firstname = ref(user.firstname || '')
 const name = ref(user.name || '')
 const email = ref(user.email || '')
-const birthday = ref(user.birthday?.slice(0, 10) || '')
+const birthday = ref((user.birthday instanceof Date ? user.birthday.toLocaleDateString() : user.birthday?.slice(0,10)) || '')
 const description = ref(user.description || '')
 const notifications = ref(user.notifications ?? false)
 const image = ref<File | null>(null)
@@ -23,6 +24,17 @@ const password = ref('')
 const newPassword = ref('')
 const confirmPassword = ref('')
 const savedLocations = ref<Location[]>([])
+
+const addingLocation = ref<boolean>(false)
+const newLocation = ref<Location>({city: "", address: "", zipcode: ""})
+
+function saveLoc() {
+    console.log(newLocation.value)
+    if (!newLocation.value) return
+    addingLocation.value = false
+    saveLocation(newLocation.value)
+    savedLocations.value.push(newLocation.value)
+}
 
 onMounted(async () => {
     try {
@@ -96,11 +108,12 @@ async function updatePass() {
     }
 }
 
-async function deleteAccount() {
+async function delAccount() {
     if (!confirm('Confirmer la suppression du compte ?')) return
 
     try {
         await deleteAccount()
+        session.saveToken("")
         alert('Compte supprimé')
         router.push('/login')
     } catch (err) {

@@ -7,7 +7,7 @@ export type User = {
     name: string,
     image: string,
     email: string,
-    birthday: Date,
+    birthday: Date | string,
     subscription: Subscription
     description: string,
     join_date: Date,

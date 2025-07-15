@@ -34,9 +34,9 @@ function search() {
   <div class="box">
     <h2 class="title is-5 has-text-centered">{{ $t('home.quality-information') }}</h2>
     <div class="columns is-justify-content-space-evenly my-5">
-      <ImageView class="column" image="home/speed.png" size=15 :text="$t('home.quick-deliveries')" />
-      <ImageView class="column" image="home/security.png" size=10 :text="$t('home.assurance-&-refunds')" />
-      <ImageView class="column" image="home/satisfaction.png" size=10 :text="$t('home.guaranteed-satisfaction')" />
+      <ImageView class="column" image="home/speed.png" :size=15 :text="$t('home.quick-deliveries')" />
+      <ImageView class="column" image="home/security.png" :size=10 :text="$t('home.assurance-&-refunds')" />
+      <ImageView class="column" image="home/satisfaction.png" :size=10 :text="$t('home.guaranteed-satisfaction')" />
     </div>
   </div>
 </template>

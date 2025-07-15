@@ -16,8 +16,8 @@ import type { Location } from './types/location.ts'
 import type { Session } from "./stores/session";
 import { type Ref, watch } from 'vue'
 
-// const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
-const API_URL = "88.172.140.59:52000"
+const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
+//const API_URL = "88.172.140.59:52000"
 let session: Session
 
 export function api(newSession: Session) {
@@ -217,11 +217,16 @@ export async function acceptProductRequest(request: ProductRequest, delivery: De
 }
 
 // User Settings
-export async function updateSettings(name: string, email: string, notifications: boolean) {
+export async function updateSettings(
+    firstname: string, name: string, email: string,
+    description: string, birthday: string
+) {
     return await put<User>("users/" + session.user?._id, {
+        firstname: firstname,
         name: name,
         email: email,
-        notifications: notifications,
+        description: description,
+        birthday: birthday,
     })
 }
 
