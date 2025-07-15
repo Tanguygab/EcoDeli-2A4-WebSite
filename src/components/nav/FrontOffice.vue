@@ -37,6 +37,7 @@ document.addEventListener("click", e => {
                         <RouterLink class="navbar-item" to="/my-files">{{ $t("user.my-files") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/my-products">{{ $t("user.my-products") }}</RouterLink>
                         <RouterLink class="navbar-item" to="/settings">{{ $t("user.settings") }}</RouterLink>
+                        <RouterLink class="navbar-item" to="/requests">Carte</RouterLink>
                         <RouterLink class="navbar-item" to="/livreur/form">
                             Demande livreur
                         </RouterLink>
