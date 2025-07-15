@@ -40,6 +40,7 @@ const router = createRouter({
                 { path: 'finance', component: () => import('@/views/backoffice/Finances.vue') }
             ]
         },
+        { path: '/livreur/form', component: () => import('@/views/livreur/LivrForm.vue') },
         { path: '/:pathMatch(.*)*', component: NotFound }
     ]
 })
