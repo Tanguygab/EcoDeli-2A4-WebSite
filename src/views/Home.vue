@@ -27,8 +27,6 @@ function search() {
 
   <div class="columns my-5">
     <ImageView class="column" overlay image="home/products.png" :text="$t('home.all-products')" link="products" />
-    <ImageView class="column" overlay image="home/livraison.png" :text="$t('home.delivery-info')" link="#" />
-    <ImageView class="column" overlay image="home/news.png" :text="$t('home.news')" link="#" />
   </div>
 
   <div class="box">
