@@ -73,11 +73,7 @@ function goBack() {
                       <span class="title is-2 has-text-primary">{{ service.price }}€</span>
                     </div>
                     
-                    <div class="buttons is-centered mt-4">
-                      <button class="button is-primary is-fullwidth">
-                        {{ $t('services.contact-provider') }}
-                      </button>
-                    </div>
+
                   </div>
 
                   <div v-if="service.image" class="mt-4">

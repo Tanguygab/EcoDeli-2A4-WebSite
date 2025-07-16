@@ -69,7 +69,7 @@ async function submitForm() {
         <div class="level">
             <div class="level-left">
                 <div class="level-item">
-                    <h1 class="title">{{ $t("service.list-title") }}</h1>
+                    <h1 class="title">{{ $t("services.list-title") }}</h1>
                 </div>
             </div>
             <div class="level-right">
@@ -78,7 +78,7 @@ async function submitForm() {
                         <span class="icon">
                             <i class="fas fa-plus"></i>
                         </span>
-                        <span>{{ $t("service.create-button") }}</span>
+                        <span>{{ $t("services.create-button") }}</span>
                     </button>
                 </div>
             </div>
@@ -87,7 +87,7 @@ async function submitForm() {
           <div class="modal-background" @click="closeForm"></div>
           <div class="modal-card">
             <header class="modal-card-head">
-              <p class="modal-card-title">{{ $t('service.create-title') }}</p>
+              <p class="modal-card-title">{{ $t('services.create-title') }}</p>
               <button class="delete" aria-label="close" @click="closeForm"></button>
             </header>
             <section class="modal-card-body">
@@ -115,7 +115,7 @@ async function submitForm() {
                 <div class="field">
                   <label class="label">{{ $t('services.availability') }} *</label>
                   <div class="control">
-                    <input v-model="form.date" class="input" type="datetime-local" required />
+                    <input v-model="form.date" class="input" type="date" required />
                   </div>
                 </div>
                 <div class="field is-grouped is-grouped-right mt-4">
@@ -133,12 +133,12 @@ async function submitForm() {
         </div>
 
         <div v-if="services.length === 0" class="notification is-info">
-            {{ $t("service.no-services") }}
+            {{ $t("services.no-services") }}
         </div>
 
         <div v-else class="columns is-multiline">
             <div class="column is-6" v-for="service in services" :key="service._id">
-                <div class="card" style="cursor: pointer;" @click="router.push('/services/' + service._id)">
+                <div class="card" style="cursor: pointer;" @click="$router.push('/services/' + service._id)">
                     <div class="card-image" v-if="service.image">
                         <figure class="image is-4by3">
                             <img :src="service.image" :alt="service.name">

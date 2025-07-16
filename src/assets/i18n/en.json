@@ -303,7 +303,9 @@
     "service-details": "Service details",
     "contact-provider": "Contact provider",
     "provider-info": "Provider information",
-    "member-since": "Member since"
+    "member-since": "Member since",
+    "create-button": "Create a service",
+    "create-title": "Create a new service"
   },
   "common": {
     "cancel": "Cancel",

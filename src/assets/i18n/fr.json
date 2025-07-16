@@ -292,7 +292,9 @@
     "service-details": "Détails du service",
     "contact-provider": "Contacter le prestataire",
     "provider-info": "Informations sur le prestataire",
-    "member-since": "Membre depuis"
+    "member-since": "Membre depuis",
+    "create-button": "Créer un service",
+    "create-title": "Créer un nouveau service"
   },
   "common": {
     "cancel": "Annuler",
