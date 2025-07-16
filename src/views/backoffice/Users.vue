@@ -33,6 +33,12 @@ const editForm = ref({
   role: 0
 })
 
+const showBulkActionsModal = ref(false)
+const bulkAction = ref({
+  action: 'role',
+  role: 0
+})
+
 const showDetailsModal = ref(false)
 const selectedUser = ref<User | null>(null)
 
@@ -168,6 +174,89 @@ async function saveUser() {
   }
 }
 
+async function makeAllUsersAdmin() {
+  if (!confirm('Êtes-vous sûr de vouloir passer TOUS les utilisateurs en admin ? Cette action est irréversible.')) {
+    return
+  }
+  
+  if (!confirm('ATTENTION : Cette action donnera les droits administrateur à tous les utilisateurs. Confirmez-vous ?')) {
+    return
+  }
+  
+  try {
+    loading.value = true
+    let successCount = 0
+    let errorCount = 0
+    
+    // Parcourir tous les utilisateurs
+    for (const user of allUsers.value) {
+      if (user.role.access_level !== 0) { // Si pas déjà admin
+        try {
+          await updateUserRole(user._id, 0) // Passer en admin (rôle 0)
+          successCount++
+        } catch (error) {
+          console.error(`Erreur pour l'utilisateur ${user.name}:`, error)
+          errorCount++
+        }
+      }
+    }
+    
+    // Vider le cache et recharger
+    allUsers.value = []
+    await loadUsers()
+    
+    alert(`Opération terminée !\n✅ ${successCount} utilisateurs passés en admin\n❌ ${errorCount} erreurs`)
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour en masse:', error)
+    alert('Erreur lors de la mise à jour en masse des utilisateurs')
+  } finally {
+    loading.value = false
+  }
+}
+
+async function executeBulkAction() {
+  const roleName = getRoleName(bulkAction.value.role)
+  
+  if (!confirm(`Êtes-vous sûr de vouloir passer TOUS les utilisateurs au rôle "${roleName}" ? Cette action est irréversible.`)) {
+    return
+  }
+  
+  if (!confirm(`ATTENTION : Cette action modifiera le rôle de tous les utilisateurs. Confirmez-vous ?`)) {
+    return
+  }
+  
+  try {
+    loading.value = true
+    let successCount = 0
+    let errorCount = 0
+    
+    // Parcourir tous les utilisateurs
+    for (const user of allUsers.value) {
+      if (user.role.access_level !== bulkAction.value.role) {
+        try {
+          await updateUserRole(user._id, bulkAction.value.role)
+          successCount++
+        } catch (error) {
+          console.error(`Erreur pour l'utilisateur ${user.name}:`, error)
+          errorCount++
+        }
+      }
+    }
+    
+    // Vider le cache et recharger
+    allUsers.value = []
+    await loadUsers()
+    
+    showBulkActionsModal.value = false
+    alert(`Opération terminée !\n✅ ${successCount} utilisateurs modifiés\n❌ ${errorCount} erreurs`)
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour en masse:', error)
+    alert('Erreur lors de la mise à jour en masse des utilisateurs')
+  } finally {
+    loading.value = false
+  }
+}
+
 async function handleDeleteUser(user: User) {
   if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur ${user.name} ${user.firstname} ?`)) {
     return
@@ -265,6 +354,18 @@ onMounted(loadUsers)
         Gestion des Utilisateurs
       </h1>
       <p class="page-subtitle">Gérez les utilisateurs, leurs rôles et permissions</p>
+      
+      <!-- Bouton d'actions globales -->
+      <div class="admin-actions">
+        <button class="btn btn-danger" @click="makeAllUsersAdmin">
+          <i class="fas fa-crown"></i>
+          Passer tous en Admin
+        </button>
+        <button class="btn btn-warning" @click="showBulkActionsModal = true">
+          <i class="fas fa-users-cog"></i>
+          Actions en masse
+        </button>
+      </div>
     </div>
 
     <div class="search-section">
@@ -540,6 +641,68 @@ onMounted(loadUsers)
         </div>
       </div>
     </div>
+
+    <!-- Modal d'actions en masse -->
+    <div v-if="showBulkActionsModal" class="modal-overlay" @click="showBulkActionsModal = false">
+      <div class="modal-container" @click.stop>
+        <div class="modal-header">
+          <h2 class="modal-title">
+            <i class="fas fa-users-cog"></i>
+            Actions en masse
+          </h2>
+          <button class="modal-close" @click="showBulkActionsModal = false">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <p class="bulk-warning">
+            ⚠️ Ces actions affecteront <strong>TOUS</strong> les utilisateurs de la base de données.
+          </p>
+          
+          <div class="form-group">
+            <label class="form-label">Nouveau rôle pour tous les utilisateurs</label>
+            <select 
+              v-model="bulkAction.role" 
+              class="form-select" 
+              required
+            >
+              <option value="0">Admin (Accès complet)</option>
+              <option value="1">Support (Assistance)</option>
+              <option value="2">HR (Ressources humaines)</option>
+              <option value="3">Employee (Employé)</option>
+              <option value="4">Supplier (Fournisseur)</option>
+              <option value="5">Service Provider (Prestataire)</option>
+              <option value="6">Delivery (Livreur)</option>
+              <option value="7">User (Utilisateur standard)</option>
+            </select>
+          </div>
+          
+          <div class="bulk-info">
+            <p>
+              <strong>Rôle sélectionné :</strong> 
+              <span class="role-badge" :class="getRoleClass(bulkAction.role)">
+                {{ getRoleName(bulkAction.role) }}
+              </span>
+            </p>
+            <p>
+              <strong>Nombre d'utilisateurs :</strong> {{ allUsers.length }}
+            </p>
+          </div>
+        </div>
+        
+        <div class="modal-footer">
+          <button class="btn btn-secondary" @click="showBulkActionsModal = false">
+            <i class="fas fa-times"></i>
+            Annuler
+          </button>
+          <button class="btn btn-danger" @click="executeBulkAction">
+            <i class="fas fa-exclamation-triangle"></i>
+            Appliquer à tous
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -576,7 +739,88 @@ onMounted(loadUsers)
 .page-subtitle {
   color: #ccc;
   font-size: 1.1rem;
-  margin: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.admin-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+.btn-danger:active {
+  transform: translateY(0);
+}
+
+.btn-warning {
+  background: #f39c12;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-warning:hover {
+  background: #e67e22;
+  transform: translateY(-2px);
+}
+
+.btn-warning:active {
+  transform: translateY(0);
+}
+
+.bulk-warning {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.bulk-info {
+  background: #333;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.bulk-info p {
+  margin: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bulk-info .role-badge {
+  font-size: 0.9rem;
 }
 
 .search-section {
