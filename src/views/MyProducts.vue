@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { startSession } from '@/stores/session'
-import { api, getProducts, createProduct } from '@/api.ts'
+import { api, getProducts, createProduct, getLocations } from '@/api.ts'
 import { newPagination } from '@/types/pagination.ts'
 import ProductCard from '@/components/products/ProductCard.vue'
 import Icon from '@/components/Icon.vue'
@@ -14,6 +14,7 @@ const user = session.user!!
 
 const pagination = newPagination()
 const products   = ref<Product[]>([])
+const locations  = ref<{ _id: number, name: string, address: string, city: string, zipcode: string }[]>([])
 const loading    = ref(false)
 const showForm   = ref(false)
 
@@ -148,7 +149,25 @@ async function submitForm () {
   }
 }
 
-onMounted(loadProducts)
+onMounted(async () => {
+  await loadProducts()
+  try {
+    const allLocations = await getLocations()
+    // Filtre les lieux de l'utilisateur ET ceux qui ont une adresse et une ville valides
+    locations.value = allLocations
+      .filter(l => typeof l.user === 'number' && l.user === user._id)
+      .filter(l => l.address && l.city && l.zipcode && typeof l._id === 'number')
+      .map(l => ({
+        _id: l._id as number,
+        name: typeof l.address === 'string' ? l.address : '',
+        address: l.address,
+        city: l.city,
+        zipcode: l.zipcode
+      }))
+  } catch (e) {
+    console.error('Erreur lors du chargement des lieux', e)
+  }
+})
 </script>
 
 <template>
@@ -202,14 +221,35 @@ onMounted(loadProducts)
             <label class="label">Prix (€)</label>
             <input v-model.number="form.price" class="input" type="number" min="0" />
           </div>
-          <div class="field is-flex gap">
-            <div class="mr-2" style="flex:1">
-              <label class="label">Taille (ID)</label>
-              <input v-model.number="form.size" class="input" type="number" min="1" placeholder="Optionnel" />
+          <div class="field">
+            <label class="label">Poids <span class="has-text-grey">(sélectionner)</span></label>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select v-model.number="form.size" required>
+                  <option disabled value="">-- Choisissez le poids --</option>
+                  <option :value="1">small</option>
+                  <option :value="2">medium</option>
+                  <option :value="3">large</option>
+                  <option :value="4">xxl</option>
+                </select>
+              </div>
             </div>
-            <div style="flex:1">
-              <label class="label">Lieu (ID) *</label>
-              <input v-model.number="form.location" class="input" type="number" min="1" placeholder="Requis" />
+          </div>
+          <div class="field">
+            <label class="label">Lieu <span class="has-text-grey">(sélectionner)</span></label>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select v-model.number="form.location" required>
+                  <option disabled value="">-- Choisissez le lieu --</option>
+                  <option
+                    v-for="loc in locations"
+                    :key="loc._id"
+                    :value="loc._id"
+                  >
+                    {{ loc.address }}, {{ loc.city }} ({{ loc.zipcode }})
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
         </section>
