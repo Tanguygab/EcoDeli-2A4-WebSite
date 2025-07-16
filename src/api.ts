@@ -17,8 +17,8 @@ import type { Session } from "./stores/session";
 import { type Ref, watch } from 'vue'
 import type { DeliveryStatus } from '@/types/delivery_status.ts'
 
-// const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
-const API_URL = "88.172.140.59:52000"
+const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
+// const API_URL = "88.172.140.59:52000"
 let session: Session
 
 export function api(newSession: Session) {
@@ -221,8 +221,8 @@ export async function createService(serviceData: any) {
 }
 
 // Récupérer les produits d'un vendeur
-export async function getUserProducts(userId: number) {
-  return await get<Product[]>(`products?seller=${userId}`)
+export async function getUserProducts(userId: string) {
+    return await get<Product[]>(`products?seller=${userId}`)
 }
 
 // Créer un produit avec upload

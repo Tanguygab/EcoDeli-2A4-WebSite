@@ -18,7 +18,6 @@ async function handleDelete(bill: Bill, callback: () => void) {
         await deleteBill(bill);
         callback();
     } catch (e) {
-        // Optionally show an error message
     }
 }
 </script>

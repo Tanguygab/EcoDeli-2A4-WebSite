@@ -72,7 +72,7 @@ async function submitForm() {
     
     // Création via l'API uniquement
     const result = await createClientAnnonce(annonceData)
-    console.log('✅ Annonce créée avec succès:', result)
+    console.log('Annonce créée avec succès:', result)
     
     // Recharger les annonces et fermer le formulaire
     await loadAnnonces()
@@ -80,7 +80,7 @@ async function submitForm() {
     alert('Annonce créée avec succès et sauvegardée sur le serveur !')
     
   } catch (error: any) {
-    console.error('❌ Erreur lors de la création:', error)
+    console.error('Erreur lors de la création:', error)
     alert('Erreur: Impossible de créer l\'annonce. ' + (error.message || 'Vérifiez votre connexion et réessayez.'))
   }
 }
@@ -95,14 +95,14 @@ async function deleteAnnonce(id: string) {
     
     // Suppression via l'API uniquement
     await deleteClientAnnonce(id)
-    console.log('✅ Annonce supprimée avec succès')
+    console.log('Annonce supprimée avec succès')
     
     // Recharger les annonces
     await loadAnnonces()
     alert('Annonce supprimée avec succès du serveur !')
     
   } catch (error: any) {
-    console.error('❌ Erreur lors de la suppression:', error)
+    console.error('Erreur lors de la suppression:', error)
     alert('Erreur: Impossible de supprimer l\'annonce. ' + (error.message || 'Vérifiez votre connexion et réessayez.'))
   }
 }

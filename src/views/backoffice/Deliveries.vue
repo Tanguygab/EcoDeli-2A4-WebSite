@@ -18,7 +18,6 @@ async function handleDelete(delivery: Delivery, callback: () => void) {
         await deleteDelivery(delivery);
         callback();
     } catch (e) {
-        // Optionally show an error message
     }
 }
 </script>

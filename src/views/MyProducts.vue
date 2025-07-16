@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { startSession } from '@/stores/session'
-import { api, createProduct, getProducts, saveLocation } from '@/api.ts'
+import { api, createProduct, getProducts, saveLocation, getUserProducts } from '@/api.ts'
 import ProductCard from '@/components/products/ProductCard.vue'
 import type { Product } from '@/types/product'
 import type { Location } from '@/types/location.ts'
@@ -16,7 +16,28 @@ api(session)
 const user = session.user!!
 
 const products = ref<Product[]>([])
-getProducts(pagination).then(data => products.value = data)
+
+getUserProducts(user?._id?.toString()).then(data => {
+    if (!user) {
+        products.value = []
+        return
+    }
+    products.value = data.filter(p => {
+        // Cas 1 : le champ seller existe et correspond à l'utilisateur
+        if (p.seller) {
+            if (typeof p.seller === 'object' && String(p.seller._id) === String(user._id)) return true
+            if (typeof p.seller === 'string' && String(p.seller) === String(user._id)) return true
+        }
+        // Cas 2 : le champ location existe et location.user correspond à l'utilisateur
+        if (p.location && p.location.user) {
+            if (typeof p.location.user === 'object' && String(p.location.user._id) === String(user._id)) return true
+            if (typeof p.location.user === 'string' && String(p.location.user) === String(user._id)) return true
+        }
+        // Sinon, ne pas afficher
+        return false
+    })
+    console.log('[MyProducts] Produits affichés :', products.value)
+})
 const loading = ref(false)
 const showForm = ref(false)
 
