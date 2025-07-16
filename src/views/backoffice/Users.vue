@@ -1,20 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { startSession } from '@/stores/session'
 import { searchUsers, updateUser, deleteUser, banUser, unbanUser, updateUserRole } from '@/api'
 import type { User } from '@/types/user'
 import type { Pagination } from '@/types/pagination'
 import { newPagination } from '@/types/pagination'
-
-const router = useRouter()
-const session = startSession()
-
-// Vérification de sécurité supplémentaire
-if (!session.user || session.user.role.access_level !== 0) {
-  alert('Accès refusé : vous devez être administrateur pour accéder à cette page.')
-  router.push('/')
-}
 
 const users = ref<User[]>([])
 const loading = ref(false)

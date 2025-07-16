@@ -4,10 +4,8 @@ import { api, getImageURL, logout } from '@/api'
 import Logo from "../Logo.vue";
 import { ref } from "vue";
 import i18next from "i18next"
-import { usePermissions } from "@/composables/usePermissions"
 
 const session = startSession()
-const { canAccessBackOffice } = usePermissions()
 api(session)
 
 const menuIcon = ref()
@@ -78,7 +76,7 @@ function setLang(lang: string) {
                           {{ $t("menu.my-storage-boxes") }}
                         </RouterLink>
                         <hr class="navbar-divider">
-                        <RouterLink v-if="canAccessBackOffice" class="navbar-item has-text-danger-50"
+                        <RouterLink v-if="session.user" class="navbar-item has-text-danger-50"
                             to="/backoffice">
                             {{ $t("user.backoffice") }}
                         </RouterLink>
