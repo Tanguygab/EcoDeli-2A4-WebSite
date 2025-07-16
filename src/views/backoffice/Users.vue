@@ -9,6 +9,8 @@ const users = ref<User[]>([])
 const loading = ref(false)
 const search = ref('')
 const pagination = newPagination()
+const allUsers = ref<User[]>([]) // Cache de tous les utilisateurs
+let searchTimeout: number | null = null
 
 const showEditModal = ref(false)
 const editingUser = ref<User | null>(null)
@@ -26,8 +28,61 @@ const selectedUser = ref<User | null>(null)
 async function loadUsers() {
   loading.value = true
   try {
-    pagination.filter = search.value.trim()
-    users.value = await searchUsers(pagination)
+    // Charger tous les utilisateurs si le cache est vide
+    if (allUsers.value.length === 0) {
+      const allUsersPagination = { ...pagination, filter: '', page: 0 }
+      
+      console.log('Chargement de tous les utilisateurs...')
+      
+      const result: any = await searchUsers(allUsersPagination)
+      console.log('Résultat de searchUsers:', result)
+      
+      if (Array.isArray(result)) {
+        allUsers.value = result
+      } else if (result && result.data && Array.isArray(result.data)) {
+        allUsers.value = result.data
+      } else if (result && result.users && Array.isArray(result.users)) {
+        allUsers.value = result.users
+      } else {
+        console.warn('Format de résultat inattendu:', result)
+        allUsers.value = []
+      }
+    }
+    
+    // Filtrer côté client si une recherche est active
+    let filteredUsers = [...allUsers.value]
+    
+    if (search.value.trim()) {
+      const searchTerm = search.value.trim().toLowerCase()
+      console.log('Filtrage côté client avec:', searchTerm)
+      
+      filteredUsers = allUsers.value.filter(user => {
+        const fullName = `${user.name} ${user.firstname}`.toLowerCase()
+        const email = user.email.toLowerCase()
+        const role = user.role?.name?.toLowerCase() || ''
+        
+        return fullName.includes(searchTerm) || 
+               email.includes(searchTerm) || 
+               role.includes(searchTerm)
+      })
+    }
+    
+    // Trier par nom de famille puis prénom
+    users.value = filteredUsers.sort((a, b) => {
+      const nameA = (a.name || '').toLowerCase()
+      const nameB = (b.name || '').toLowerCase()
+      if (nameA < nameB) return -1
+      if (nameA > nameB) return 1
+      
+      const firstnameA = (a.firstname || '').toLowerCase()
+      const firstnameB = (b.firstname || '').toLowerCase()
+      if (firstnameA < firstnameB) return -1
+      if (firstnameA > firstnameB) return 1
+      
+      return 0
+    })
+    
+    console.log('Utilisateurs finaux après filtrage:', users.value.length)
   } catch (error) {
     console.error('Erreur lors du chargement des utilisateurs:', error)
     users.value = []
@@ -37,7 +92,28 @@ async function loadUsers() {
 }
 
 async function handleSearch() {
+  // Annuler le timeout précédent s'il existe
+  if (searchTimeout) {
+    clearTimeout(searchTimeout)
+  }
+  
+  // Délai de 300ms avant de lancer la recherche
+  searchTimeout = setTimeout(async () => {
+    console.log('Recherche lancée avec:', search.value)
+    await loadUsers()
+  }, 300)
+}
+
+// Recherche instantanée pour le filtrage local
+async function handleInstantSearch() {
+  console.log('Recherche instantanée avec:', search.value)
   await loadUsers()
+}
+
+// Fonction pour vider la recherche
+function clearSearch() {
+  search.value = ''
+  handleInstantSearch()
 }
 
 function openEditModal(user: User) {
@@ -47,7 +123,7 @@ function openEditModal(user: User) {
     name: user.name,
     email: user.email,
     description: user.description,
-    role: user.role._id
+    role: user.role.access_level
   }
   showEditModal.value = true
 }
@@ -66,11 +142,13 @@ async function saveUser() {
     await updateUser(editingUser.value._id, updateData)
     
     // Mettre à jour le rôle séparément si nécessaire
-    if (editForm.value.role !== editingUser.value.role._id) {
+    if (editForm.value.role !== editingUser.value.role.access_level) {
       await updateUserRole(editingUser.value._id, editForm.value.role)
     }
     
     showEditModal.value = false
+    // Vider le cache et recharger
+    allUsers.value = []
     await loadUsers()
     alert('Utilisateur modifié avec succès')
   } catch (error) {
@@ -80,12 +158,14 @@ async function saveUser() {
 }
 
 async function handleDeleteUser(user: User) {
-  if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur ${user.firstname} ${user.name} ?`)) {
+  if (!confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur ${user.name} ${user.firstname} ?`)) {
     return
   }
   
   try {
     await deleteUser(user._id)
+    // Vider le cache et recharger
+    allUsers.value = []
     await loadUsers()
     alert('Utilisateur supprimé avec succès')
   } catch (error) {
@@ -97,6 +177,8 @@ async function handleDeleteUser(user: User) {
 async function handleBanUser(user: User) {
   try {
     await banUser(user._id)
+    // Vider le cache et recharger
+    allUsers.value = []
     await loadUsers()
     alert('Utilisateur banni avec succès')
   } catch (error) {
@@ -108,6 +190,8 @@ async function handleBanUser(user: User) {
 async function handleUnbanUser(user: User) {
   try {
     await unbanUser(user._id)
+    // Vider le cache et recharger
+    allUsers.value = []
     await loadUsers()
     alert('Utilisateur débanni avec succès')
   } catch (error) {
@@ -119,6 +203,8 @@ async function handleUnbanUser(user: User) {
 async function handleApproveUser(user: User) {
   try {
     await approveUser(user._id)
+    // Vider le cache et recharger
+    allUsers.value = []
     await loadUsers()
     alert('Utilisateur approuvé avec succès')
   } catch (error) {
@@ -130,6 +216,8 @@ async function handleApproveUser(user: User) {
 async function handleUnapproveUser(user: User) {
   try {
     await unapproveUser(user._id)
+    // Vider le cache et recharger
+    allUsers.value = []
     await loadUsers()
     alert('Approbation retirée avec succès')
   } catch (error) {
@@ -153,6 +241,34 @@ function getStatusClass(user: User) {
   return 'status-approved'
 }
 
+function getRoleName(roleId: number): string {
+  const roles = {
+    0: 'Admin',
+    1: 'Support',
+    2: 'HR',
+    3: 'Employee',
+    4: 'Supplier',
+    5: 'Service Provider',
+    6: 'Delivery',
+    7: 'User'
+  }
+  return roles[roleId as keyof typeof roles] || 'Unknown'
+}
+
+function getRoleClass(roleId: number): string {
+  const roleClasses = {
+    0: 'role-admin',
+    1: 'role-support',
+    2: 'role-hr',
+    3: 'role-employee',
+    4: 'role-supplier',
+    5: 'role-service-provider',
+    6: 'role-delivery',
+    7: 'role-user'
+  }
+  return roleClasses[roleId as keyof typeof roleClasses] || 'role-default'
+}
+
 onMounted(loadUsers)
 </script>
 
@@ -167,25 +283,46 @@ onMounted(loadUsers)
     </div>
 
     <div class="search-section">
-      <div class="search-container">
-        <div class="search-input-wrapper">
-          <input
-            v-model="search"
-            class="search-input"
-            type="text"
-            placeholder="Rechercher un utilisateur..."
-            @keyup.enter="handleSearch"
-          />
-          <i class="fas fa-search search-icon"></i>
+      <div class="container">
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input
+              v-model="search"
+              class="input"
+              type="text"
+              placeholder="Rechercher un utilisateur..."
+              @keyup.enter="handleSearch"
+              @input="handleInstantSearch"
+            />
+          </div>
+          <div class="control">
+            <button class="button is-success" @click="handleSearch">
+              <span class="icon">
+                <i class="fas fa-search"></i>
+              </span>
+              <span>Rechercher</span>
+            </button>
+          </div>
+          <div class="control" v-if="search.length > 0">
+            <button class="button is-light" @click="clearSearch">
+              <span class="icon">
+                <i class="fas fa-times"></i>
+              </span>
+              <span>Effacer</span>
+            </button>
+          </div>
         </div>
-        <button class="search-btn" @click="handleSearch">
-          <i class="fas fa-search"></i>
-          Rechercher
-        </button>
       </div>
     </div>
 
     <div class="main-content">
+      <div v-if="search.length > 0" class="search-results">
+        <p>
+          <strong>{{ users.length }}</strong> résultat(s) trouvé(s) pour 
+          <em>"{{ search }}"</em>
+        </p>
+      </div>
+      
       <div v-if="loading" class="loading-state">
         <div class="loading-spinner"></div>
         <p>Chargement des utilisateurs...</p>
@@ -194,7 +331,12 @@ onMounted(loadUsers)
       <div v-else-if="users.length === 0" class="empty-state">
         <i class="fas fa-users"></i>
         <h3>Aucun utilisateur trouvé</h3>
-        <p>Aucun utilisateur ne correspond à votre recherche</p>
+        <p v-if="search.length > 0">
+          Aucun utilisateur ne correspond à votre recherche "{{ search }}"
+        </p>
+        <p v-else>
+          Aucun utilisateur dans la base de données
+        </p>
       </div>
 
       <div v-else class="users-table">
@@ -205,7 +347,6 @@ onMounted(loadUsers)
               <th>Nom</th>
               <th>Email</th>
               <th>Rôle</th>
-              <th>Statut</th>
               <th>Date d'inscription</th>
               <th>Actions</th>
             </tr>
@@ -220,17 +361,14 @@ onMounted(loadUsers)
               </td>
               <td class="user-name">
                 <div class="name-info">
-                  <span class="full-name">{{ user.firstname }} {{ user.name }}</span>
+                  <span class="full-name">{{ user.name }} {{ user.firstname }}</span>
                   <span class="user-id">#{{ user._id }}</span>
                 </div>
               </td>
               <td class="user-email">{{ user.email }}</td>
               <td class="user-role">
-                <span class="role-badge">{{ user.role.name }}</span>
-              </td>
-              <td class="user-status">
-                <span :class="['status-badge', getStatusClass(user)]">
-                  {{ getStatusText(user) }}
+                <span class="role-badge" :class="getRoleClass(user.role.access_level)">
+                  {{ getRoleName(user.role.access_level) }}
                 </span>
               </td>
               <td class="user-date">
@@ -324,13 +462,21 @@ onMounted(loadUsers)
           </div>
           
           <div class="form-group">
-            <label class="form-label">Rôle (ID)</label>
-            <input 
+            <label class="form-label">Rôle</label>
+            <select 
               v-model="editForm.role" 
-              class="form-input" 
-              type="number" 
+              class="form-select" 
               required
-            />
+            >
+              <option value="0">Admin</option>
+              <option value="1">Support</option>
+              <option value="2">HR</option>
+              <option value="3">Employee</option>
+              <option value="4">Supplier</option>
+              <option value="5">Service Provider</option>
+              <option value="6">Delivery</option>
+              <option value="7">User</option>
+            </select>
           </div>
         </form>
         
@@ -367,7 +513,7 @@ onMounted(loadUsers)
               <div class="detail-grid">
                 <div class="detail-item">
                   <label>Nom complet:</label>
-                  <span>{{ selectedUser.firstname }} {{ selectedUser.name }}</span>
+                  <span>{{ selectedUser.name }} {{ selectedUser.firstname }}</span>
                 </div>
                 <div class="detail-item">
                   <label>Email:</label>
@@ -389,7 +535,9 @@ onMounted(loadUsers)
               <div class="detail-grid">
                 <div class="detail-item">
                   <label>Rôle:</label>
-                  <span class="role-badge">{{ selectedUser.role.name }}</span>
+                  <span class="role-badge" :class="getRoleClass(selectedUser.role.access_level)">
+                    {{ getRoleName(selectedUser.role.access_level) }}
+                  </span>
                 </div>
                 <div class="detail-item">
                   <label>Niveau d'accès:</label>
@@ -463,74 +611,68 @@ onMounted(loadUsers)
 }
 
 .search-section {
-  padding: 2rem 0;
+  padding: 1.5rem 0;
   background: #2a2a2a;
 }
 
-.search-container {
-  max-width: 1200px;
+.search-section .container {
+  max-width: 800px;
   margin: 0 auto;
-  padding: 0 2rem;
-  display: flex;
-  gap: 1rem;
-  align-items: center;
+  padding: 0 1rem;
 }
 
-.search-input-wrapper {
-  position: relative;
-  flex: 1;
-  max-width: 500px;
+.search-section .field {
+  margin-bottom: 0;
 }
 
-.search-input {
-  width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
-  border: 2px solid #333;
-  border-radius: 25px;
+.search-section .input {
   background: #333;
+  border: 1px solid #555;
   color: #fff;
-  font-size: 1rem;
-  transition: all 0.3s ease;
 }
 
-.search-input:focus {
-  outline: none;
-  background: #444;
+.search-section .input:focus {
   border-color: #09ce44;
-  box-shadow: 0 0 0 3px rgba(9, 206, 68, 0.3);
+  box-shadow: 0 0 0 0.125em rgba(9, 206, 68, 0.25);
 }
 
-.search-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #09ce44;
+.search-section .input::placeholder {
+  color: #ccc;
 }
 
-.search-btn {
-  background: #09ce44;
-  color: #fff;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 25px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.search-section .button.is-success {
+  background-color: #09ce44;
+  border-color: #09ce44;
 }
 
-.search-btn:hover {
-  background: #0ab33a;
-  transform: translateY(-2px);
+.search-section .button.is-success:hover {
+  background-color: #0ab33a;
+  border-color: #0ab33a;
 }
 
 .main-content {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+}
+
+.search-results {
+  background: #333;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  color: #ccc;
+  border-left: 4px solid #09ce44;
+}
+
+.search-results strong {
+  color: #09ce44;
+}
+
+.search-results em {
+  color: #fff;
+  font-style: normal;
+  font-weight: 600;
 }
 
 .loading-state, .empty-state {
@@ -629,6 +771,38 @@ onMounted(loadUsers)
   border-radius: 15px;
   font-size: 0.8rem;
   font-weight: 600;
+}
+
+.role-admin {
+  background: #e74c3c;
+}
+
+.role-support {
+  background: #3498db;
+}
+
+.role-hr {
+  background: #9b59b6;
+}
+
+.role-employee {
+  background: #2ecc71;
+}
+
+.role-supplier {
+  background: #f39c12;
+}
+
+.role-service-provider {
+  background: #1abc9c;
+}
+
+.role-delivery {
+  background: #34495e;
+}
+
+.role-user {
+  background: #95a5a6;
 }
 
 .status-badge {
@@ -801,7 +975,7 @@ onMounted(loadUsers)
   color: #fff;
 }
 
-.form-input, .form-textarea {
+.form-input, .form-textarea, .form-select {
   width: 100%;
   padding: 0.8rem 1rem;
   border: 2px solid #444;
@@ -812,10 +986,16 @@ onMounted(loadUsers)
   transition: all 0.3s ease;
 }
 
-.form-input:focus, .form-textarea:focus {
+.form-input:focus, .form-textarea:focus, .form-select:focus {
   outline: none;
   border-color: #09ce44;
   box-shadow: 0 0 0 3px rgba(9, 206, 68, 0.3);
+}
+
+.form-select option {
+  background: #333;
+  color: #fff;
+  padding: 0.5rem;
 }
 
 .form-textarea {
