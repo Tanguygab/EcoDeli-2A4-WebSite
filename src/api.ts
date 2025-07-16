@@ -157,6 +157,31 @@ export async function searchUsers(pagination: Pagination) {
     return await get<User[]>(paginate("users", pagination))
 }
 
+// Ajouter des fonctions pour la gestion des utilisateurs
+export async function updateUser(id: number, userData: Partial<User>) {
+    return await put<User>(`users/${id}`, userData)
+}
+
+export async function deleteUser(id: number) {
+    return await del(`users/${id}`)
+}
+
+export async function banUser(id: number) {
+    return await put(`users/${id}/ban`)
+}
+
+export async function unbanUser(id: number) {
+    return await put(`users/${id}/unban`)
+}
+
+export async function approveUser(id: number) {
+    return await put(`users/${id}/approve`)
+}
+
+export async function unapproveUser(id: number) {
+    return await put(`users/${id}/unapprove`)
+}
+
 export async function getNotifications() {
     return await get<Notification[]>("notifications")
 }

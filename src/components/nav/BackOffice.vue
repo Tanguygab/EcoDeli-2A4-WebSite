@@ -31,6 +31,7 @@ const pages = [
         name: "Gestion",
         prefix: "Gestion des",
         children: {
+            "users": "utilisateurs",
             "traders": "commerçants",
             "contracts": "contrats",
             "candidature": "Candidatures livreurs",

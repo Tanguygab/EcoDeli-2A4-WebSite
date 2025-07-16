@@ -117,7 +117,8 @@
     "results": "Résultats pour \"{{input}}\"",
     "products": "Rechercher des produits/offres...",
     "bills": "Rechercher des factures...",
-    "files": "Rechercher des fichiers..."
+    "files": "Rechercher des fichiers...",
+    "users": "Rechercher des utilisateurs..."
   },
   "pagination": {
     "previous": "Précédent",
@@ -167,6 +168,19 @@
       "accept": "Valider",
       "refuse": "Refuser",
       "empty": "Aucune candidature trouvée"
+    },
+    "users": {
+      "title": "Gestion des Utilisateurs",
+      "firstname": "Prénom",
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rôle",
+      "approved": "Approuvé",
+      "join_date": "Date d'inscription",
+      "birthday": "Date de naissance",
+      "description": "Description",
+      "tutorial": "Tutoriel",
+      "subscription": "Abonnement"
     },
     "finances": {
       "title": "Gestion des Finances",

@@ -111,7 +111,8 @@
     "results": "Results for \"{{input}}\"",
     "products": "Search products/offers...",
     "bills": "Search bills...",
-    "files": "Search files..."
+    "files": "Search files...",
+    "users": "Search users..."
   },
   "pagination": {
     "previous": "Previous",
@@ -161,6 +162,19 @@
       "accept": "Accept",
       "refuse": "Reject",
       "empty": "No application found"
+    },
+    "users": {
+      "title": "User Management",
+      "firstname": "First Name",
+      "name": "Last Name",
+      "email": "Email",
+      "role": "Role",
+      "approved": "Approved",
+      "join_date": "Join Date",
+      "birthday": "Birthday",
+      "description": "Description",
+      "tutorial": "Tutorial",
+      "subscription": "Subscription"
     },
     "finances": {
       "title": "Finance Management",
