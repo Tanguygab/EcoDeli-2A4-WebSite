@@ -135,7 +135,7 @@ async function delAccount() {
                 <input class="input" type="email" v-model="email" placeholder="Email" />
                 <input class="input" type="date" v-model="birthday" placeholder="Date de naissance" />
                 <textarea class="input" v-model="description" placeholder="Parle un peu de toi..."></textarea>
-                <!-- Upload image -->
+                
                 <div class="field">
                   <label class="label">Image de profil</label>
                   <div class="file is-boxed is-success has-name is-fullwidth custom-file">
@@ -149,7 +149,6 @@ async function delAccount() {
                     </label>
                   </div>
                 </div>
-                <!-- Case tutoriel -->
                 <div class="field mt-4">
                   <label class="custom-checkbox">
                     <input type="checkbox" v-model="tutorial" />
@@ -244,7 +243,7 @@ async function delAccount() {
 .ml-2 {
     margin-left: 0.5rem;
 }
-/* Custom round checkbox */
+
 .custom-checkbox {
   display: flex;
   align-items: center;

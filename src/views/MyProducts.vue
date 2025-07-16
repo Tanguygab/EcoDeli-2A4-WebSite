@@ -119,7 +119,6 @@ async function submitForm () {
       imageType: selectedFile.value?.type
     })
     
-    // Essayons d'abord avec du JSON simple pour voir si le problème vient du FormData
     const productData = {
       name: form.value.name.trim(),
       price: form.value.price,

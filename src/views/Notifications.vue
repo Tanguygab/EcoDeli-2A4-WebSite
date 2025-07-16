@@ -8,11 +8,10 @@ import router from '@/router'
 const session = startSession()
 api(session)
 const user = session.user!!
-
 const notifications = ref<Notification[]>([])
 const loading = ref(false)
 const search = ref('')
-const sortOrder = ref<'desc' | 'asc'>('desc') // Tri par défaut : du plus récent au plus vieux
+const sortOrder = ref<'desc' | 'asc'>('desc') 
 
 async function loadNotifications () {
   loading.value = true
@@ -54,7 +53,6 @@ onMounted(loadNotifications)
     <div class="notifications-header">
       <h1 class="title has-text-centered mb-4">{{ $t('user.notifications-title') }}</h1>
       
-      <!-- Barre de recherche et tri -->
       <div class="notification-toolbar mb-4">
         <input
           v-model="search"
@@ -82,8 +80,6 @@ onMounted(loadNotifications)
         </button>
       </div>
     </div>
-
-    <!-- Liste des notifications avec scrollbar -->
     <div v-if="loading" class="loading">Chargement…</div>
     
     <div v-else class="notifications-list">
@@ -150,7 +146,6 @@ onMounted(loadNotifications)
   margin: 0 auto;
 }
 
-/* Scrollbar personnalisée */
 .notifications-list::-webkit-scrollbar {
   width: 8px;
 }

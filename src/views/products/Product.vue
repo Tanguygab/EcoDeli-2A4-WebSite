@@ -18,30 +18,28 @@ import LocationSelector from '@/components/location/LocationSelector.vue'
 import LabelInput from '@/components/LabelInput.vue'
 import { computed } from 'vue'
 
-// Auth & API Setup
 const session = startSession()
 api(session)
 
-// Vérifier si utilisateur connecté
+
 const loggedIn = ref(false)
 isSessionValid(false).then((valid: boolean) => (loggedIn.value = valid))
 
-// Produit à afficher
+
 const product = ref<Product | undefined>()
 loadPage(product, getProduct)
-// Liste des lieux pour sélection
+
 const location = ref<Location | undefined>()
 const locations = ref<Location[]>([])
 getLocations().then((locs) => (locations.value = locs))
 
-// Dummy filteredProducts function (replace with your actual filter logic)
 const filteredProducts = computed<Product[]>(() => {
-  // If you have a products array, filter it here. For now, return an empty array.
+  
   return []
 })
 getLocations().then((locs) => (locations.value = locs))
 
-// Modal d'achat
+
 const buyModal = ref(false)
 async function toggleBuyModal() {
   if (loggedIn.value) {
@@ -51,7 +49,7 @@ async function toggleBuyModal() {
   router.push('/login')
 }
 
-// Soumission achat
+
 async function submit() {
   if (!location.value) return
   if (!!location.value._id) {
@@ -62,7 +60,7 @@ async function submit() {
   } else buy()
 }
 
-// Achat
+
 const amount = ref(1)
 async function buy() {
   if (product.value && location.value) {
@@ -76,7 +74,7 @@ async function buy() {
 <template>
   <template v-if="product">
     <div class="is-flex">
-      <!-- Image du produit -->
+      
       <figure class="image is-1by1 is-fullwidth mr-5 mt-5">
         <img
           :alt="product.name"
@@ -84,11 +82,10 @@ async function buy() {
         />
       </figure>
 
-      <!-- Détails produit -->
+      
       <div>
         <h1 class="title">{{ product.name }}</h1>
 
-        <!-- Vendeur -->
         <div v-if="product.seller">
           {{ $t('product.seller') }}:
           <RouterLink class="link" :to="'/profile/' + product.seller._id">
@@ -99,24 +96,23 @@ async function buy() {
           <em>{{ $t('product.noSeller') || 'Vendeur non spécifié' }}</em>
         </div>
 
-        <!-- Prix -->
         <p>
           {{ $t('product.price.name') }}: <strong>{{ product.price }} €</strong>
         </p>
 
-        <!-- Taille -->
+        
         <p v-if="product.size">
           {{ $t('product.size.name') || 'Taille' }}:
           <strong>{{ product.size.name }}</strong>
         </p>
 
-        <!-- Bouton acheter -->
+        
         <div class="mt-3">
           <button class="button is-primary" @click="toggleBuyModal">
             Acheter
           </button>
 
-          <!-- Modal d'achat -->
+          
           <Modal
             :active="buyModal"
             title="Acheter"
