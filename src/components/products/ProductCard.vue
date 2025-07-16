@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Product } from '@/types/product.ts'
+import { getImageURL } from '@/api.ts'
 
 defineProps<{product: Product}>()
 
@@ -10,7 +11,7 @@ defineProps<{product: Product}>()
     <RouterLink :to="'/product/' + product._id" class="card">
         <div class="card-image">
             <figure class="image">
-                <img :src="product.image ?? 'https://bulma.io/assets/images/placeholders/128x128.png'" :alt="product.name">
+                <img :src="product.image ? getImageURL(product.image) : 'https://bulma.io/assets/images/placeholders/128x128.png'" :alt="product.name">
             </figure>
         </div>
         <div class="card-content">
@@ -26,8 +27,9 @@ defineProps<{product: Product}>()
     </RouterLink>
 </template>
 
-<style>
-.gap-6 {
-    gap: 1rem;
+<style scoped>
+img {
+    width: 128px;
+    height: 128px;
 }
 </style>

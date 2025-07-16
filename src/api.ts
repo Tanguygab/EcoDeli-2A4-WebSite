@@ -16,8 +16,8 @@ import type { Location } from './types/location.ts'
 import type { Session } from "./stores/session";
 import { type Ref, watch } from 'vue'
 
-// const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
-const API_URL = "88.172.140.59:52000"
+const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
+//const API_URL = "88.172.140.59:52000"
 let session: Session
 
 export function api(newSession: Session) {
@@ -30,14 +30,14 @@ export function getImageURL(name: string) {
 
 async function request<type>(method: string, url: string, body?: object | FormData) {
     const headers = { ...session.getHeader }
-    
+
     console.log(`[API] ${method} ${url}`, { body, headers })
-    
+
     // Pour FormData, ne pas définir Content-Type (le navigateur le fait automatiquement)
     if (body instanceof FormData) {
         console.log('[API] FormData detected, entries:', [...body.entries()])
     }
-    
+
     try {
         const response = await axios.request<type>({
             method: method,
@@ -46,7 +46,7 @@ async function request<type>(method: string, url: string, body?: object | FormDa
             data: body,
             headers: headers
         })
-        
+
         console.log(`[API] ${method} ${url} - Success:`, response.data)
         return response.data
     } catch (error: any) {
@@ -223,21 +223,8 @@ export async function getUserProducts(userId: number) {
 }
 
 // Créer un produit avec upload
-export async function createProduct(body: FormData | object) {
-  const product = await post<Product>('products', body)
-  
-  // Créer une notification pour informer l'utilisateur
-  try {
-    if (session.user) {
-      const notificationContent = `Votre produit "${product.name}" a bien été créé`
-      await createNotification(session.user._id, notificationContent, `/products/${product._id}`)
-    }
-  } catch (error) {
-    console.warn('Erreur lors de la création de la notification:', error)
-    // Ne pas faire échouer la création du produit si la notification échoue
-  }
-  
-  return product
+export async function createProduct(body: FormData) {
+  return await post<Product>('products', body)
 }
 
 export async function getRequests(pagination: Pagination) {
@@ -456,10 +443,10 @@ export async function checkAvailableEndpoints() {
         "products",
         "deliveries"
     ]
-    
+
     const available = []
     const unavailable = []
-    
+
     for (const endpoint of endpoints) {
         try {
             await get<any[]>(endpoint)
@@ -472,9 +459,9 @@ export async function checkAvailableEndpoints() {
             })
         }
     }
-    
+
     console.log('🔍 Endpoints disponibles:', available)
     console.log('❌ Endpoints indisponibles:', unavailable)
-    
+
     return { available, unavailable }
 }

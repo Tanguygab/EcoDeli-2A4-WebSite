@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { startSession } from '@/stores/session'
 import {
-  api,
-  buyProduct,
-  getLocations,
-  getProduct,
-  isSessionValid,
-  loadPage,
-  saveLocation
+    api,
+    buyProduct, getImageURL,
+    getLocations,
+    getProduct,
+    isSessionValid,
+    loadPage,
+    saveLocation
 } from '@/api'
 import { ref } from 'vue'
 import type { Product } from '@/types/product'
@@ -16,7 +16,6 @@ import type { Location } from '@/types/location'
 import router from '@/router'
 import LocationSelector from '@/components/location/LocationSelector.vue'
 import LabelInput from '@/components/LabelInput.vue'
-import { computed } from 'vue'
 
 const session = startSession()
 api(session)
@@ -33,10 +32,6 @@ const location = ref<Location | undefined>()
 const locations = ref<Location[]>([])
 getLocations().then((locs) => (locations.value = locs))
 
-const filteredProducts = computed<Product[]>(() => {
-  
-  return []
-})
 getLocations().then((locs) => (locations.value = locs))
 
 
@@ -74,15 +69,15 @@ async function buy() {
 <template>
   <template v-if="product">
     <div class="is-flex">
-      
+
       <figure class="image is-1by1 is-fullwidth mr-5 mt-5">
         <img
           :alt="product.name"
-          src="https://bulma.io/assets/images/placeholders/256x256.png"
+          :src="product.image ? getImageURL(product.image) : 'https://bulma.io/assets/images/placeholders/256x256.png'"
         />
       </figure>
 
-      
+
       <div>
         <h1 class="title">{{ product.name }}</h1>
 
@@ -100,19 +95,19 @@ async function buy() {
           {{ $t('product.price.name') }}: <strong>{{ product.price }} €</strong>
         </p>
 
-        
+
         <p v-if="product.size">
           {{ $t('product.size.name') || 'Taille' }}:
           <strong>{{ product.size.name }}</strong>
         </p>
 
-        
+
         <div class="mt-3">
           <button class="button is-primary" @click="toggleBuyModal">
             Acheter
           </button>
 
-          
+
           <Modal
             :active="buyModal"
             title="Acheter"
@@ -146,12 +141,6 @@ async function buy() {
       <p>Chargement du produit...</p>
     </div>
   </template>
-
-  <ProductCard
-    v-for="product in filteredProducts"
-    :key="product._id"
-    :product="product"
-  />
 </template>
 
 <style scoped>

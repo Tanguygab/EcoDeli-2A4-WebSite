@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { getImageURL } from '@/api.ts'
+
 defineProps<{array: Array<any>}>()
 defineEmits<{(e: 'click', element: any): void}>()
 </script>
@@ -10,7 +12,7 @@ defineEmits<{(e: 'click', element: any): void}>()
     >
         <figure class="media-left">
             <p class="image is-64x64">
-                <img alt="A delivery" src="https://bulma.io/assets/images/placeholders/128x128.png" />
+                <img alt="A delivery" :src="element.image ? getImageURL(element.image) : 'https://bulma.io/assets/images/placeholders/128x128.png'" />
             </p>
         </figure>
         <div class="media-content">
