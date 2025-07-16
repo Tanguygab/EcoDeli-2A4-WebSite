@@ -129,7 +129,7 @@ function openEditModal(user: User) {
     name: user.name,
     email: user.email,
     description: user.description,
-    role: user.role.access_level
+    role: user.role._id
   }
   showEditModal.value = true
 }
@@ -160,89 +160,6 @@ async function saveUser() {
   } catch (error) {
     console.error('Erreur lors de la modification:', error)
     alert('Erreur lors de la modification de l\'utilisateur')
-  }
-}
-
-async function makeAllUsersAdmin() {
-  if (!confirm('Êtes-vous sûr de vouloir passer TOUS les utilisateurs en admin ? Cette action est irréversible.')) {
-    return
-  }
-  
-  if (!confirm('ATTENTION : Cette action donnera les droits administrateur à tous les utilisateurs. Confirmez-vous ?')) {
-    return
-  }
-  
-  try {
-    loading.value = true
-    let successCount = 0
-    let errorCount = 0
-    
-    // Parcourir tous les utilisateurs
-    for (const user of allUsers.value) {
-      if (user.role.access_level !== 0) { // Si pas déjà admin
-        try {
-          await updateUserRole(user._id, 0) // Passer en admin (rôle 0)
-          successCount++
-        } catch (error) {
-          console.error(`Erreur pour l'utilisateur ${user.name}:`, error)
-          errorCount++
-        }
-      }
-    }
-    
-    // Vider le cache et recharger
-    allUsers.value = []
-    await loadUsers()
-    
-    alert(`Opération terminée !\n✅ ${successCount} utilisateurs passés en admin\n❌ ${errorCount} erreurs`)
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour en masse:', error)
-    alert('Erreur lors de la mise à jour en masse des utilisateurs')
-  } finally {
-    loading.value = false
-  }
-}
-
-async function executeBulkAction() {
-  const roleName = getRoleName(bulkAction.value.role)
-  
-  if (!confirm(`Êtes-vous sûr de vouloir passer TOUS les utilisateurs au rôle "${roleName}" ? Cette action est irréversible.`)) {
-    return
-  }
-  
-  if (!confirm(`ATTENTION : Cette action modifiera le rôle de tous les utilisateurs. Confirmez-vous ?`)) {
-    return
-  }
-  
-  try {
-    loading.value = true
-    let successCount = 0
-    let errorCount = 0
-    
-    // Parcourir tous les utilisateurs
-    for (const user of allUsers.value) {
-      if (user.role.access_level !== bulkAction.value.role) {
-        try {
-          await updateUserRole(user._id, bulkAction.value.role)
-          successCount++
-        } catch (error) {
-          console.error(`Erreur pour l'utilisateur ${user.name}:`, error)
-          errorCount++
-        }
-      }
-    }
-    
-    // Vider le cache et recharger
-    allUsers.value = []
-    await loadUsers()
-    
-    showBulkActionsModal.value = false
-    alert(`Opération terminée !\n✅ ${successCount} utilisateurs modifiés\n❌ ${errorCount} erreurs`)
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour en masse:', error)
-    alert('Erreur lors de la mise à jour en masse des utilisateurs')
-  } finally {
-    loading.value = false
   }
 }
 
@@ -304,6 +221,17 @@ function getStatusClass(user: User) {
   return 'status-approved'
 }
 
+const roleNames: Record<number, string> = {
+  0: 'Admin',
+  1: 'Support',
+  2: 'HR',
+  3: 'Employee',
+  4: 'Supplier',
+  5: 'Service Provider',
+  6: 'Delivery',
+  7: 'User'
+}
+
 function getRoleName(roleId: number): string {
   const roles = {
     0: 'Admin',
@@ -319,7 +247,7 @@ function getRoleName(roleId: number): string {
 }
 
 function getRoleClass(roleId: number): string {
-  const roleClasses = {
+  const roleClasses: Record<number, string> = {
     0: 'role-admin',
     1: 'role-support',
     2: 'role-hr',
@@ -329,7 +257,7 @@ function getRoleClass(roleId: number): string {
     6: 'role-delivery',
     7: 'role-user'
   }
-  return roleClasses[roleId as keyof typeof roleClasses] || 'role-default'
+  return roleClasses[roleId] || 'role-default'
 }
 
 onMounted(loadUsers)
@@ -342,19 +270,7 @@ onMounted(loadUsers)
         <i class="fas fa-users"></i>
         Gestion des Utilisateurs
       </h1>
-      <p class="page-subtitle">Gérez les utilisateurs, leurs rôles et permissions</p>
-      
-      <!-- Bouton d'actions globales -->
-      <div class="admin-actions">
-        <button class="btn btn-danger" @click="makeAllUsersAdmin">
-          <i class="fas fa-crown"></i>
-          Passer tous en Admin
-        </button>
-        <button class="btn btn-warning" @click="showBulkActionsModal = true">
-          <i class="fas fa-users-cog"></i>
-          Actions en masse
-        </button>
-      </div>
+      <p class="page-subtitle">Gérez les utilisateurs et leurs rôles</p>
     </div>
 
     <div class="search-section">
@@ -391,79 +307,49 @@ onMounted(loadUsers)
     </div>
 
     <div class="main-content">
-      <div v-if="search.length > 0" class="search-results">
-        <p>
-          <strong>{{ users.length }}</strong> résultat(s) trouvé(s) pour 
-          <em>"{{ search }}"</em>
-        </p>
-      </div>
-      
-      <div v-if="loading" class="loading-state">
-        <div class="loading-spinner"></div>
-        <p>Chargement des utilisateurs...</p>
-      </div>
-
-      <div v-else-if="users.length === 0" class="empty-state">
-        <i class="fas fa-users"></i>
-        <h3>Aucun utilisateur trouvé</h3>
-        <p v-if="search.length > 0">
-          Aucun utilisateur ne correspond à votre recherche "{{ search }}"
-        </p>
-        <p v-else>
-          Aucun utilisateur dans la base de données
-        </p>
-      </div>
-
-      <div v-else class="users-table">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Photo</th>
-              <th>Nom</th>
-              <th>Email</th>
-              <th>Rôle</th>
-              <th>Date d'inscription</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in users" :key="user._id" class="user-row">
-              <td class="user-avatar">
-                <img v-if="user.image" :src="user.image" :alt="user.firstname" />
-                <div v-else class="avatar-placeholder">
-                  <i class="fas fa-user"></i>
-                </div>
-              </td>
-              <td class="user-name">
-                <div class="name-info">
-                  <span class="full-name">{{ user.name }} {{ user.firstname }}</span>
-                  <span class="user-id">#{{ user._id }}</span>
-                </div>
-              </td>
-              <td class="user-email">{{ user.email }}</td>
-              <td class="user-role">
-                <span class="role-badge" :class="getRoleClass(user.role.access_level)">
-                  {{ getRoleName(user.role.access_level) }}
-                </span>
-              </td>
-              <td class="user-date">
-                {{ new Date(user.join_date).toLocaleDateString() }}
-              </td>
-              <td class="user-actions">
-                <button class="action-btn view-btn" @click="openDetailsModal(user)" title="Voir les détails">
-                  <i class="fas fa-eye"></i>
-                </button>
-                <button class="action-btn edit-btn" @click="openEditModal(user)" title="Modifier">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="action-btn delete-btn" @click="handleDeleteUser(user)" title="Supprimer">
-                  <i class="fas fa-trash"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <h2 class="title">Gestion des Utilisateurs</h2>
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Nom</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Date d'inscription</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user._id">
+            <td>
+              <img v-if="user.image" :src="user.image" :alt="user.firstname" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" />
+              <span v-else class="icon"><i class="fas fa-user"></i></span>
+            </td>
+            <td>{{ user.name }} {{ user.firstname }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              <span class="tag" :class="getRoleClass(user.role._id)">
+                {{ roleNames[user.role._id] || 'Unknown' }}
+              </span>
+            </td>
+            <td>{{ new Date(user.join_date).toLocaleDateString() }}</td>
+            <td>
+              <button class="button is-info is-small mr-2" @click="openDetailsModal(user)" title="Voir">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="button is-success is-small mr-2" @click="openEditModal(user)" title="Modifier">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="button is-danger is-small" @click="handleDeleteUser(user)" title="Supprimer">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+          <tr v-if="users.length === 0">
+            <td colspan="6" class="has-text-centered">Aucun utilisateur trouvé</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Modal de modification -->
@@ -523,18 +409,17 @@ onMounted(loadUsers)
           <div class="form-group">
             <label class="form-label">Rôle</label>
             <select 
-              v-model="editForm.role" 
-              class="form-select" 
+              v-model="editForm.role"
+              class="form-select"
               required
             >
-              <option value="0">Admin</option>
-              <option value="1">Support</option>
-              <option value="2">HR</option>
-              <option value="3">Employee</option>
-              <option value="4">Supplier</option>
-              <option value="5">Service Provider</option>
-              <option value="6">Delivery</option>
-              <option value="7">User</option>
+              <option
+                v-for="(name, id) in roleNames"
+                :key="id"
+                :value="Number(id)"
+              >
+                {{ name }}
+              </option>
             </select>
           </div>
         </form>
@@ -626,68 +511,6 @@ onMounted(loadUsers)
           <button class="btn btn-secondary" @click="showDetailsModal = false">
             <i class="fas fa-times"></i>
             Fermer
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal d'actions en masse -->
-    <div v-if="showBulkActionsModal" class="modal-overlay" @click="showBulkActionsModal = false">
-      <div class="modal-container" @click.stop>
-        <div class="modal-header">
-          <h2 class="modal-title">
-            <i class="fas fa-users-cog"></i>
-            Actions en masse
-          </h2>
-          <button class="modal-close" @click="showBulkActionsModal = false">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-        
-        <div class="modal-body">
-          <p class="bulk-warning">
-            ⚠️ Ces actions affecteront <strong>TOUS</strong> les utilisateurs de la base de données.
-          </p>
-          
-          <div class="form-group">
-            <label class="form-label">Nouveau rôle pour tous les utilisateurs</label>
-            <select 
-              v-model="bulkAction.role" 
-              class="form-select" 
-              required
-            >
-              <option value="0">Admin (Accès complet)</option>
-              <option value="1">Support (Assistance)</option>
-              <option value="2">HR (Ressources humaines)</option>
-              <option value="3">Employee (Employé)</option>
-              <option value="4">Supplier (Fournisseur)</option>
-              <option value="5">Service Provider (Prestataire)</option>
-              <option value="6">Delivery (Livreur)</option>
-              <option value="7">User (Utilisateur standard)</option>
-            </select>
-          </div>
-          
-          <div class="bulk-info">
-            <p>
-              <strong>Rôle sélectionné :</strong> 
-              <span class="role-badge" :class="getRoleClass(bulkAction.role)">
-                {{ getRoleName(bulkAction.role) }}
-              </span>
-            </p>
-            <p>
-              <strong>Nombre d'utilisateurs :</strong> {{ allUsers.length }}
-            </p>
-          </div>
-        </div>
-        
-        <div class="modal-footer">
-          <button class="btn btn-secondary" @click="showBulkActionsModal = false">
-            <i class="fas fa-times"></i>
-            Annuler
-          </button>
-          <button class="btn btn-danger" @click="executeBulkAction">
-            <i class="fas fa-exclamation-triangle"></i>
-            Appliquer à tous
           </button>
         </div>
       </div>
@@ -904,7 +727,7 @@ onMounted(loadUsers)
 }
 
 .users-table {
-  background: #2a2a2a;
+  background: transparent;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
@@ -927,10 +750,18 @@ onMounted(loadUsers)
 .table td {
   padding: 1rem;
   border-bottom: 1px solid #333;
+  vertical-align: middle;
+  /* Ajout pour forcer la même hauteur */
+  height: 60px;
 }
 
-.user-row:hover {
-  background: #333;
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.user-row {
+  /* Force la hauteur de la ligne pour tous les éléments */
+  height: 60px;
 }
 
 .user-avatar img {
@@ -1024,11 +855,19 @@ onMounted(loadUsers)
   color: #fff;
 }
 
+/* Centrer verticalement et horizontalement les actions */
 .user-actions {
   display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  height: 100%;
+  min-height: 40px;
+  /* Ajout pour éviter tout débordement */
+  box-sizing: border-box;
 }
 
+/* Uniformiser la taille des boutons */
 .action-btn {
   width: 35px;
   height: 35px;
@@ -1039,36 +878,10 @@ onMounted(loadUsers)
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.view-btn {
-  background: #3498db;
-  color: #fff;
-}
-
-.view-btn:hover {
-  background: #2980b9;
-  transform: scale(1.1);
-}
-
-.edit-btn {
-  background: #09ce44;
-  color: #fff;
-}
-
-.edit-btn:hover {
-  background: #0ab33a;
-  transform: scale(1.1);
-}
-
-.delete-btn {
-  background: #d33;
-  color: #fff;
-}
-
-.delete-btn:hover {
-  background: #b22;
-  transform: scale(1.1);
+  font-size: 1.1rem;
+  padding: 0;
+  /* Supprime tout margin qui pourrait créer un décalage */
+  margin: 0;
 }
 
 /* Modal styles */
@@ -1101,8 +914,6 @@ onMounted(loadUsers)
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem 2rem 1rem;
-  border-bottom: 1px solid #444;
 }
 
 .modal-title {
@@ -1120,6 +931,7 @@ onMounted(loadUsers)
 }
 
 .modal-close {
+  margin-left: auto;
   width: 40px;
   height: 40px;
   border: none;
