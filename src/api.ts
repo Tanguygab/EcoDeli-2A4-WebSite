@@ -207,14 +207,16 @@ export async function buyProduct(product: Product, amount: number, location: Loc
     })
 }
 
-export async function createService(name: string, description: string, price: number, location: Location, date: string) {
-    return await post<Service>("services", {
-        name: name,
-        description: description,
-        price: price,
-        location: location,
-        date: date
-    })
+export async function createService(serviceData: any) {
+    // Transformer les données pour correspondre exactement à l'API
+    const apiData = {
+        name: serviceData.name,
+        description: serviceData.description,
+        price: parseFloat(serviceData.price) || 0.0,
+        date: serviceData.date || new Date().toISOString(),
+    };
+
+    return await post<Service>("services", apiData);
 }
 
 // Récupérer les produits d'un vendeur

@@ -233,7 +233,8 @@
     "card": "Card",
     "delivery-request": "Delivery request",
     "post-announcement": "Post announcement",
-    "my-storage-boxes": "My storage boxes"
+    "my-storage-boxes": "My storage boxes",
+    "create-service": "Create a service"
   },
   "settings": {
     "title": "Account Settings",
@@ -276,5 +277,37 @@
         "asc": "Oldest first"
       }
     }
+  },
+  "services": {
+    "title": "Title",
+    "description": "Description",
+    "price": "Price",
+    "category": "Category",
+    "location": "Location",
+    "availability": "Availability",
+    "duration": "Duration",
+    "image": "Image",
+    "create-service": "Create Service",
+    "service-created-successfully": "Service created successfully!",
+    "title-placeholder": "Your service title",
+    "description-placeholder": "Describe your service in detail",
+    "price-placeholder": "0.00",
+    "location-placeholder": "Your location",
+    "duration-placeholder": "Ex: 2 hours",
+    "select-category": "Select a category",
+    "select-availability": "Select your availability",
+    "choose-image": "Choose an image",
+    "image-selected": "Image selected",
+    "list-title": "Services list",
+    "no-services": "No services available",
+    "service-details": "Service details",
+    "contact-provider": "Contact provider",
+    "provider-info": "Provider information",
+    "member-since": "Member since"
+  },
+  "common": {
+    "cancel": "Cancel",
+    "back": "Back",
+    "loading": "Loading..."
   }
 }

@@ -52,7 +52,8 @@
     "card": "Carte",
     "delivery-request": "Demande livreur",
     "post-announcement": "Déposer une annonce",
-    "my-storage-boxes": "Mes box de stockage"
+    "my-storage-boxes": "Mes box de stockage",
+    "create-service": "Créer un service"
   },
   "product": {
     "products": "Produits",
@@ -265,5 +266,37 @@
         "submit": "Déposer"
       }
     }
+  },
+  "services": {
+    "title": "Titre",
+    "description": "Description",
+    "price": "Prix",
+    "category": "Catégorie",
+    "location": "Localisation",
+    "availability": "Disponibilité",
+    "duration": "Durée",
+    "image": "Image",
+    "create-service": "Créer un service",
+    "service-created-successfully": "Service créé avec succès !",
+    "title-placeholder": "Titre de votre service",
+    "description-placeholder": "Décrivez votre service en détail",
+    "price-placeholder": "0.00",
+    "location-placeholder": "Votre localisation",
+    "duration-placeholder": "Ex: 2 heures",
+    "select-category": "Sélectionnez une catégorie",
+    "select-availability": "Sélectionnez votre disponibilité",
+    "choose-image": "Choisir une image",
+    "image-selected": "Image sélectionnée",
+    "list-title": "Liste des services",
+    "no-services": "Aucun service disponible",
+    "service-details": "Détails du service",
+    "contact-provider": "Contacter le prestataire",
+    "provider-info": "Informations sur le prestataire",
+    "member-since": "Membre depuis"
+  },
+  "common": {
+    "cancel": "Annuler",
+    "back": "Retour",
+    "loading": "Chargement..."
   }
 }

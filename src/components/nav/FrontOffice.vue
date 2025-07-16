@@ -75,6 +75,9 @@ function setLang(lang: string) {
                         <RouterLink class="navbar-item" to="/client/box">
                           {{ $t("menu.my-storage-boxes") }}
                         </RouterLink>
+                        <RouterLink class="navbar-item" to="/services/create">
+                          {{ $t("menu.create-service") }}
+                        </RouterLink>
                         <hr class="navbar-divider">
                         <RouterLink v-if="session.user" class="navbar-item has-text-danger-50"
                             to="/backoffice">
