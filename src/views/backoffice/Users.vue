@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { searchUsers, updateUser, deleteUser, banUser, unbanUser, approveUser, unapproveUser, updateUserRole } from '@/api'
+import { searchUsers, updateUser, deleteUser, banUser, unbanUser, updateUserRole } from '@/api'
 import type { User } from '@/types/user'
 import type { Pagination } from '@/types/pagination'
 import { newPagination } from '@/types/pagination'
@@ -200,32 +200,6 @@ async function handleUnbanUser(user: User) {
   }
 }
 
-async function handleApproveUser(user: User) {
-  try {
-    await approveUser(user._id)
-    // Vider le cache et recharger
-    allUsers.value = []
-    await loadUsers()
-    alert('Utilisateur approuvé avec succès')
-  } catch (error) {
-    console.error('Erreur lors de l\'approbation:', error)
-    alert('Erreur lors de l\'approbation de l\'utilisateur')
-  }
-}
-
-async function handleUnapproveUser(user: User) {
-  try {
-    await unapproveUser(user._id)
-    // Vider le cache et recharger
-    allUsers.value = []
-    await loadUsers()
-    alert('Approbation retirée avec succès')
-  } catch (error) {
-    console.error('Erreur lors du retrait d\'approbation:', error)
-    alert('Erreur lors du retrait d\'approbation de l\'utilisateur')
-  }
-}
-
 function openDetailsModal(user: User) {
   selectedUser.value = user
   showDetailsModal.value = true
@@ -380,22 +354,6 @@ onMounted(loadUsers)
                 </button>
                 <button class="action-btn edit-btn" @click="openEditModal(user)" title="Modifier">
                   <i class="fas fa-edit"></i>
-                </button>
-                <button 
-                  v-if="user.approved" 
-                  class="action-btn ban-btn" 
-                  @click="handleUnapproveUser(user)" 
-                  title="Retirer l'approbation"
-                >
-                  <i class="fas fa-user-times"></i>
-                </button>
-                <button 
-                  v-else 
-                  class="action-btn approve-btn" 
-                  @click="handleApproveUser(user)" 
-                  title="Approuver"
-                >
-                  <i class="fas fa-check"></i>
                 </button>
                 <button class="action-btn delete-btn" @click="handleDeleteUser(user)" title="Supprimer">
                   <i class="fas fa-trash"></i>
@@ -856,26 +814,6 @@ onMounted(loadUsers)
 
 .edit-btn:hover {
   background: #0ab33a;
-  transform: scale(1.1);
-}
-
-.approve-btn {
-  background: #27ae60;
-  color: #fff;
-}
-
-.approve-btn:hover {
-  background: #219a52;
-  transform: scale(1.1);
-}
-
-.ban-btn {
-  background: #e74c3c;
-  color: #fff;
-}
-
-.ban-btn:hover {
-  background: #c0392b;
   transform: scale(1.1);
 }
 
