@@ -6,6 +6,7 @@ export type Delivery = {
     deliveryman: User,
     latitude: number,
     longitude: number,
+    status: 'ongoing' | 'done' | undefined,
     products: number | ProductRequest[]
     first_product_date: string,
     last_product_date: string,
