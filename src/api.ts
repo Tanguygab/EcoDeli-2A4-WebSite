@@ -15,6 +15,7 @@ import type { Notification } from "./types/notification";
 import type { Location } from './types/location.ts'
 import type { Session } from "./stores/session";
 import { type Ref, watch } from 'vue'
+import type { DeliveryStatus } from '@/types/delivery_status.ts'
 
 const API_URL = import.meta.env.PROD || import.meta.env.VITE_PROD ? "88.172.140.59:52000" : "localhost:3000"
 //const API_URL = "88.172.140.59:52000"
@@ -274,8 +275,24 @@ export async function createDelivery() {
     return await post<Delivery>("deliveries")
 }
 
+export async function getDeliveryStatuses() {
+    return await get<DeliveryStatus[]>("deliveries/statuses")
+}
+
 export async function getDelivery(id: number) {
     return await get<Delivery>("deliveries/" + id)
+}
+
+export async function startDelivery(id: number) {
+    return await post<Delivery>("deliveries/" + id + "/start")
+}
+
+export async function setRequestStatus(request: ProductRequest, status: DeliveryStatus) {
+    return await put<Delivery>("products/requests/" + request._id + "/status", { status: status._id })
+}
+
+export async function endDelivery(id: number) {
+    return await post<Delivery>("deliveries/" + id + "/end")
 }
 
 export async function getUnassignedRequests(pagination: Pagination) {

@@ -84,7 +84,7 @@ function setLang(lang: string) {
                     </div>
                 </div>
             </div>
-            <RouterLink v-else to="login" class="button is-light">{{ $t("auth.login") }}</RouterLink>
+            <RouterLink v-else to="/login" class="button is-light">{{ $t("auth.login") }}</RouterLink>
         </div>
     </nav>
 </template>

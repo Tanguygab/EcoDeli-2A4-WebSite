@@ -84,6 +84,7 @@ function closeModal() {
         </div>
 
     </ElementList>
+    <h1 v-if="!requests.length" class="title is-1">{{ $t("requests.no-requests") }}</h1>
 </template>
 
 <style scoped>

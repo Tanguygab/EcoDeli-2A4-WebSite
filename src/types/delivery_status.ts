@@ -1,4 +1,5 @@
 export type DeliveryStatus = {
     _id: number,
-    name: string
+    name: string,
+    color: string
 }
