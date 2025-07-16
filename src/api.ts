@@ -380,11 +380,32 @@ export async function deleteTrader(trader: any) {
 }
 
 export async function getClientAnnonces(pagination: Pagination) {
-    return await get<any[]>(paginate("annonces", pagination))
+    try {
+        // Utiliser l'endpoint correct : clientannonces au lieu de annonces
+        return await get<any[]>(paginate("clientannonces", pagination))
+    } catch (error: any) {
+        console.error('Erreur lors de la récupération des annonces:', error)
+        // Retourner un tableau vide en cas d'erreur
+        return []
+    }
 }
 
 export async function createClientAnnonce(body: object) {
-    return await post<any>("annonces", body)
+    try {
+        return await post<any>("clientannonces", body)
+    } catch (error: any) {
+        console.error('Erreur lors de la création de l\'annonce:', error)
+        throw error
+    }
+}
+
+export async function deleteClientAnnonce(id: string) {
+    try {
+        return await del(`clientannonces/${id}`)
+    } catch (error: any) {
+        console.error('Erreur lors de la suppression de l\'annonce:', error)
+        throw error
+    }
 }
 
 // Supprimer une candidature (proof)
@@ -400,4 +421,35 @@ export async function updateUserRole(userId: number | string, role: number) {
 // Supprimer une notification
 export async function deleteNotification(id: number | string) {
     return await del(`notifications/${id}`)
+}
+
+// Fonction pour diagnostiquer les endpoints disponibles (version simplifiée)
+export async function checkAvailableEndpoints() {
+    const endpoints = [
+        "clientannonces",
+        "users",
+        "products",
+        "deliveries"
+    ]
+    
+    const available = []
+    const unavailable = []
+    
+    for (const endpoint of endpoints) {
+        try {
+            await get<any[]>(endpoint)
+            available.push(endpoint)
+        } catch (error: any) {
+            unavailable.push({
+                endpoint,
+                status: error.response?.status,
+                message: error.response?.statusText
+            })
+        }
+    }
+    
+    console.log('🔍 Endpoints disponibles:', available)
+    console.log('❌ Endpoints indisponibles:', unavailable)
+    
+    return { available, unavailable }
 }
