@@ -72,11 +72,11 @@ const pages = [
         </div>
 
         <div :class="'navbar-menu' + (burgerMenu ? ' is-active' : '')">
-            <div class="navbar-start" style="display: flex; align-items: center;">
-                <!-- Bouton SSH à côté de Gestion -->
+           <div class="navbar-start" style="display: flex; align-items: center;">
+                <!-- Bouton SSH à côté de Gestion 
                 <RouterLink class="navbar-item" to="/backoffice/ssh">
                     <span class="icon"><i class="fas fa-terminal"></i></span> SSH
-                </RouterLink>
+                </RouterLink> -->
 
                 <div v-for="page in pages" class="navbar-item has-dropdown is-hoverable">
                     <a class="navbar-link">{{ page.name }}</a>

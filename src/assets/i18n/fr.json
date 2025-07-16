@@ -298,5 +298,9 @@
     "cancel": "Annuler",
     "back": "Retour",
     "loading": "Chargement..."
+  },
+  "backoffice": {
+    "welcome": "Bienvenue sur le panel Admin",
+    "description": "Gérez toutes les fonctionnalités administratives depuis ce tableau de bord."
   }
 }

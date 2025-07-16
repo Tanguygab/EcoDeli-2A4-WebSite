@@ -309,5 +309,9 @@
     "cancel": "Cancel",
     "back": "Back",
     "loading": "Loading..."
+  },
+  "backoffice": {
+    "welcome": "Welcome to the Admin Panel",
+    "description": "Manage all administrative features from this dashboard."
   }
 }
